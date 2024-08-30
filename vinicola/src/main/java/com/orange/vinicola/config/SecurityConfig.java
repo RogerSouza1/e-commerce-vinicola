@@ -14,17 +14,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig{
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
+                .authorizeHttpRequests()
+                .requestMatchers("/h2-console/**").permitAll() // Permitir acesso ao console H2
                 .anyRequest().authenticated()
                 .and()
-            .formLogin()
+                .formLogin()
                 .and()
-            .httpBasic();
+                .httpBasic()
+                .and()
+                .csrf().disable() // Desabilitar CSRF para o console H2
+                .headers().frameOptions().disable(); // Desabilitar frame options para o console H2
+
         return http.build();
     }
 
