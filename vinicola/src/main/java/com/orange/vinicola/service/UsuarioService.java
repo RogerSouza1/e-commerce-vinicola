@@ -3,26 +3,45 @@ package com.orange.vinicola.service;
 import com.orange.vinicola.model.Usuario;
 import com.orange.vinicola.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UsuarioService {
 
     @Autowired
-    private UsuarioRepository userRepository;
+    private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public Usuario save(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
 
-    public Usuario registrarUsuario(Usuario usuario){
-        Optional<Usuario> usuarioExistente = userRepository.findByEmail(usuario.getEmail());
-        if(usuarioExistente.isPresent()){
-            throw new IllegalArgumentException("Email já cadastrado");
-        }
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        return userRepository.save(usuario);
+    //TODO: Alterar para optional
+    public Usuario findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+
+    public Optional<Usuario> findById(Long id) {
+        return usuarioRepository.findById(id);
+    }
+
+    public void update(Usuario usuario) {
+        usuarioRepository.save(usuario);
+    }
+
+    public void alterar_estado(Usuario usuario) {
+        
+        if (usuario.isAtivado())
+            usuario.setAtivado(false);
+        else
+            usuario.setAtivado(true);
+        
+        usuarioRepository.save(usuario);
+    }
+
+    public List<Usuario> findAll() {
+        return usuarioRepository.findAll();
     }
 }
