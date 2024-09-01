@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="tabela-usuarios">
+    <table border="1" id="tabela-usuarios" th:fragment="tabela-usuarios">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Grupo</th>
+            <th>Status</th>
+            <th>Ações</th>
+            <th class="text-center">Habilitar / Desabilitar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="usuario : ${usuarios}">
+            <td th:text="${usuario.id}"></td>
+            <td th:text="${usuario.nome}"></td>
+            <td th:text="${usuario.email}"></td>
+            <td th:text="${usuario.grupo}"></td>
+            <td th:text="${usuario.ativado ? 'Ativo' : 'Inativo'}"></td>
+            <td class="text-center">
+                <a class="btn-edit" th:href="@{/editar-usuario(id=${usuario.id})}">Editar</a>
+            </td>
+            <td class="text-center">
+                <a class="btn-toggle-status" th:href="@{/alterar-estado(id=${usuario.id})}" th:text="${usuario.ativado ? 'Desabilitar' : 'Habilitar'}" onclick="return confirmChange()"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

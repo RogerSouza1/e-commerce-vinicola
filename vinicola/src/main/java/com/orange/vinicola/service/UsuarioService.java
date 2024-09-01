@@ -32,16 +32,17 @@ public class UsuarioService {
     }
 
     public void alterar_estado(Usuario usuario) {
-        
-        if (usuario.isAtivado())
-            usuario.setAtivado(false);
-        else
-            usuario.setAtivado(true);
+
+        usuario.setAtivado(!usuario.isAtivado());
         
         usuarioRepository.save(usuario);
     }
 
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
+    }
+
+    public List<Usuario> findByNome(String nome) {
+        return usuarioRepository.findByNome(nome);
     }
 }
