@@ -116,8 +116,7 @@ public class UsuarioController {
     @PostMapping("/login")
     public String login(Usuario usuario, Model model) {
         if (UsuarioService.validar_login(usuario.getEmail(), usuario.getSenha())) {
-            model.addAttribute("mensagem", "Login efetuado com sucesso!");
-            return "sucesso";
+            return "redirect:/index";
         } else {
             model.addAttribute("mensagem", "Email ou senha incorretos!");
             return "login";
