@@ -108,7 +108,7 @@ public class UsuarioController {
         return "fragments/tabela-usuarios :: tabela-usuarios";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/loginForm")
     public String showLoginForm(Model model) {
         model.addAttribute("usuario", new Usuario());
         return "login";

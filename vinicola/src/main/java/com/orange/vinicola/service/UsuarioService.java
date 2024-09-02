@@ -1,4 +1,5 @@
 package com.orange.vinicola.service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.orange.vinicola.model.Usuario;
 import com.orange.vinicola.repository.UsuarioRepository;
@@ -13,6 +14,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     public Usuario save(Usuario usuario) {
         return usuarioRepository.save(usuario);
@@ -49,7 +53,7 @@ public class UsuarioService {
     public boolean validar_login(String email, String senha) {
         Usuario usuario = usuarioRepository.findByEmail(email);
         if (usuario != null) {
-            if (usuario.getSenha().equals(senha)) {
+            if (encoder.matches(senha, usuario.getSenha())) {
                 return true;
             }
         }
