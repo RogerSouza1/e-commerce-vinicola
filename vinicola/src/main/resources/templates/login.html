@@ -30,14 +30,14 @@
 </script>
 </head>
 <body>
-<form th:action="@{/login}" th:object="${usuario}" method="post" onsubmit="return validateForm()">
+<form th:action="@{/login-acess}" th:object="${usuario}" method="post" onsubmit="return validateForm()">
     <label for="email">Email:</label>
     <input type="email" id="email" name="email"  th:field="*{email}" required /><br/>
     <br>
     <label for="senha">Senha:</label>
     <input type="password" id="senha" name="senha"  th:field="*{senha}" required /><br/>
     <br>
-   <button id="botao-login" type="submit">Entrar</button>
+    <button id="botao-login" type="submit">Entrar</button>
 </form>
 
 </body>

@@ -260,3 +260,6 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/s123716
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
 	... 93 more
+2024-09-02 16:44:02.375320-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT FROM [*]* USUARIO"; expected "identifier"; SQL statement:
+SELECT FROM * USUARIO [42001-224]
