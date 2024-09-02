@@ -45,4 +45,15 @@ public class UsuarioService {
     public List<Usuario> findByNome(String nome) {
         return usuarioRepository.findByNome(nome);
     }
+
+    public boolean validar_login(String email, String senha) {
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        if (usuario != null) {
+            if (usuario.getSenha().equals(senha)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
