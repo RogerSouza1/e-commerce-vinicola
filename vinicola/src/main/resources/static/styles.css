@@ -1,0 +1,159 @@
+/* Estilos globais */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+/* Estilo do título principal */
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Contêiner para alinhamento flexível */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ajusta o espaçamento entre os itens */
+    margin-bottom: 20px; /* Espaço abaixo do contêiner */
+}
+
+/* Estilo do campo de busca */
+#search {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding-left: 35px; /* Espaço para o ícone de busca */
+    background: url('https://img.icons8.com/ios-glyphs/30/000000/search.png') no-repeat 10px center; /* Ícone de busca */
+    background-size: 20px 20px;
+}
+
+/* Estilo dos botões */
+.btn {
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #4682B4;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #1E90FF;
+}
+
+/* Estilo do botão de cadastro */
+.btn-cadastrar {
+    margin-left: 20px; /* Espaço entre o botão e o campo de busca */
+}
+
+.btn-cadastrar a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Estilos da tabela */
+table {
+    width: 100%;
+    border-collapse: separate; /* Mudança importante para bordas arredondadas */
+    border-spacing: 0; /* Remove o espaço entre as células */
+    margin-bottom: 20px;
+    border-radius: 8px; /* Define o arredondamento das bordas da tabela */
+    overflow: hidden; /* Garante que o conteúdo não ultrapasse as bordas arredondadas */
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+/* Estilo do cabeçalho da tabela */
+th {
+    background-color: #4682B4;
+    color: white;
+    text-align: center;
+}
+
+/* Cores alternadas para as linhas da tabela */
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+/* Estilo dos links */
+td a {
+    color: #4682B4;
+    text-decoration: none;
+}
+
+td a:hover {
+    color: #1E90FF;
+}
+
+
+/* Estilos para centralizar o conteúdo das células */
+.text-center {
+    text-align: center;
+}
+
+/* Estilos específicos para os botões na tabela */
+.table-actions a {
+    display: inline-block;
+    padding: 5px 10px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Estilos específicos para o botão de editar */
+.btn-edit {
+    background-color: #ffffff;
+}
+
+/* Estilos específicos para o botão de alternar status */
+.btn-toggle-status {
+    background-color: #ffffff;
+}
+
+/* Estilo para o contêiner dos botões */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 20px;
+}
+
+.btn-register {
+    width: 200px;
+    text-align: center;
+    background-color: #4682B4;
+}
+
+.btn-register:hover {
+    background-color: #1E90FF;
+}
+
+.btn-list {
+    width: 200px;
+    text-align: center;
+    background-color: #4682B4;
+}
+
+.btn-list:hover {
+    background-color: #1E90FF;
+}

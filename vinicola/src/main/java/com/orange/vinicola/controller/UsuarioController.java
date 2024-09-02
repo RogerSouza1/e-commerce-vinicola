@@ -5,12 +5,14 @@ import com.orange.vinicola.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -58,11 +60,10 @@ public class UsuarioController {
     }
 
     @GetMapping("/editar-usuario")
-    public String showEditForm(@RequestParam("id") Long id, Model model, Authentication authentication) {
+    public String showEditForm(@RequestParam("id") Long id, Model model) {
         Optional<Usuario> usuario = UsuarioService.findById(id);
-        Usuario usuarioAutenticado = UsuarioService.findByEmail(authentication.getName());
-
-        //TODO: Revisar código e páginas de erro
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Usuario usuarioAutenticado = UsuarioService.findByEmail(auth.getName());
 
         if (usuario.isEmpty()) {
             model.addAttribute("mensagem", "Usuário não encontrado!");
@@ -86,5 +87,24 @@ public class UsuarioController {
         UsuarioService.update(usuario);
         model.addAttribute("mensagem", "Usuário atualizado com sucesso!");
         return "sucesso";
+    }
+
+    @GetMapping("/alterar-estado")
+    public String alterarEstado(@RequestParam("id") Long id, Model model) {
+        Optional<Usuario> usuario = UsuarioService.findById(id);
+        if (usuario.isPresent()) {
+            UsuarioService.alterar_estado(usuario.get());
+            model.addAttribute("mensagem", "Estado do usuário alterado com sucesso!");
+        } else {
+            model.addAttribute("mensagem", "Usuário não encontrado!");
+        }
+        return "redirect:/lista-usuarios";
+    }
+
+    @GetMapping("/buscar-usuario")
+    public String buscarUsuario(@RequestParam("nome") String nome, Model model) {
+        List<Usuario> usuarios = UsuarioService.findByNome(nome);
+        model.addAttribute("usuarios", usuarios);
+        return "fragments/tabela-usuarios :: tabela-usuarios";
     }
 }

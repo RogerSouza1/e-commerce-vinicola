@@ -1,34 +1,39 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Usuários</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#search').on('keyup', function () {
+                var nome = $(this).val();
+                $.ajax({
+                    url: '/buscar-usuario',
+                    data: {
+                        nome: nome
+                    },
+                    success: function (data) {
+                        $('#tabela-usuarios').html(data);
+                    }
+                });
+            });
+        });
+
+        function confirmChange() {
+            return confirm("Tem certeza que deseja mudar o status do usuário?");
+        }
+    </script>
 </head>
 <body>
 <h1>Lista de Usuários</h1>
+<div class="header-container">
+    <input type="text" id="search" name="nome" placeholder="Pesquisar" autocomplete="off">
+    <a href="/cadastro-funcionario" class="btn btn-cadastrar">Cadastrar Usuário</a>
+</div>
 
-<table border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Grupo</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="usuario : ${usuarios}">
-            <td th:text="${usuario.id}"></td>
-            <td th:text="${usuario.nome}"></td>
-            <td th:text="${usuario.email}"></td>
-            <td th:text="${usuario.grupo}"></td>
-            <td>
-                <a th:href="@{/editar-usuario(id=${usuario.id})}">Editar</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div id="tabela-usuarios" th:replace="fragments/tabela-usuarios :: tabela-usuarios"></div>
 
 </body>
 </html>
