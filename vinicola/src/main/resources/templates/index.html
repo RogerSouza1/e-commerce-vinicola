@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" href="/styles.css">
     <meta charset="UTF-8">
@@ -8,7 +8,16 @@
 <body>
 <div class="button-container">
     <button class="btn btn-register" type="button" onclick="window.location.href=''">Listar Produtos</button>
-    <button class="btn btn-list" type="button" onclick="window.location.href='/lista-usuarios'">Listar Usuários</button>
+
+    <div sec:authorize="hasRole('ROLE_ADMINISTRADOR')">
+        <button class="btn btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Listar
+            Funcionários
+        </button>
+    </div>
+
+    <form method="post" th:action="@{/logout}">
+        <button class="btn btn-logout" type="submit">Logout</button>
+    </form>
 </div>
 </body>
 </html>

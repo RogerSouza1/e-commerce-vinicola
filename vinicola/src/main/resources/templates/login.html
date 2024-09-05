@@ -6,16 +6,22 @@
     <title>Login</title>
 </head>
 <body>
+
 <h1>Login</h1>
 
-<form th:action="@{/login}" method="post">
-    <label for="username">Email:</label>
-    <input type="text" id="username" name="username" required /><br/>
+<div th:if="${session.error}" th:text="${session.error}"></div>
 
-    <label for="password">Senha:</label>
-    <input type="password" id="password" name="password" required /><br/>
+<form th:action="@{/login}" method="post">
+    <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+    <label for="email">Email:</label>
+    <input id="email" name="email" required type="email"/><br/>
+
+    <label for="senha">Senha:</label>
+    <input id="senha" name="senha" required type="password"/><br/>
 
     <button type="submit">Login</button>
 </form>
+
+
 </body>
 </html>
