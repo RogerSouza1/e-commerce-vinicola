@@ -89,7 +89,7 @@ public class UsuarioController {
         Usuario usuarioAutenticado = UsuarioService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
         if (usuarioExistente.isPresent()) {
-            if (usuario.equals(usuarioAutenticado)) {
+            if (usuario.getId().equals(usuarioAutenticado.getId())) {
                 usuario.setGrupo(usuarioAutenticado.getGrupo());
             }
         }
