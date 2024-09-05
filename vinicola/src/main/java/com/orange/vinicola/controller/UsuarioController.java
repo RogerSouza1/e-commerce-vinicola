@@ -34,6 +34,9 @@ public class UsuarioController {
 
     @PostMapping("/cadastro-funcionario")
     public String registerUser(Usuario usuario, Model model) {
+
+        usuario.setEmail(usuario.getEmail().toLowerCase());
+
         try {
             if (UsuarioService.findByEmail(usuario.getEmail()) != null) {
                 model.addAttribute("mensagem", "Email já registrado!");
@@ -83,16 +86,15 @@ public class UsuarioController {
     public String updateUser(Usuario usuario, Model model) {
         usuario.setAtivado(true);
         Optional<Usuario> usuarioExistente = UsuarioService.findById(usuario.getId());
+        Usuario usuarioAutenticado = UsuarioService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
         if (usuarioExistente.isPresent()) {
-            usuario.setGrupo(usuarioExistente.get().getGrupo());
-
-            if (!encoder.matches(usuario.getSenha(), usuarioExistente.get().getSenha())) {
-
-                usuario.setSenha(encoder.encode(usuario.getSenha()));
+            if (usuario.equals(usuarioAutenticado)) {
+                usuario.setGrupo(usuarioAutenticado.getGrupo());
             }
         }
 
+        usuario.setSenha(encoder.encode(usuario.getSenha()));
         UsuarioService.update(usuario);
         model.addAttribute("mensagem", "Usuário atualizado com sucesso!");
         return "redirect:/lista-usuarios";
@@ -119,30 +121,35 @@ public class UsuarioController {
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error, Model model) {
+        SecurityContextHolder.clearContext();
         if (error != null) {
-            model.addAttribute("error", "Erro ao realizar. Por favor, tente novamente.");
+            model.addAttribute("error", error);
         }
         return "login";
     }
 
     @PostMapping("/login")
     public String login(@RequestParam("email") String email, @RequestParam("senha") String senha, Model model) {
-        Optional<Usuario> usuario = Optional.ofNullable(UsuarioService.findByEmail(email));
+        String userEmail = email.toLowerCase();
+        Optional<Usuario> usuario = Optional.ofNullable(UsuarioService.findByEmail(userEmail));
 
         if (usuario.isEmpty()) {
             model.addAttribute("error", "Email inválido!");
-            return "login";
+            return "redirect:/login";
         } else if (!encoder.matches(senha, usuario.get().getSenha())) {
             model.addAttribute("error", "Senha incorreta!");
-            return "login";
+            return "redirect:/login";
         } else if (!usuario.get().isAtivado()) {
             model.addAttribute("error", "Usuário inativo!");
-            return "login";
+            return "redirect:/login";
+        } else if (usuario.get().getGrupo().equals("CLIENTE")) {
+            model.addAttribute("error", "Acesso negado!");
+            return "redirect:/login";
         } else {
             Authentication auth = new UsernamePasswordAuthenticationToken(usuario.get().getEmail(), usuario.get().getSenha(), usuario.get().getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
             return "redirect:/index";
         }
-    }
 
+    }
 }
