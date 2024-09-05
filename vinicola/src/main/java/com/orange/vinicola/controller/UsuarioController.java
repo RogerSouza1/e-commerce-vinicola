@@ -138,11 +138,12 @@ public class UsuarioController {
         } else if (!usuario.get().isAtivado()) {
             model.addAttribute("error", "Usuário inativo!");
             return "login";
+
         } else {
             Authentication auth = new UsernamePasswordAuthenticationToken(usuario.get().getEmail(), usuario.get().getSenha(), usuario.get().getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
             return "redirect:/index";
         }
-    }
 
+    }
 }
