@@ -61,15 +61,24 @@ public class UsuarioService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        Usuario usuario = usuarioRepository.findByEmail(email);
+
+        String userEmail = email.toLowerCase();
+
+        Usuario usuario = usuarioRepository.findByEmail(userEmail);
+
         if (usuario == null) {
-            System.out.println("Usuário não encontrado: " + email);
+            System.out.println("Usuário não encontrado: " + userEmail);
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
 
         if (!usuario.isAtivado()) {
-            System.out.println("Usuário desativado: " + email);
+            System.out.println("Usuário desativado: " + userEmail);
             throw new UsernameNotFoundException("Usuário desativado");
+        }
+
+        if (usuario.getGrupo().equals("CLIENTE")) {
+            System.out.println("Usuário não autorizado: " + userEmail);
+            throw new UsernameNotFoundException("Usuário não autorizado");
         }
 
         return new User(usuario.getEmail(), usuario.getSenha(),
