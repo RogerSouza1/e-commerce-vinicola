@@ -26,11 +26,6 @@
                 return false;
             }
 
-            if (senha.length < 8) {
-                alert("Senha deve ter no mínimo 8 caracteres.");
-                return false;
-            }
-
             if (senha !== document.getElementById("confirmar-senha").value) {
                 alert("Senhas não conferem.");
                 return false;
