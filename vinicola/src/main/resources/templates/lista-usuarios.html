@@ -24,6 +24,10 @@
         function confirmChange() {
             return confirm("Tem certeza que deseja mudar o status do usuário?");
         }
+
+        function showInactiveUserError() {
+            alert("Não é possível editar um usuário inativo.");
+        }
     </script>
 </head>
 <body>
@@ -34,6 +38,6 @@
 </div>
 
 <div id="tabela-usuarios" th:replace="fragments/tabela-usuarios :: tabela-usuarios"></div>
-
+<button onclick="window.location.href='index'" type="button">Voltar</button>
 </body>
 </html>

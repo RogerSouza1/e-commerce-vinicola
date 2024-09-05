@@ -4,6 +4,7 @@ import com.orange.vinicola.model.Usuario;
 import com.orange.vinicola.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -68,25 +68,25 @@ public class UsuarioController {
         if (usuario.isEmpty()) {
             model.addAttribute("mensagem", "Usuário não encontrado!");
             return "erro";
-        } else if (usuario.get().getEmail().equals(usuarioAutenticado.getEmail())) {
-            model.addAttribute("mensagem", "Você não pode alterar seu próprio grupo!");
-            return "erro";
+        } else if (!usuario.get().isAtivado()) {
+            model.addAttribute("mensagem", "Não é possível editar um usuário inativo!");
+            return "redirect:/lista-usuarios";
         } else {
             model.addAttribute("usuario", usuario.get());
+            boolean isEditingOwnProfile = usuarioAutenticado.getId().equals(usuario.get().getId());
+            model.addAttribute("isEditingOwnProfile", isEditingOwnProfile);
             return "editar-usuario";
         }
     }
 
+
     @PostMapping("/editar-usuario")
-    public String updateUser(Usuario usuario, @RequestParam("confirmarSenha") String confirmarSenha, Model model) {
-        if (!usuario.getSenha().equals(confirmarSenha)) {
-            model.addAttribute("mensagem", "As senhas não conferem!");
-            return "editar-usuario";
-        }
+    public String updateUser(Usuario usuario, Model model) {
+        usuario.setAtivado(true);
         usuario.setSenha(encoder.encode(usuario.getSenha()));
         UsuarioService.update(usuario);
         model.addAttribute("mensagem", "Usuário atualizado com sucesso!");
-        return "sucesso";
+        return "redirect:/lista-usuarios";
     }
 
     @GetMapping("/alterar-estado")
@@ -107,4 +107,33 @@ public class UsuarioController {
         model.addAttribute("usuarios", usuarios);
         return "fragments/tabela-usuarios :: tabela-usuarios";
     }
+
+    @GetMapping("/login")
+    public String login(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Erro ao realizar. Por favor, tente novamente.");
+        }
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestParam("email") String email, @RequestParam("senha") String senha, Model model) {
+        Optional<Usuario> usuario = Optional.ofNullable(UsuarioService.findByEmail(email));
+
+        if (usuario.isEmpty()) {
+            model.addAttribute("error", "Email inválido!");
+            return "login";
+        } else if (!encoder.matches(senha, usuario.get().getSenha())) {
+            model.addAttribute("error", "Senha incorreta!");
+            return "login";
+        } else if (!usuario.get().isAtivado()) {
+            model.addAttribute("error", "Usuário inativo!");
+            return "login";
+        } else {
+            Authentication auth = new UsernamePasswordAuthenticationToken(usuario.get().getEmail(), usuario.get().getSenha(), usuario.get().getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            return "redirect:/index";
+        }
+    }
+
 }

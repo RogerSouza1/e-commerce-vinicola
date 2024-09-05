@@ -26,10 +26,14 @@
             <td th:text="${usuario.grupo}"></td>
             <td th:text="${usuario.ativado ? 'Ativo' : 'Inativo'}"></td>
             <td class="text-center">
-                <a class="btn-edit" th:href="@{/editar-usuario(id=${usuario.id})}">Editar</a>
+                <a class="btn-edit" th:href="@{/editar-usuario(id=${usuario.id})}" th:if="${usuario.ativado}">Editar</a>
+                <a class="btn-edit" href="javascript:void(0);" onclick="showInactiveUserError()"
+                   th:unless="${usuario.ativado}">Editar</a>
             </td>
             <td class="text-center">
-                <a class="btn-toggle-status" th:href="@{/alterar-estado(id=${usuario.id})}" th:text="${usuario.ativado ? 'Desabilitar' : 'Habilitar'}" onclick="return confirmChange()"></a>
+                <a class="btn-toggle-status" onclick="return confirmChange()"
+                   th:href="@{/alterar-estado(id=${usuario.id})}"
+                   th:text="${usuario.ativado ? 'Desabilitar' : 'Habilitar'}"></a>
             </td>
         </tr>
         </tbody>
