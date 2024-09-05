@@ -79,11 +79,20 @@ public class UsuarioController {
         }
     }
 
-
     @PostMapping("/editar-usuario")
     public String updateUser(Usuario usuario, Model model) {
         usuario.setAtivado(true);
-        usuario.setSenha(encoder.encode(usuario.getSenha()));
+        Optional<Usuario> usuarioExistente = UsuarioService.findById(usuario.getId());
+
+        if (usuarioExistente.isPresent()) {
+            usuario.setGrupo(usuarioExistente.get().getGrupo());
+
+            if (!encoder.matches(usuario.getSenha(), usuarioExistente.get().getSenha())) {
+
+                usuario.setSenha(encoder.encode(usuario.getSenha()));
+            }
+        }
+
         UsuarioService.update(usuario);
         model.addAttribute("mensagem", "Usuário atualizado com sucesso!");
         return "redirect:/lista-usuarios";

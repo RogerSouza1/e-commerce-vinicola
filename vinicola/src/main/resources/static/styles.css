@@ -157,3 +157,108 @@ td a:hover {
 .btn-list:hover {
     background-color: #1E90FF;
 }
+
+/* ----------------------Login----------------------- */
+
+.login-container{
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height:99vh;
+    overflow: auto;
+    background-color: #D2D1D2;
+
+
+}
+
+.login-container label{
+    color: #fff;
+    margin-bottom: 30px;
+
+
+}
+
+.container-forms{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 479px;
+    height: 586px;
+    border-radius: 10px;
+    border: 5px solid #FFF;
+    background: #3F3F3F;
+    gap: 50px;
+
+}
+
+input, select{
+    width: 300px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 2px;
+    background: #ffffff;
+    text-align: left;
+    padding-left: 10px;
+    margin-bottom: 10px
+}
+
+.container-redirecionamento{
+    display: flex;
+    flex-direction: row;
+    align-items:  center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 13px;
+}
+
+.container-link{
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-login {
+    width: 90px;
+    height: 25px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+/*----------------------cadastrar ----------------*/
+
+.cadastrar-container{
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height:99vh;
+    overflow: auto;
+    background-color: #D2D1D2;
+
+
+}
+.container-forms select{
+    width: 315px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 2px;
+    background: #ffffff;
+    text-align: left;
+    padding-left: 10px;
+    margin-bottom: 10px
+}
+
+.btn-cadastrar {
+    width: 90px;
+    height: 25px;
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    background-color: #ffffff;
+}
