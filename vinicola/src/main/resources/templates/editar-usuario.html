@@ -2,6 +2,7 @@
 <html xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/styles.css">
     <title>Editar Usuário</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
@@ -29,38 +30,42 @@
     </script>
 </head>
 <body>
+<main class="cadastrar-container">
 <h1>Editar Usuário</h1>
 
-
+<div class="container-forms">
 <div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
 
 <form th:action="@{/editar-usuario}" th:object="${usuario}" method="post" onsubmit="return validateForm()">
     <input th:field="*{id}" type="hidden"/>
-    <label for="nome">Nome:</label>
+    <label for="nome"></label>
     <input id="nome" name="nome" required th:field="*{nome}" type="text"/><br/>
 
-    <label for="cpf">CPF:</label>
+    <label for="cpf"></label>
     <input id="cpf" maxlength="14" name="cpf" required th:field="*{cpf}" type="text"/><br/>
 
-    <label for="senha">Senha:</label>
-    <input id="senha" name="senha" required th:field="*{senha}" type="password"/><br/>
+    <label for="senha"></label>
+    <input id="senha" name="senha" required th:field="*{senha}" type="password" placeholder="Senha"/><br/>
 
-    <label for="confirmar-senha">Confirmar Senha:</label>
-    <input id="confirmar-senha" name="confirmar-senha" required type="password"/><br/>
+    <label for="confirmar-senha"></label>
+    <input id="confirmar-senha" name="confirmar-senha" required type="password" placeholder="Confirmar Senha"/><br/>
 
     <div th:if="${!isEditingOwnProfile}">
-        <label for="grupo">Grupo:</label>
-        <select id="grupo" name="group" required th:field="*{grupo}">
+        <label for="grupo"></label>
+        <select id="grupo" name="group" required th:field="*{grupo}" >
             <option value="ADMINISTRADOR">Administrador</option>
             <option value="FUNCIONARIO">Funcionário</option>
             <option value="CLIENTE">Cliente</option>
         </select><br>
     </div>
-
-    <button type="submit">Editar</button>
-
+<div class="container-redirecionamento-editar">
+    <button class="btn-editar" type="submit">Editar</button>
+    <button class="btn-editar" onclick="window.location.href='/lista-usuarios'" type="button">Cancelar</button>
+</div>
 </form>
 
-<button onclick="window.location.href='/lista-usuarios'" type="button">Cancelar</button>
+
+</div>
+</main>
 </body>
 </html>

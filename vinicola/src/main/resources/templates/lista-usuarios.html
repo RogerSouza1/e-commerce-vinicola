@@ -31,13 +31,15 @@
     </script>
 </head>
 <body>
-<h1>Lista de Usuários</h1>
-<div class="header-container">
-    <input type="text" id="search" name="nome" placeholder="Pesquisar" autocomplete="off">
-    <a href="/cadastro-funcionario" class="btn btn-cadastrar">Cadastrar Usuário</a>
-</div>
+<main class="list-container" >
+    <h1>Lista de Usuários</h1>
+    <div class="header-container">
+        <input type="text" id="search" name="nome" placeholder="Pesquisar" autocomplete="off">
+        <a href="/cadastro-funcionario" class="btn btn-cadastrar-lista">Cadastrar Usuário</a>
+    </div>
 
-<div id="tabela-usuarios" th:replace="fragments/tabela-usuarios :: tabela-usuarios"></div>
-<button onclick="window.location.href='index'" type="button">Voltar</button>
+    <div id="tabela-usuarios" th:replace="fragments/tabela-usuarios :: tabela-usuarios"></div>
+    <button onclick="window.location.href='index'" type="button">Voltar</button>
+</main>
 </body>
 </html>

@@ -7,21 +7,23 @@
     <title>Login</title>
 </head>
 <body>
-<main class="listar-usuario-container">
+<main class="login-container">
     <h1>Login</h1>
 
-    <div class="header-container">
+    <div class="container-forms">
         <div th:if="${session.error}" th:text="${session.error}"></div>
 
         <form th:action="@{/login}" method="post">
             <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
-            <label for="email">Email:</label>
-            <input id="email" name="email" required type="email"/><br/>
+            <label for="email"></label>
+            <input id="email" name="email" required type="email" placeholder="Email"/><br/>
 
-            <label for="senha">Senha:</label>
-            <input id="senha" name="senha" required type="password"/><br/>
+            <label for="senha"></label>
+            <input id="senha" name="senha" required type="password" placeholder="Senha" /><br/>
 
-            <button type="submit">Login</button>
+            <div class="container-redirecionamento">
+            <button  class="btn-login" type="submit">Login</button>
+            </div>
         </form>
     </div>
 </main>

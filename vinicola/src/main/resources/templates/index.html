@@ -7,15 +7,15 @@
 </head>
 <body>
 <div class="button-container">
-    <button class="btn btn-register" type="button" onclick="window.location.href=''">Listar Produtos</button>
+    <button class="btn btn-register=-lista" type="button" onclick="window.location.href=''">Listar Produtos</button>
 
     <div sec:authorize="hasRole('ROLE_ADMINISTRADOR')">
-        <button class="btn btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Listar
+        <button class="btn btn-register-lista" onclick="window.location.href='/lista-usuarios'" type="button">Listar
             Funcionários
         </button>
     </div>
 
-    <form method="post" th:action="@{/logout}">
+    <form method="post" th:action="@{/login}">
         <button class="btn btn-logout" type="submit">Logout</button>
     </form>
 </div>

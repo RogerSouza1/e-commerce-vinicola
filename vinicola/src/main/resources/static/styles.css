@@ -2,7 +2,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 2px;
     background-color: #f4f4f4;
 }
 
@@ -138,11 +138,6 @@ td a:hover {
     gap: 20px;
 }
 
-.btn-register {
-    width: 200px;
-    text-align: center;
-    background-color: #4682B4;
-}
 
 .btn-register:hover {
     background-color: #1E90FF;
@@ -158,6 +153,22 @@ td a:hover {
     background-color: #1E90FF;
 }
 
+.btn-cadastrar-lista {
+    width:  80px;
+    height: 36px;
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    background-color: #1E90FF;
+}
+.list-container{
+    padding: 20px;
+
+
+
+}
 /* ----------------------Login----------------------- */
 
 .login-container{
@@ -166,7 +177,7 @@ td a:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height:99vh;
+    height:98vh;
     overflow: auto;
     background-color: #D2D1D2;
 
@@ -221,7 +232,7 @@ input, select{
 
 .btn-login {
     width: 90px;
-    height: 25px;
+    height: 36px;
     border-radius: 5px;
     text-align: center;
     background-color: #ffffff;
@@ -252,13 +263,56 @@ input, select{
     margin-bottom: 10px
 }
 
+.container-redirecionamento-cadastro{
+    display: flex;
+    flex-direction: row;
+    align-items:  center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 13px;
+
+}
+
+
 .btn-cadastrar {
-    width: 90px;
-    height: 25px;
+    width:  80px;
+    height: 36px;
     display: flex;
     border-radius: 5px;
     align-items: center;
     text-align: center;
+    gap: 10px;
+    background-color: #ffffff;
+}
+
+
+.btn-register {
+    width: 106px;
+    height: 36px;
+    text-align: center;
+    gap: 20px;
+    background-color: #4682B4;
+}
+
+/*----------------------editar ----------------*/
+
+.container-redirecionamento-editar{
+    display: flex;
+    flex-direction: row;
+    align-items:  center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 13px;
+
+}
+
+.btn-editar{
+    width:  100px;
+    height: 36px;
+    text-align: center;
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
     gap: 20px;
     background-color: #ffffff;
 }
