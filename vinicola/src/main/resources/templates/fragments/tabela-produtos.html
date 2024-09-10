@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="tabela-produtos">
+    <table border="1" id="tabela-produtos" th:fragment="tabela-produtos">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Avaliação</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="produto : ${produtos}">
+            <td th:text="${produto.id}"></td>
+            <td th:text="${produto.nome}"></td>
+            <td th:text="${produto.avaliacao}"></td>
+            <td th:text="${produto.descricao}"></td>
+            <td th:text="${produto.preco}"></td>
+            <td th:text="${produto.qtdEstoque}"></td>
+            <td class="text-center">
+                <a class="btn-edit" th:href="" th:if="">Editar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

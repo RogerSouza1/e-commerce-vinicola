@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="button-container">
-    <button class="btn btn-register" type="button" onclick="window.location.href=''">Listar Produtos</button>
+    <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Listar Produtos</button>
 
     <div sec:authorize="hasRole('ROLE_ADMINISTRADOR')">
         <button class="btn btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Listar
