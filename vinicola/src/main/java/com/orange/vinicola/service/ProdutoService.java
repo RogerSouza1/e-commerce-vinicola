@@ -26,7 +26,11 @@ public class ProdutoService {
         return produtoRepository.findById(id);
     }
 
-    public List<Produto> findByNome(String nome){
+    public Produto findByNome(String email) {
+        return produtoRepository.findByNome(email);
+    }
+
+    public List<Produto> findByNomes(String nome){
         return produtoRepository.findByNomes(nome);
     }
 

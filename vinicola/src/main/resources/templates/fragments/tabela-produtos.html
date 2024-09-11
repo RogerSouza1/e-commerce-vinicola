@@ -6,31 +6,29 @@
 </head>
 <body>
 <div th:fragment="tabela-produtos">
-    <table border="1" id="tabela-produtos" th:fragment="tabela-produtos">
-        <thead>
+<!-- fragments/tabela-produtos.html -->
+<table>
+    <thead>
         <tr>
-            <th>ID</th>
             <th>Nome</th>
             <th>Avaliação</th>
             <th>Descrição</th>
             <th>Preço</th>
             <th>Quantidade</th>
+            <th>Status</th>
         </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tbody>
         <tr th:each="produto : ${produtos}">
-            <td th:text="${produto.id}"></td>
-            <td th:text="${produto.nome}"></td>
-            <td th:text="${produto.avaliacao}"></td>
-            <td th:text="${produto.descricao}"></td>
-            <td th:text="${produto.preco}"></td>
-            <td th:text="${produto.qtdEstoque}"></td>
-            <td class="text-center">
-                <a class="btn-edit" th:href="" th:if="">Editar</a>
-            </td>
+            <td th:text="${produto.nome}">Nome</td>
+            <td th:text="${produto.avaliacao}">Avaliação</td>
+            <td th:text="${produto.descricao}">Descrição</td>
+            <td th:text="${produto.preco}">Preço</td>
+            <td th:text="${produto.qtdEstoque}">Quantidade</td>
+            <td th:text="${produto.ativado ? 'Ativo' : 'Inativo'}"></td>
         </tr>
-        </tbody>
-    </table>
+    </tbody>
+</table>
 </div>
 </body>
 </html>

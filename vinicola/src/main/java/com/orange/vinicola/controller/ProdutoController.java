@@ -31,7 +31,7 @@ public class ProdutoController {
                 model.addAttribute("mensagem", "Produto já registrado!");
                 return "registrar-produto";
             }
-
+            produto.setAtivado(true);
             produtoService.save(produto);
             model.addAttribute("mensagem", "Produto registrado com sucesso!");
         } catch (DataIntegrityViolationException e) {
@@ -49,7 +49,7 @@ public class ProdutoController {
 
     @GetMapping("/buscar-produto")
     public String buscarProduto(@RequestParam("nome") String nome, Model model) {
-        List<Produto> produtos = produtoService.findByNome(nome);
+        List<Produto> produtos = produtoService.findByNomes(nome);
         model.addAttribute("produtos", produtos);
         return "fragments/tabela-produtos :: tabela-produtos";
     }

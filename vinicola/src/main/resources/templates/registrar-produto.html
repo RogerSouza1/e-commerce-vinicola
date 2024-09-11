@@ -6,58 +6,39 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
-
         function validateForm() {
-            const cpf = document.getElementById("cpf").value.replace(/[^\d]+/g, '');
-            const email = document.getElementById("email").value;
-            const senha = document.getElementById("senha").value;
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const nome = document.getElementById("nome").value.trim();
+            const avaliacao = document.getElementById("avaliacao").value;
+            const descricao = document.getElementById("descricao").value.trim();
+            const preco = document.getElementById("preco").value.replace(/[^\d,]/g, '').replace(',', '.');
+            const qtdEstoque = document.getElementById("qtdEstoque").value;
 
-            if (!validateCPF(cpf)) {
-                alert("CPF inválido.");
+            if (nome === "" || descricao === "" || preco === "" || qtdEstoque === "") {
+                alert("Todos os campos são obrigatórios.");
                 return false;
             }
 
-            if (!emailPattern.test(email)) {
-                alert("Email inválido.");
+            if (isNaN(preco) || parseFloat(preco) <= 0) {
+                alert("Preço deve ser um número positivo.");
                 return false;
             }
 
-            if (senha !== document.getElementById("confirmar-senha").value) {
-                alert("Senhas não conferem.");
+            if (isNaN(qtdEstoque) || parseInt(qtdEstoque) < 0) {
+                alert("Quantidade deve ser um número não negativo.");
                 return false;
             }
+
+            // Convert the price to a numeric format
+            document.getElementById("preco").value = preco;
 
             return true;
         }
 
-        function validateCPF(cpf) {
-            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-                return false;
-            }
-            let sum = 0;
-            for (let i = 0; i < 9; i++) {
-                sum += parseInt(cpf.charAt(i)) * (10 - i);
-            }
-            let remainder = 11 - (sum % 11);
-            if (remainder === 10 || remainder === 11) {
-                remainder = 0;
-            }
-            if (remainder !== parseInt(cpf.charAt(9))) {
-                return false;
-            }
-            sum = 0;
-            for (let i = 0; i < 10; i++) {
-                sum += parseInt(cpf.charAt(i)) * (11 - i);
-            }
-            remainder = 11 - (sum % 11);
-            if (remainder === 10 || remainder === 11) {
-                remainder = 0;
-            }
-            if (remainder !== parseInt(cpf.charAt(10))) {
-                return false;
-            }
-            return true;
+        function formatCurrency(input) {
+            let value = input.value.replace(/\D/g, '');
+            value = (value / 100).toFixed(2);
+            value = value.replace('.', ',');
+            input.value = 'R$ ' + value;
         }
 
         function clearForm() {
@@ -67,7 +48,6 @@
             document.getElementById("preco").value = 0.00;
             document.getElementById("qtdEstoque").value = 0;
         }
-
     </script>
 </head>
 <body>
@@ -80,20 +60,20 @@
     <input id="nome" name="nome" required th:field="*{nome}" type="text"/><br/>
 
     <label for="avaliacao">Avaliação:</label>
-    <input id="avaliacao" name="avaliacao" required th:field="*{avaliacao}" type="text"/><br/>
+    <input type="number" id="avaliacao" name="avaliacao" min="1" max="5" step="0.5" required th:field="*{avaliacao}">
 
     <label for="descricao">Descrição:</label>
-    <input id="descricao" maxlength="14" name="descricao" required th:field="*{descricao}" type="text"/><br/>
+    <input id="descricao" maxlength="2000" name="descricao" required th:field="*{descricao}" type="text"/><br/>
 
-    <label for="preco">Senha:</label>
-    <input id="preco" name="preco" required th:field="*{preco}" type="text"/><br/>
+    <label for="preco">Preço:</label>
+    <input type="text" id="preco" name="preco" onkeyup="formatCurrency(this)" placeholder="0,00" required th:field="*{preco}"><br/>
 
     <label for="qtdEstoque">Quantidade:</label>
-    <input id="qtdEstoque" name="qtdEstoque" th:field="*{qtdEstoque}" type="text"/><br/>
+    <input type="number" id="qtdEstoque" name="qtdEstoque" min="0" step="1" required th:field="*{qtdEstoque}">
 
     <button type="submit">Cadastrar</button>
     <button onclick="clearForm()" type="button">Limpar</button>
+<button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Cancelar</button>
 </form>
-<button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Voltar</button>
 </body>
 </html>

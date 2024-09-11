@@ -24,7 +24,7 @@ public class Produto {
     private Long id;
 
     @Column(nullable = false)
-    @Size(min = 1, max = 300)
+    @Size(min = 1, max = 200)
     private String nome;
 
     @DecimalMin(value = "0", inclusive = true)
@@ -32,8 +32,7 @@ public class Produto {
     @Column(nullable = false)
     private double avaliacao;
 
-    @Column(nullable = false)
-    @Size(min = 1, max = 2000)
+    @Column(nullable = false, length = 2000)
     private String descricao;
 
     @Column(nullable = false)
@@ -41,6 +40,10 @@ public class Produto {
 
     @Column(nullable = false)
     private int qtdEstoque;
+
+    @Getter
+    @Column(nullable = false)
+    private boolean ativado;
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Imagem> imagems;
