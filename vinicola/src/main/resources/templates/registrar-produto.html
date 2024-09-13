@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Usuário</title>
+    <title>Cadastro de Produto</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
@@ -12,6 +12,8 @@
             const descricao = document.getElementById("descricao").value.trim();
             const preco = document.getElementById("preco").value.replace(/[^\d,]/g, '').replace(',', '.');
             const qtdEstoque = document.getElementById("qtdEstoque").value;
+            const imageUpload = document.getElementById("imageUpload").files;
+            const principalImage = document.getElementById("principalImage").value;
 
             if (nome === "" || descricao === "" || preco === "" || qtdEstoque === "") {
                 alert("Todos os campos são obrigatórios.");
@@ -25,6 +27,15 @@
 
             if (isNaN(qtdEstoque) || parseInt(qtdEstoque) < 0) {
                 alert("Quantidade deve ser um número não negativo.");
+                return false;
+            }
+
+            if (imageUpload.length === 0) {
+                alert("É necessário anexar pelo menos uma imagem.");
+                return false;
+            }
+            if (isNaN(principalImage) || parseInt(principalImage) < 0 || parseInt(principalImage) >= imageUpload.length) {
+                alert("Índice da imagem principal inválido.");
                 return false;
             }
 
@@ -47,6 +58,8 @@
             document.getElementById("descricao").value = "";
             document.getElementById("preco").value = 0.00;
             document.getElementById("qtdEstoque").value = 0;
+            document.getElementById("imageUpload").value = "";
+            document.getElementById("principalImage").value = "";
         }
     </script>
 </head>
@@ -55,12 +68,13 @@
 
 <div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
 
-<form th:action="@{/cadastro-produto}" th:object="${produto}" method="post" onsubmit="return validateForm()">
+<form th:action="@{/cadastro-produto}" th:object="${produto}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    <input type="hidden" name="produtoId" th:value="${produto.id}"/>
     <label for="nome">Nome:</label>
     <input id="nome" name="nome" required th:field="*{nome}" type="text"/><br/>
 
     <label for="avaliacao">Avaliação:</label>
-    <input type="number" id="avaliacao" name="avaliacao" min="1" max="5" step="0.5" required th:field="*{avaliacao}">
+    <input type="number" id="avaliacao" name="avaliacao" min="1" max="5" step="0.5" required th:field="*{avaliacao}"><br>
 
     <label for="descricao">Descrição:</label>
     <input id="descricao" maxlength="2000" name="descricao" required th:field="*{descricao}" type="text"/><br/>
@@ -69,11 +83,17 @@
     <input type="text" id="preco" name="preco" onkeyup="formatCurrency(this)" placeholder="0,00" required th:field="*{preco}"><br/>
 
     <label for="qtdEstoque">Quantidade:</label>
-    <input type="number" id="qtdEstoque" name="qtdEstoque" min="0" step="1" required th:field="*{qtdEstoque}">
+    <input type="number" id="qtdEstoque" name="qtdEstoque" min="0" step="1" required th:field="*{qtdEstoque}"><br>
+
+    <label for="imageUpload">Anexa sua(s) imagem(ns):</label>
+    <input type="file" id="imageUpload" name="imageUpload" accept="image/png, image/jpeg, image/jpg" multiple><br/>
+
+    <label for="principalImage">Imagem Principal:</label>
+    <input type="number" id="principalImage" name="principalImage" min="0" placeholder="Índice da imagem principal"><br/>
 
     <button type="submit">Cadastrar</button>
     <button onclick="clearForm()" type="button">Limpar</button>
-<button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Cancelar</button>
+    <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Cancelar</button>
 </form>
 </body>
 </html>

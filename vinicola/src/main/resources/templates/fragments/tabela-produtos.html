@@ -6,10 +6,10 @@
 </head>
 <body>
 <div th:fragment="tabela-produtos">
-<!-- fragments/tabela-produtos.html -->
-<table>
-    <thead>
+    <table>
+        <thead>
         <tr>
+            <th>Imagem Principal</th>
             <th>Nome</th>
             <th>Avaliação</th>
             <th>Descrição</th>
@@ -17,9 +17,12 @@
             <th>Quantidade</th>
             <th>Status</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         <tr th:each="produto : ${produtos}">
+            <td>
+                <img th:src="${produto.imagemPrincipal.url}" alt="Imagem Principal" />
+            </td>
             <td th:text="${produto.nome}">Nome</td>
             <td th:text="${produto.avaliacao}">Avaliação</td>
             <td th:text="${produto.descricao}">Descrição</td>
@@ -27,8 +30,8 @@
             <td th:text="${produto.qtdEstoque}">Quantidade</td>
             <td th:text="${produto.ativado ? 'Ativo' : 'Inativo'}"></td>
         </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
