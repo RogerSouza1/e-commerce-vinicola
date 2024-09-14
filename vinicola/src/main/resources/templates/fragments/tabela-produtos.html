@@ -21,7 +21,7 @@
         <tbody>
         <tr th:each="produto : ${produtos}">
             <td>
-                <img th:src="${produto.imagemPrincipal.url}" alt="Imagem Principal" />
+                <img th:src="@{'/imagem/' + ${produto.imagemPrincipal.id}}" alt="Imagem Principal" width=80px/>
             </td>
             <td th:text="${produto.nome}">Nome</td>
             <td th:text="${produto.avaliacao}">Avaliação</td>

@@ -23,6 +23,7 @@
     </script>
 </head>
 <body>
+<button onclick="window.location.href='index'" type="button">Voltar</button>
 <h1>Lista de Produtos</h1>
 <div class="header-container">
     <input type="text" id="search" name="nome" placeholder="Pesquisar" autocomplete="off">
@@ -30,6 +31,5 @@
 </div>
 
 <div id="tabela-produtos" th:replace="~{fragments/tabela-produtos :: tabela-produtos}"></div>
-<button onclick="window.location.href='index'" type="button">Voltar</button>
 </body>
 </html>

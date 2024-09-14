@@ -13,7 +13,8 @@
             const preco = document.getElementById("preco").value.replace(/[^\d,]/g, '').replace(',', '.');
             const qtdEstoque = document.getElementById("qtdEstoque").value;
             const imageUpload = document.getElementById("imageUpload").files;
-            const principalImage = document.getElementById("principalImage").value;
+            let principalImage = document.getElementById("principalImage").value;
+
 
             if (nome === "" || descricao === "" || preco === "" || qtdEstoque === "") {
                 alert("Todos os campos são obrigatórios.");
@@ -34,9 +35,9 @@
                 alert("É necessário anexar pelo menos uma imagem.");
                 return false;
             }
-            if (isNaN(principalImage) || parseInt(principalImage) < 0 || parseInt(principalImage) >= imageUpload.length) {
-                alert("Índice da imagem principal inválido.");
-                return false;
+            if (principalImage === "" || isNaN(principalImage) || parseInt(principalImage) < 0 || parseInt(principalImage) >= imageUpload.length) {
+                principalImage = 0; // Define o valor padrão como 0
+                document.getElementById("principalImage").value = 0;
             }
 
             // Convert the price to a numeric format
@@ -59,7 +60,7 @@
             document.getElementById("preco").value = 0.00;
             document.getElementById("qtdEstoque").value = 0;
             document.getElementById("imageUpload").value = "";
-            document.getElementById("principalImage").value = "";
+            document.getElementById("principalImage").value = 0;
         }
     </script>
 </head>
@@ -89,7 +90,7 @@
     <input type="file" id="imageUpload" name="imageUpload" accept="image/png, image/jpeg, image/jpg" multiple><br/>
 
     <label for="principalImage">Imagem Principal:</label>
-    <input type="number" id="principalImage" name="principalImage" min="0" placeholder="Índice da imagem principal"><br/>
+    <input type="number" id="principalImage" name="principalImage" min="0" placeholder="Índice da imagem principal" value="0"><br/>
 
     <button type="submit">Cadastrar</button>
     <button onclick="clearForm()" type="button">Limpar</button>

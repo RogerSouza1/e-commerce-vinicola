@@ -6,9 +6,11 @@ import com.orange.vinicola.service.ImagemService;
 import com.orange.vinicola.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,6 +77,14 @@ public class ProdutoController {
         List<Produto> produtos = produtoService.findByNomes(nome);
         model.addAttribute("produtos", produtos);
         return "fragments/tabela-produtos :: tabela-produtos";
+    }
+
+    @GetMapping("/imagem/{id}")
+    public ResponseEntity<byte[]> getImagem(@PathVariable Long id) {
+        Imagem imagem = imagemService.findById(id).orElseThrow(() -> new RuntimeException("Imagem não encontrada"));
+        return ResponseEntity.ok()
+                .header("Content-Type", "image/jpeg") // ou image/png, conforme o tipo da imagem
+                .body(imagem.getDados());
     }
 
 }
