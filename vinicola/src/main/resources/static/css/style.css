@@ -15,17 +15,20 @@ body {
     background-color: #f8f8f8;
 }
 
+/* HEADER E NAVIGATION */
 header {
+    width: 100%;
+    padding: 1.5vw 2vw;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
-    width: 150px;
+    max-width: 12vw; /* Ajusta automaticamente o tamanho da logo */
+    width: 100%;
 }
 
 .dropdown {
@@ -36,10 +39,11 @@ header {
 .dropdown-btn {
     background-color: #6b1d1d;
     color: white;
-    padding: 10px 20px;
+    padding: 1rem 2rem;
     border: none;
     border-radius: 16px;
     cursor: pointer;
+    font-size: 0.8rem;
 }
 
 .dropdown-btn:hover {
@@ -52,7 +56,7 @@ header {
     right: 0;
     background-color: #fff;
     min-width: 100px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     z-index: 1;
     border-radius: 10px;
 }
@@ -76,6 +80,7 @@ header {
     background-color: #f1f1f1;
 }
 
+/* CONTAINER DE LOGIN */
 main {
     display: flex;
     justify-content: center;
@@ -83,11 +88,92 @@ main {
     flex-grow: 1;
 }
 
+.login-container {
+    background-color: #fff;
+    margin: 5vh;
+    padding: 3vw;
+    border-radius: 2vw;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+    width: 35vw;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 2vw;
+    color: #6b1d1d;
+    font-size: 1.8vw;
+}
+
+.input-group {
+    margin-bottom: 1.5vw;
+    text-align: left;
+}
+
+label {
+    margin-bottom: 0.5vw;
+    color: darkred;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 1vw;
+    border: 2px solid gray;
+    border-radius: 1vw;
+    font-size: 1vw;
+}
+
+input:focus {
+    border-color: #6b1d1d;
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn-login {
+    background-color: #6b1d1d;
+    color: #fff;
+    border: none;
+    padding: 1vw 0;
+    font-size: 1.2vw;
+    border-radius: 1vw;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    line-height: 1.6vw;
+    margin: 2.5vw 0 1.5vw;
+}
+
+.btn-login:hover {
+    background-color: #5a1515;
+}
+
+.btn-cancel {
+    text-decoration-line: underline;
+    color: #6b1d1d;
+    font-size: 1vw;
+    width: 100%;
+    margin-top: 1vw;
+}
+
+.error-message {
+    color: #b91c1c;
+    font-size: 1vw;
+    margin-top: 1vw;
+    text-align: center;
+}
+
+/* BOTÕES DE REGISTRO */
 .button-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .btn-register {
@@ -95,7 +181,7 @@ main {
     color: #fff;
     border: none;
     padding: 15px 40px;
-    font-size: 18px;
+    font-size: 1.125rem;
     border-radius: 16px;
     cursor: pointer;
     margin: 25px 0;
