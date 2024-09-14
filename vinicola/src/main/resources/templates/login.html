@@ -1,29 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-
+<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/styles.css">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Winery</title>
 </head>
 <body>
-<main class="listar-usuario-container">
-    <h1>Login</h1>
 
-    <div class="header-container">
-        <div th:if="${session.error}" th:text="${session.error}"></div>
+<header>
+    <nav>
+        <div class="logo-container">
+            <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+        </div>
+    </nav>
+</header>
 
-        <form th:action="@{/login}" method="post">
+<main>
+    <section class="login-container">
+        <h2>Login</h2>
+
+        <div th:if="${session.error}" th:text="${session.error}" class="error-message"></div>
+
+        <form th:action="@{/login}" method="post" class="login-form">
             <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
-            <label for="email">Email:</label>
-            <input id="email" name="email" required type="email"/><br/>
 
-            <label for="senha">Senha:</label>
-            <input id="senha" name="senha" required type="password"/><br/>
+            <div class="input-group">
+                <label for="email">Usuário:</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+            </div>
 
-            <button type="submit">Login</button>
+            <div class="input-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-login">Entrar</button>
+                <a href="/" class="btn-cancel">Cancelar</a>
+            </div>
         </form>
-    </div>
+    </section>
 </main>
+
 </body>
 </html>

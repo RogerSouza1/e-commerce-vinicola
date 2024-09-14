@@ -1,23 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" th:href="@{/css/index_backoffice.css}">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backoffice</title>
 </head>
 <body>
-<div class="button-container">
-    <button class="btn btn-register" type="button" onclick="window.location.href=''">Listar Produtos</button>
-
-    <div sec:authorize="hasRole('ROLE_ADMINISTRADOR')">
-        <button class="btn btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Listar
-            Funcionários
+<header>
+    <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+    <div class="dropdown">
+        <button class="dropdown-btn" sec:authorize="isAuthenticated()">
+            [[${#authentication.name}]] &#9662;
         </button>
+        <div class="dropdown-content">
+            <form method="post" th:action="@{/logout}">
+                <button class="btn-logout" type="submit">Sair</button>
+            </form>
+        </div>
     </div>
 
-    <form method="post" th:action="@{/logout}">
-        <button class="btn btn-logout" type="submit">Logout</button>
-    </form>
-</div>
+</header>
+
+<main>
+    <div class="button-container">
+        <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Listar Produtos</button>
+
+        <div sec:authorize="hasRole('ROLE_ADMINISTRADOR')">
+            <button class="btn btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Listar Usuários</button>
+        </div>
+    </div>
+</main>
 </body>
 </html>
