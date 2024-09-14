@@ -72,7 +72,7 @@
 <form th:action="@{/cadastro-produto}" th:object="${produto}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
     <input type="hidden" name="produtoId" th:value="${produto.id}"/>
     <label for="nome">Nome:</label>
-    <input id="nome" name="nome" required th:field="*{nome}" type="text"/><br/>
+    <input id="nome" name="nome" required th:field="*{nome}" type="text" maxlength="200"/><br/>
 
     <label for="avaliacao">Avaliação:</label>
     <input type="number" id="avaliacao" name="avaliacao" min="1" max="5" step="0.5" required th:field="*{avaliacao}"><br>

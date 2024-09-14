@@ -112,6 +112,14 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!--Comando para verificar o tamanho do heap da JVM (rodar no CMD): java -XX:+PrintFlagsFinal -version | findstr /i "HeapSize PermSize ThreadStackSize"-->
+					<jvmArguments>-Xms512m -Xmx4096</jvmArguments>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

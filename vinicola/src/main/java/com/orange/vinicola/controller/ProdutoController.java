@@ -78,13 +78,4 @@ public class ProdutoController {
         model.addAttribute("produtos", produtos);
         return "fragments/tabela-produtos :: tabela-produtos";
     }
-
-    @GetMapping("/imagem/{id}")
-    public ResponseEntity<byte[]> getImagem(@PathVariable Long id) {
-        Imagem imagem = imagemService.findById(id).orElseThrow(() -> new RuntimeException("Imagem não encontrada"));
-        return ResponseEntity.ok()
-                .header("Content-Type", "image/jpeg") // ou image/png, conforme o tipo da imagem
-                .body(imagem.getDados());
-    }
-
 }
