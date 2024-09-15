@@ -29,6 +29,10 @@
             <td th:text="${produto.preco}">Preço</td>
             <td th:text="${produto.qtdEstoque}">Quantidade</td>
             <td th:text="${produto.ativado ? 'Ativo' : 'Inativo'}"></td>
+
+            <td class="text-center">
+                <a class="btn-edit" th:href="@{/editar-produto(id=${produto.id})}" th:if="${produto.ativado}">Editar</a>
+                <a class="btn-edit" href="javascript:void(0);" onclick="showInactiveProductError()" th:unless="${produto.ativado}">Editar</a>
         </tr>
         </tbody>
     </table>
