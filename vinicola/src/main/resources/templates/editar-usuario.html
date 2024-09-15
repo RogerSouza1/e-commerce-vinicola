@@ -79,10 +79,9 @@
             </div>
         </div>
     </nav>
+    <button class="btn-voltar" onclick="window.location.href='/lista-usuarios'" type="button"><img
+            th:src="@{images/seta.png}"></button>
 </header>
-
-<button class="btn-voltar" onclick="window.location.href='/lista-usuarios'" type="button"><img
-        th:src="@{images/seta.png}"></button>
 
 <main class="main-editar-usuario">
     <section class="form-container">
@@ -115,10 +114,10 @@
             <div class="input-group">
                 <div th:if="${!isEditingOwnProfile}">
                     <label for="grupo">Grupo:</label>
-                    <select id="grupo" name="group" required th:field="*{grupo}">
-                        <option value="ADMINISTRADOR">Administrador</option>
-                        <option value="ESTOQUISTA">Estoquista</option>
-                        <option value="CLIENTE">Cliente</option>
+                    <select id="grupo" name="group" class="select-field" required th:field="*{grupo}">
+                        <option value="ADMINISTRADOR" class="option-select">Administrador</option>
+                        <option value="ESTOQUISTA" class="option-select">Estoquista</option>
+                        <option value="CLIENTE" class="option-select">Cliente</option>
                     </select><br>
                 </div>
             </div>
