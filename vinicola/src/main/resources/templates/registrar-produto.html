@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Produto</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        function validateForm() {
+            const nome = document.getElementById("nome").value.trim();
+            const avaliacao = document.getElementById("avaliacao").value;
+            const descricao = document.getElementById("descricao").value.trim();
+            const preco = document.getElementById("preco").value.replace(/[^\d,]/g, '').replace(',', '.');
+            const qtdEstoque = document.getElementById("qtdEstoque").value;
+            const hiddenImageUpload = document.getElementById('hiddenImageUpload').files;
+            const principalImage = document.getElementById('principalImage').value;
+
+            if (nome === "" || descricao === "" || preco === "" || qtdEstoque === "") {
+                alert("Todos os campos são obrigatórios.");
+                return false;
+            }
+
+            if (isNaN(preco) || parseFloat(preco) <= 0) {
+                alert("Preço deve ser um número positivo.");
+                return false;
+            }
+
+            if (isNaN(qtdEstoque) || parseInt(qtdEstoque) < 0) {
+                alert("Quantidade deve ser um número não negativo.");
+                return false;
+            }
+
+            if (hiddenImageUpload.length === 0) {
+                alert('Por favor, adicione ao menos uma imagem.');
+                return false;
+            }
+
+            if (!principalImage) {
+                alert('Por favor, selecione uma imagem principal.');
+                return false;
+            }
+
+            document.getElementById("preco").value = preco;
+
+            return true;
+        }
+
+        function formatCurrency(input) {
+            let value = input.value.replace(/\D/g, '');
+            value = (value / 100).toFixed(2);
+            value = value.replace('.', ',');
+            input.value = 'R$ ' + value;
+        }
+
+        function clearForm() {
+            document.getElementById("nome").value = "";
+            document.getElementById("avaliacao").value = 0;
+            document.getElementById("descricao").value = "";
+            document.getElementById("preco").value = "0,00";
+            document.getElementById("qtdEstoque").value = 0;
+            document.getElementById("imagePreviewList").innerHTML = "";
+            document.getElementById("imageUpload").value = "";
+            document.getElementById("hiddenImageUpload").value = "";
+            document.getElementById("principalImage").value = "";
+        }
+
+        let principalImageIndex = -1;
+
+        function openModal() {
+            document.getElementById("imageModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        function addImage() {
+            const fileInput = document.getElementById("imageUpload");
+            const files = fileInput.files;
+            const imagePreviewList = document.getElementById("imagePreviewList");
+
+            imagePreviewList.innerHTML = ''; // Limpa as imagens anteriores
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.style.width = "80px";
+                    img.style.cursor = "pointer";
+                    img.style.border = "2px solid transparent";
+
+                    img.onclick = function() {
+                        setPrincipalImage(i, img);
+                    };
+
+                    imagePreviewList.appendChild(img);
+
+                    // Define a primeira imagem como principal se for a única
+                    if (files.length === 1) {
+                        setPrincipalImage(0, img);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function setPrincipalImage(index, imgElement) {
+            const imagePreviewList = document.getElementById("imagePreviewList").children;
+
+            for (let i = 0; i < imagePreviewList.length; i++) {
+                imagePreviewList[i].style.border = "2px solid transparent";
+            }
+
+            imgElement.style.border = "2px solid red";
+
+            document.getElementById('principalImage').value = index;
+
+            alert("Imagem principal definida.");
+        }
+
+        function saveAndCloseModal() {
+            const fileInput = document.getElementById("imageUpload");
+            const hiddenFileInput = document.getElementById("hiddenImageUpload");
+
+            const dt = new DataTransfer();
+            for (let i = 0; i < fileInput.files.length; i++) {
+                dt.items.add(fileInput.files[i]);
+            }
+
+            hiddenFileInput.files = dt.files;
+
+            closeModal();
+        }
+</script>
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+        padding-top: 60px;
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+    .save, .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .save, .close:hover,
+    .save, .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<h1>Cadastro de Produto</h1>
+
+<div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
+
+<form th:action="@{/cadastro-produto}" th:object="${produto}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    <input type="hidden" name="produtoId" th:value="${produto.id}"/>
+
+    <label for="nome">Nome:</label>
+    <input id="nome" name="nome" required th:field="*{nome}" type="text" maxlength="200"/><br/>
+
+    <label for="avaliacao">Avaliação:</label>
+    <input type="number" id="avaliacao" name="avaliacao" min="1" max="5" step="0.5" required th:field="*{avaliacao}"><br>
+
+    <label for="descricao">Descrição:</label>
+    <input id="descricao" maxlength="2000" name="descricao" required th:field="*{descricao}" type="text"/><br/>
+
+    <label for="preco">Preço:</label>
+    <input type="text" id="preco" name="preco" onkeyup="formatCurrency(this)" placeholder="0,00" required th:field="*{preco}"><br/>
+
+    <label for="qtdEstoque">Quantidade:</label>
+    <input type="number" id="qtdEstoque" name="qtdEstoque" min="0" step="1" required th:field="*{qtdEstoque}"><br/>
+
+    <label for="imageUpload">Anexa sua(s) imagem(ns):</label>
+    <button type="button" onclick="openModal()">Gerenciar Imagens</button><br/>
+
+    <!-- Campo oculto para armazenar os arquivos selecionados no modal -->
+    <input type="file" id="hiddenImageUpload" name="imageUpload" style="display:none" multiple/>
+
+    <!-- Campo oculto para armazenar o índice da imagem principal -->
+    <input type="hidden" id="principalImage" name="principalImage" value="">
+
+    <button type="submit">Cadastrar</button>
+    <button onclick="clearForm()" type="button">Limpar</button>
+    <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Cancelar</button>
+</form>
+<div id="imageModal" class="modal">
+    <div class="modal-content">
+        <h2>Imagens Anexadas</h2>
+        <!-- Lista de visualização das imagens anexadas -->
+        <div id="imagePreviewList" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+        <!-- Input de seleção de imagens -->
+        <input type="file" id="imageUpload" name="imageUpload" multiple onchange="addImage()" style="margin-top: 10px;"/>
+        <!-- Botões para anexar e fechar o modal -->
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <button class="save" onclick="saveAndCloseModal()">Salvar e Fechar</button>
+            <button class="close" onclick="closeModal()">Cancelar</button>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

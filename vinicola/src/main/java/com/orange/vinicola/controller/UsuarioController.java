@@ -49,10 +49,11 @@ public class UsuarioController {
 
             UsuarioService.save(usuario);
             model.addAttribute("mensagem", "Funcionário registrado com sucesso!");
+
         } catch (DataIntegrityViolationException e) {
             model.addAttribute("mensagem", "Erro: Email já registrado!");
         }
-        return "registrar-funcionario";
+        return "redirect:/lista-usuarios";
     }
 
     @GetMapping("/lista-usuarios")
