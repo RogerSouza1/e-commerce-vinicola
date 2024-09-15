@@ -11,7 +11,6 @@
             const avaliacao = document.getElementById("avaliacao").value;
             const descricao = document.getElementById("descricao").value.trim();
             const preco = document.getElementById("preco").value.replace(/[^\d,]/g, '').replace(',', '.');
-            document.getElementById("preco").value = preco;
             const qtdEstoque = document.getElementById("qtdEstoque").value;
             const hiddenImageUpload = document.getElementById('hiddenImageUpload').files;
             const principalImage = document.getElementById('principalImage').value;
@@ -41,6 +40,8 @@
                 return false;
             }
 
+            document.getElementById("preco").value = preco;
+
             return true;
         }
 
@@ -57,8 +58,10 @@
             document.getElementById("descricao").value = "";
             document.getElementById("preco").value = "0,00";
             document.getElementById("qtdEstoque").value = 0;
-            document.getElementById("hiddenImageUpload").value = ""; // Limpa o input hidden
-            document.getElementById("principalImage").value = "";    // Limpa o principalImage
+            document.getElementById("imagePreviewList").innerHTML = "";
+            document.getElementById("imageUpload").value = "";
+            document.getElementById("hiddenImageUpload").value = "";
+            document.getElementById("principalImage").value = "";
         }
 
         let principalImageIndex = -1;
@@ -86,7 +89,6 @@
                     const img = document.createElement("img");
                     img.src = e.target.result;
                     img.style.width = "80px";
-                    img.style.height = "80px";
                     img.style.cursor = "pointer";
                     img.style.border = "2px solid transparent";
 
@@ -95,6 +97,11 @@
                     };
 
                     imagePreviewList.appendChild(img);
+
+                    // Define a primeira imagem como principal se for a única
+                    if (files.length === 1) {
+                        setPrincipalImage(0, img);
+                    }
                 };
                 reader.readAsDataURL(file);
             }
