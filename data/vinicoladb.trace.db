@@ -2477,3 +2477,6 @@ select p1_0.id,p1_0.ativado,p1_0.avaliacao,p1_0.descricao,p1_0.nome,p1_0.preco,p
 2024-09-13 20:25:39.091532-03:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUTO" not found; SQL statement:
 select p1_0.id,p1_0.ativado,p1_0.avaliacao,p1_0.descricao,p1_0.nome,p1_0.preco,p1_0.qtd_estoque from produto p1_0 [42102-224]
+2024-09-14 22:53:41.593838-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "IMAGE" not found; SQL statement:
+drop table image [42102-224]

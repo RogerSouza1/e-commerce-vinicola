@@ -33,15 +33,30 @@ public class ProdutoController {
     }
 
     @PostMapping("/cadastro-produto")
-    public String registerProduct(Produto produto, @RequestParam("imageUpload") MultipartFile[] files, @RequestParam("principalImage") int principalImageIndex, Model model) {
+    public String registerProduct(Produto produto, @RequestParam("imageUpload") MultipartFile[] files,  @RequestParam("principalImage") Integer principalImageIndex,
+                                  Model model)  {
         try {
             if (produtoService.findByNome(produto.getNome()) != null) {
                 model.addAttribute("mensagem", "Produto já registrado!");
                 return "registrar-produto";
             }
+
             produto.setAtivado(true);
             Produto produtoSalvo = produtoService.save(produto);
 
+            // Verifica se as imagens foram carregadas
+            if (files == null || files.length == 0) {
+                model.addAttribute("mensagem", "Por favor, anexe pelo menos uma imagem.");
+                return "registrar-produto";
+            }
+
+            // Verifica se o índice da imagem principal foi enviado
+            if (principalImageIndex == null || principalImageIndex < 0 || principalImageIndex >= files.length) {
+                model.addAttribute("mensagem", "Selecione uma imagem principal válida.");
+                return "registrar-produto";
+            }
+
+            // Salva as imagens no banco
             for (int i = 0; i < files.length; i++) {
                 MultipartFile file = files[i];
                 try {
@@ -49,7 +64,7 @@ public class ProdutoController {
                     imagem.setProduto(produtoSalvo);
                     imagem.setDados(file.getBytes());
                     imagem.setUrl(file.getOriginalFilename());
-                    imagem.setPrincipal(i == principalImageIndex); // Define a imagem principal
+                    imagem.setPrincipal(i == principalImageIndex); // Define a imagem principal com base no índice
                     imagemService.save(imagem);
                 } catch (IOException e) {
                     e.printStackTrace();
