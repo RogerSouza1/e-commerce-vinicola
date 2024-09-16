@@ -31,9 +31,9 @@
                    th:unless="${usuario.ativado}">Editar</a>
             </td>
             <td class="text-center">
-                <a class="btn-toggle-status" onclick="return confirmChange()"
-                   th:href="@{/alterar-estado(id=${usuario.id})}"
-                   th:text="${usuario.ativado ? 'Desabilitar' : 'Habilitar'}"></a>
+                <input type="checkbox" id="checkbox-toggle-status-${usuario.id}" class="checkbox-toggle-status" th:checked="${usuario.ativado}"
+                       th:onclick="|return confirmChange() ? window.location.href='@{/alterar-estado(id=${usuario.id})}' : false|">
+                <label th:for="'checkbox-toggle-status-' + ${usuario.id}">Habilitar</label>
             </td>
         </tr>
         </tbody>
