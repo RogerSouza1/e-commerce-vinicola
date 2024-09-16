@@ -1,6 +1,7 @@
 package com.orange.vinicola.service;
 
 import com.orange.vinicola.model.Produto;
+import com.orange.vinicola.model.Usuario;
 import com.orange.vinicola.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
