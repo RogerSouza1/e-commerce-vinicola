@@ -84,6 +84,4 @@ public class UsuarioService implements UserDetailsService {
         return new User(usuario.getEmail(), usuario.getSenha(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getGrupo())));
     }
-
-
 }

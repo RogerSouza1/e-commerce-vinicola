@@ -1,6 +1,7 @@
 package com.orange.vinicola.controller;
 
 import com.orange.vinicola.model.Usuario;
+import com.orange.vinicola.service.ProductService;
 import com.orange.vinicola.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -152,4 +153,6 @@ public class UsuarioController {
         }
 
     }
+
+
 }
