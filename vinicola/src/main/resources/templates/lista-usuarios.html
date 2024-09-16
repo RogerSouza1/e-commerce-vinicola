@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Usuários</title>
@@ -30,14 +30,41 @@
         }
     </script>
 </head>
-<body>
-<h1>Lista de Usuários</h1>
-<div class="header-container">
-    <input type="text" id="search" name="nome" placeholder="Pesquisar" autocomplete="off">
-    <a href="/cadastro-funcionario" class="btn btn-cadastrar">Cadastrar Usuário</a>
-</div>
 
-<div id="tabela-usuarios" th:replace="fragments/tabela-usuarios :: tabela-usuarios"></div>
-<button onclick="window.location.href='index'" type="button">Voltar</button>
+<body>
+
+<header>
+    <nav>
+        <div class="logo-container">
+            <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+            <div class="dropdown">
+                <button class="dropdown-btn" sec:authorize="isAuthenticated()">
+                    [[${#authentication.name}]] &#9662;
+                </button>
+                <div class="dropdown-content">
+                    <form method="post" th:action="@{/logout}">
+                        <button class="btn-logout" type="submit">Sair</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <button class="btn-voltar" onclick="window.location.href='/index'" type="button"><img
+            th:src="@{images/seta.png}"></button>
+</header>
+
+<main class="main-lista-usuario">
+    <div class="content-wrapper">
+        <section class="lista-usuario-container">
+            <h2 class="lista-title">Lista de Usuários</h2>
+            <div class="header-container">
+                <input type="text" id="search" name="nome" placeholder="Pesquisar" autocomplete="off">
+                <a href="/cadastro-funcionario" class="btn-cadastro">Cadastrar Usuário</a>
+            </div>
+            <div id="tabela-usuarios" th:replace="fragments/tabela-usuarios :: tabela-usuarios"></div>
+        </section>
+    </div>
+</main>
 </body>
 </html>

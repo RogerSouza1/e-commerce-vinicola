@@ -8,26 +8,29 @@
 </head>
 <body>
 <header>
-    <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
-    <div class="dropdown">
-        <button class="dropdown-btn" sec:authorize="isAuthenticated()">
-            [[${#authentication.name}]] &#9662;
-        </button>
-        <div class="dropdown-content">
-            <form method="post" th:action="@{/logout}">
-                <button class="btn-logout" type="submit">Sair</button>
-            </form>
+    <nav>
+        <div class="logo-container">
+            <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+            <div class="dropdown">
+                <button class="dropdown-btn" sec:authorize="isAuthenticated()">
+                    [[${#authentication.name}]] &#9662;
+                </button>
+                <div class="dropdown-content">
+                    <form method="post" th:action="@{/logout}">
+                        <button class="btn-logout" type="submit">Sair</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-
+    </nav>
 </header>
 
-<main>
+<main class="main-index">
     <div class="button-container">
-        <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Listar Produtos</button>
+        <button class="btn-register" onclick="window.location.href='/lista-produtos'" type="button">Listar Produtos</button>
 
         <div sec:authorize="hasRole('ROLE_ADMINISTRADOR')">
-            <button class="btn btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Listar Usuários</button>
+            <button class="btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Listar Usuários</button>
         </div>
     </div>
 </main>
