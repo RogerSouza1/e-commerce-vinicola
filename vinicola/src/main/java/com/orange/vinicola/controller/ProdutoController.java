@@ -114,45 +114,44 @@ public class ProdutoController {
 
     //Atualizar produto
     @PostMapping("/atualizar-produto")
-    public String updateProduct(Produto produto, @RequestParam("imageUpload") MultipartFile[] files, @RequestParam("principalImage") Integer principalImageIndex, Model model) {
-    try {
-        Produto produtoExistente = produtoService.findById(produto.getId()).orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+    public String updateProduct(@RequestParam("id") Long id, Produto produto, Model model) {
+        try {
+            Produto produtoExistente = produtoService.findById(id).orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
 
-        // Atualiza os detalhes do produto
-        produtoExistente.setNome(produto.getNome());
-        produtoExistente.setAvaliacao(produto.getAvaliacao());
-        produtoExistente.setDescricao(produto.getDescricao());
-        produtoExistente.setPreco(produto.getPreco());
-        produtoExistente.setQtdEstoque(produto.getQtdEstoque());
-        produtoService.save(produtoExistente);
+            // Atualiza os detalhes do produto
+            produtoExistente.setNome(produto.getNome());
+            produtoExistente.setAvaliacao(produto.getAvaliacao());
+            produtoExistente.setDescricao(produto.getDescricao());
+            produtoExistente.setPreco(produto.getPreco());
+            produtoExistente.setQtdEstoque(produto.getQtdEstoque());
+            produtoService.save(produtoExistente);
 
-        // Verifica se as imagens foram carregadas
-        if (files != null && files.length > 0) {
-            // Remove as imagens antigas
-            List<Imagem> imagensAntigas = imagemService.findByProdutoId(produtoExistente.getId());
-            for (Imagem imagem : imagensAntigas) {
-                imagemService.deleteById(imagem.getId());
-            }
-
-            // Salva as novas imagens
-            for (int i = 0; i < files.length; i++) {
-                MultipartFile file = files[i];
-                Imagem imagem = new Imagem();
-                imagem.setProduto(produtoExistente);
-                imagem.setDados(file.getBytes());
-                imagem.setUrl(file.getOriginalFilename());
-                imagem.setPrincipal(i == principalImageIndex); // Define a imagem principal com base no índice
-                imagemService.save(imagem);
-            }
+            // Verifica se as imagens foram carregadas
+//        if (files != null && files.length > 0) {
+//            // Remove as imagens antigas
+//            List<Imagem> imagensAntigas = imagemService.findByProdutoId(produtoExistente.getId());
+//            for (Imagem imagem : imagensAntigas) {
+//                imagemService.deleteById(imagem.getId());
+//            }
+//
+//            // Salva as novas imagens
+//            for (int i = 0; i < files.length; i++) {
+//                MultipartFile file = files[i];
+//                Imagem imagem = new Imagem();
+//                imagem.setProduto(produtoExistente);
+//                imagem.setDados(file.getBytes());
+//                imagem.setUrl(file.getOriginalFilename());
+//                imagem.setPrincipal(i == principalImageIndex); // Define a imagem principal com base no índice
+//                imagemService.save(imagem);
+//            }
+//        }
+            model.addAttribute("mensagem", "Produto atualizado com sucesso!");
+            return "redirect:/lista-produtos";
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("mensagem", "Erro: Produto já registrado!");
+            return "redirect:/lista-produtos";
         }
-
-        model.addAttribute("mensagem", "Produto atualizado com sucesso!");
-        return "redirect:/lista-produtos";
-    } catch (DataIntegrityViolationException e) {
-        model.addAttribute("mensagem", "Erro: Produto já registrado!");
-    } catch (IOException e) {
-        model.addAttribute("mensagem", "Erro ao salvar as imagens do produto.");
     }
-    return "redirect:/lista-produtos";
-}
-}
+
+    }
+
