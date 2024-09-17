@@ -11,10 +11,9 @@ import java.util.List;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
-    Produto findByNome(String nome);
 
     @Query("SELECT p FROM Produto p WHERE LOWER(p.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
-    List<Produto> findByNomes(@Param("nome") String nome);
+    List<Produto> findByNome(@Param("nome") String nome);
 
     @Query("SELECT p.id FROM Produto p WHERE p.nome = :nome")
     Long findByIdNome(@Param("nome") String nome);

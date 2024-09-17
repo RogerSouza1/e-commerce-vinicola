@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Usuário</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
@@ -75,36 +76,78 @@
     </script>
 </head>
 <body>
-<h1>Cadastro de Usuário</h1>
 
-<div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
+<header>
+    <nav>
+        <div class="logo-container">
+            <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+            <div class="dropdown">
+                <button class="dropdown-btn" sec:authorize="isAuthenticated()">
+                    [[${#authentication.name}]] &#9662;
+                </button>
+                <div class="dropdown-content">
+                    <form method="post" th:action="@{/logout}">
+                        <button class="btn-logout" type="submit">Sair</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<form th:action="@{/cadastro-funcionario}" th:object="${usuario}" method="post" onsubmit="return validateForm()">
-    <label for="nome">Nome:</label>
-    <input id="nome" name="nome" required th:field="*{nome}" type="text"/><br/>
+    <button class="btn-voltar" onclick="window.location.href='/lista-usuarios'" type="button"><img
+            th:src="@{images/seta.png}"></button>
+</header>
 
-    <label for="email">Email:</label>
-    <input id="email" name="email" required th:field="*{email}" type="email"/><br/>
 
-    <label for="cpf">CPF:</label>
-    <input id="cpf" maxlength="14" name="cpf" required th:field="*{cpf}" type="text"/><br/>
 
-    <label for="senha">Senha:</label>
-    <input id="senha" name="senha" required th:field="*{senha}" type="password"/><br/>
+<main class="main-cadastro-usuario">
+    <section class="form-container">
+        <h2 class="form-title">Cadastro de Usuário</h2>
+        <div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
 
-    <label for="confirmar-senha">Confirmar Senha:</label>
-    <input id="confirmar-senha" name="confirmar-senha" required type="password"/><br/>
+        <form th:action="@{/cadastro-funcionario}" th:object="${usuario}" method="post"
+              onsubmit="return validateForm()">
 
-    <label for="grupo">Grupo:</label>
-    <select id="grupo" name="grupo" th:field="*{grupo}" required>
-        <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-        <option value="ESTOQUISTA">ESTOQUISTA</option>
-        <option value="CLIENTE">CLIENTE</option>
-    </select><br/>
+            <div class="input-group">
+                <label for="nome">Nome:</label>
+                <input id="nome" name="nome" required th:field="*{nome}" type="text"/><br/>
+            </div>
 
-    <button type="submit">Cadastrar</button>
-    <button onclick="clearForm()" type="button">Limpar</button>
-</form>
-<button class="btn btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Voltar</button>
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input id="email" name="email" required th:field="*{email}" type="email"/><br/>
+            </div>
+
+            <div class="input-group">
+                <label for="cpf">CPF:</label>
+                <input id="cpf" maxlength="14" name="cpf" required th:field="*{cpf}" type="text"/><br/>
+            </div>
+
+            <div class="input-group">
+                <label for="senha">Senha:</label>
+                <input id="senha" name="senha" required th:field="*{senha}" type="password"/><br/>
+            </div>
+
+            <div class="input-group">
+                <label for="confirmar-senha">Confirmar Senha:</label>
+                <input id="confirmar-senha" name="confirmar-senha" required type="password"/><br/>
+            </div>
+
+            <div class="input-group">
+                <label for="grupo">Grupo:</label>
+                <select id="grupo" name="grupo" class="select-field" th:field="*{grupo}" required>
+                    <option value="ADMINISTRADOR" class="option-select">ADMINISTRADOR</option>
+                    <option value="ESTOQUISTA" class="option-select">ESTOQUISTA</option>
+                    <option value="CLIENTE" class="option-select">CLIENTE</option>
+                </select><br/>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-padrao">Cadastrar</button>
+                <button onclick="clearForm()" type="button" class="btn-limpar">Limpar</button>
+            </div>
+        </form>
+    </section>
+</main>
 </body>
 </html>

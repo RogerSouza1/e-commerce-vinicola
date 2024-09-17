@@ -89,7 +89,7 @@ public class ProdutoController {
 
     @GetMapping("/buscar-produto")
     public String buscarProduto(@RequestParam("nome") String nome, Model model) {
-        List<Produto> produtos = produtoService.findByNomes(nome);
+        List<Produto> produtos = produtoService.findByNome(nome);
         model.addAttribute("produtos", produtos);
         return "fragments/tabela-produtos :: tabela-produtos";
     }

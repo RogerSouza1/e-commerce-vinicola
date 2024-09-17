@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Produtos</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -20,25 +20,16 @@
                 });
             });
         });
-
-        function confirmChange() {
-            return confirm("Tem certeza que deseja mudar o status do usuário?");
-        }
-
-        function showInactiveUserError() {
-            alert("Não é possível editar um usuário inativo.");
-        }
     </script>
 </head>
 <body>
-<h1>Lista de Usuários</h1>
+<button onclick="window.location.href='index'" type="button">Voltar</button>
+<h1>Lista de Produtos</h1>
 <div class="header-container">
     <input type="text" id="search" name="nome" placeholder="Pesquisar" autocomplete="off">
     <a href="/cadastro-produto" class="btn btn-cadastrar">Cadastrar Produto</a>
 </div>
 
-<div id="tabela-produtos" th:replace="~{fragments/tabela-produtos :: tabela-produtos}"></div>
-<button onclick="window.location.href='index'" type="button">Voltar</button>
+<div id="tabela-produtos" th:replace="fragments/tabela-produtos :: tabela-produtos"></div>
 </body>
 </html>
-
