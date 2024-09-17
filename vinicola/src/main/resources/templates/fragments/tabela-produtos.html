@@ -9,26 +9,38 @@
     <table border="1" id="tabela-produtos" th:fragment="tabela-produtos">
         <thead>
         <tr>
-            <th>Imagem Principal</th>
+            <th>ID</th>
             <th>Nome</th>
-            <th>Avaliação</th>
-            <th>Descrição</th>
-            <th>Preço</th>
             <th>Quantidade</th>
+            <th>Preço</th>
             <th>Status</th>
+            <th>Ações</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="produto : ${produtos}">
-            <td>
-                <img th:src="@{'/imagem/' + ${produto.imagemPrincipal.id}}" alt="Imagem Principal" width=80px/>
-            </td>
+            <td th:text="${produto.id}"></td>
+
             <td th:text="${produto.nome}">Nome</td>
-            <td th:text="${produto.avaliacao}">Avaliação</td>
-            <td th:text="${produto.descricao}">Descrição</td>
-            <td th:text="${produto.preco}">Preço</td>
             <td th:text="${produto.qtdEstoque}">Quantidade</td>
+            <td th:text="${produto.preco}">Preço</td>
             <td th:text="${produto.ativado ? 'Ativo' : 'Inativo'}"></td>
+            <td class="text-center">
+
+                <div class="btn-acao">
+                    <a class="btn-visu" th:href="@{/editar-produto(id=${produto.id})}" th:if="${produto.ativado}">Visualizar</a>
+                    <a class="btn-visu" href="javascript:void(0);" onclick="showInactiveUserError()"
+                       th:unless="${produto.ativado}">Visualizar</a>
+                <a class="btn-edit" th:href="@{/editar-produto(id=${produto.id})}" th:if="${produto.ativado}">Editar</a>
+                <a class="btn-edit" href="javascript:void(0);" onclick="showInactiveUserError()"
+                   th:unless="${produto.ativado}">Editar</a>
+
+                    <input type="checkbox" id="checkbox-toggle-status-${produto.id}" class="checkbox-toggle-status" th:checked="${produto.ativado}"
+                           th:onclick="|return confirmChange() ? window.location.href='@{/alterar-estado(id=${produto.id})}' : false|">
+                    <label th:for="'checkbox-toggle-status-' + ${produto.id}">Habilitar</label>
+                </div>
+
+            </td>
         </tr>
         </tbody>
     </table>

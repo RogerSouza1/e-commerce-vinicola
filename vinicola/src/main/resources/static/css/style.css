@@ -382,6 +382,36 @@ td a {
     background-color: #A66F00;
 }
 
+.btn-visu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #00730B;
+    color: #ffffff;
+    padding: 0.5vw 2vw;
+    border-radius: 10px;
+    font-size: 1vw;
+    border: none;
+    cursor: pointer;
+    background-image: url('https://img.icons8.com/ios-glyphs/30/ffffff/edit.png');
+    background-repeat: no-repeat;
+    background-size: 1.3vw;
+    background-position: 10px center;
+    padding-left: 3vw;
+}
+
+.btn-visu:hover {
+    background-color: #A66F00;
+}
+
+.btn-acao{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
 .btn-toggle-status {
     background-color: #ffffff;
 }
@@ -430,3 +460,4 @@ td a {
     cursor: pointer;
     font-weight: normal;
 }
+

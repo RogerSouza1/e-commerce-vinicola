@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Produtos</title>
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="/css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -20,16 +20,49 @@
                 });
             });
         });
+
+        function confirmChange() {
+            return confirm("Tem certeza que deseja mudar o status do usuário?");
+        }
+
+        function showInactiveUserError() {
+            alert("Não é possível editar um usuário inativo.");
+        }
     </script>
 </head>
 <body>
-<button onclick="window.location.href='index'" type="button">Voltar</button>
-<h1>Lista de Produtos</h1>
-<div class="header-container">
-    <input type="text" id="search" name="nome" placeholder="Pesquisar" autocomplete="off">
-    <a href="/cadastro-produto" class="btn btn-cadastrar">Cadastrar Produto</a>
-</div>
+<header>
+    <nav>
+        <div class="logo-container">
+            <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+            <div class="dropdown">
+                <button class="dropdown-btn" sec:authorize="isAuthenticated()">
+                    [[${#authentication.name}]] &#9662;
+                </button>
+                <div class="dropdown-content">
+                    <form method="post" th:action="@{/logout}">
+                        <button class="btn-logout" type="submit">Sair</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<div id="tabela-produtos" th:replace="fragments/tabela-produtos :: tabela-produtos"></div>
+    <button class="btn-voltar" onclick="window.location.href='/index'" type="button"><img
+            th:src="@{images/seta.png}"></button>
+</header>
+
+<main class="main-lista-usuario">
+    <div class="content-wrapper">
+        <section class="lista-usuario-container">
+            <h2 class="lista-title">Lista de Produto</h2>
+            <div class="header-container">
+                <input type="text" id="search" name="nome" placeholder="Pesquisar" autocomplete="off">
+                <a href="/cadastro-produto" class="btn-cadastro">Cadastrar Produto</a>
+            </div>
+            <div id="tabela-produtos" th:replace="~{fragments/tabela-produtos :: tabela-produtos}"></div>
+        </section>
+    </div>
+</main>
 </body>
 </html>
