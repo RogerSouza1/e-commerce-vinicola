@@ -6,16 +6,14 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
   <script>
-    // let existingImages = [];
 
     function validateForm() {
       const nome = document.getElementById("nome").value.trim();
       const avaliacao = document.getElementById("avaliacao").value;
       const descricao = document.getElementById("descricao").value.trim();
-      const preco = document.getElementById("preco").value.replace(/[^\d,]/g, '').replace(',', '.');
+      const precoInput = document.getElementById("preco");
+      const preco = precoInput.value.replace(/[^\d,]/g, '').replace(',', '.');
       const qtdEstoque = document.getElementById("qtdEstoque").value;
-      // const hiddenImageUpload = document.getElementById('hiddenImageUpload').files;
-      // const principalImage = document.getElementById('principalImage').value;
 
       if (nome === "" || descricao === "" || preco === "" || qtdEstoque === "") {
         alert("Todos os campos são obrigatórios.");
@@ -32,27 +30,30 @@
         return false;
       }
 
-      // if (hiddenImageUpload.length === 0) {
-      //   alert('Por favor, adicione ao menos uma imagem.');
-      //   return false;
-      // }
-      //
-      // if (!principalImage) {
-      //   alert('Por favor, selecione uma imagem principal.');
-      //   return false;
-      // }
-
-      document.getElementById("preco").value = preco;
+      precoInput.value = parseFloat(preco).toFixed(2);
 
       return true;
     }
 
+
     function formatCurrency(input) {
       let value = input.value.replace(/\D/g, '');
-      value = (value / 100).toFixed(2);
+      if (value.length === 0) {
+        input.value = 'R$ 0,00';
+        return;
+      }
+      value = (parseInt(value) / 100).toFixed(2);
       value = value.replace('.', ',');
       input.value = 'R$ ' + value;
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const precoInput = document.getElementById("preco");
+      if (precoInput) {
+        precoInput.value = precoInput.value.replace('.', ',');
+        formatCurrency(precoInput);
+      }
+    });
 
     function clearForm() {
       document.getElementById("nome").value = "";
@@ -60,100 +61,8 @@
       document.getElementById("descricao").value = "";
       document.getElementById("preco").value = "0,00";
       document.getElementById("qtdEstoque").value = 0;
-      // document.getElementById("imagePreviewList").innerHTML = "";
-      // document.getElementById("imageUpload").value = "";
-      // document.getElementById("hiddenImageUpload").value = "";
-      // document.getElementById("principalImage").value = "";
     }
 
-    // let principalImageIndex = -1;
-    //
-    // function openModal() {
-    //   const hiddenFileInput = document.getElementById("hiddenImageUpload");
-    //   const dt = new DataTransfer();
-    //
-    //   // Add existing images to DataTransfer
-    //   existingImages.forEach(image => {
-    //     const file = new File([image.dados], image.url, { type: "image/jpeg" });
-    //     dt.items.add(file);
-    //   });
-    //
-    //   hiddenFileInput.files = dt.files;
-    //   document.getElementById("imageModal").style.display = "block";
-    // }
-    //
-    // function closeModal() {
-    //   document.getElementById("imageModal").style.display = "none";
-    // }
-    //
-    // function addImage() {
-    //   const fileInput = document.getElementById("imageUpload");
-    //   const files = fileInput.files;
-    //   const imagePreviewList = document.getElementById("imagePreviewList");
-    //
-    //   imagePreviewList.innerHTML = ''; // Clear previous images
-    //
-    //   // Display existing images
-    //   existingImages.forEach((image, index) => {
-    //     const img = document.createElement("img");
-    //     img.src = `data:image/jpeg;base64,${image.dados}`;
-    //     img.style.width = "80px";
-    //     img.style.cursor = "pointer";
-    //     img.style.border = "2px solid transparent";
-    //
-    //     img.onclick = function() {
-    //       setPrincipalImage(index, img);
-    //     };
-    //
-    //     imagePreviewList.appendChild(img);
-    //   });
-    //
-    //   // Display new images
-    //   for (let i = 0; i < files.length; i++) {
-    //     const file = files[i];
-    //     const reader = new FileReader();
-    //     reader.onload = function(e) {
-    //       const img = document.createElement("img");
-    //       img.src = e.target.result;
-    //       img.style.width = "80px";
-    //       img.style.cursor = "pointer";
-    //       img.style.border = "2px solid transparent";
-    //
-    //       img.onclick = function() {
-    //         setPrincipalImage(existingImages.length + i, img);
-    //       };
-    //
-    //       imagePreviewList.appendChild(img);
-    //     };
-    //     reader.readAsDataURL(file);
-    //   }
-    // }
-    // function setPrincipalImage(id, imgElement) {
-    //   const imagePreviewList = document.getElementById("imagePreviewList").children;
-    //
-    //   for (let i = 0; i < imagePreviewList.length; i++) {
-    //     imagePreviewList[i].children[0].style.border = "2px solid transparent";
-    //   }
-    //
-    //   imgElement.style.border = "2px solid red";
-    //   principalImageId = id;
-    //   document.getElementById('principalImage').value = id;
-    //
-    //   alert("Imagem principal definida.");
-    // }
-    //
-    // function saveAndCloseModal() {
-    //   const fileInput = document.getElementById("imageUpload");
-    //   const hiddenFileInput = document.getElementById("hiddenImageUpload");
-    //
-    //   const dt = new DataTransfer();
-    //   for (let i = 0; i < fileInput.files.length; i++) {
-    //     dt.items.add(fileInput.files[i]);
-    //   }
-    //
-    //   hiddenFileInput.files = dt.files;
-    //   closeModal();
-    // }
   </script>
   <style>
     .modal {
@@ -195,8 +104,8 @@
 
 <div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
 
-<form th:action="@{/atualizar-produto}" th:object="${produto}" method="post" onsubmit="return validateForm()">
-  <input type="hidden" name="id" th:value="${produto.id}"/>
+<form th:action="@{/editar-produto}" th:object="${produto}" method="post" onsubmit="return validateForm()">
+  <input type="hidden" name="id" th:value="${produto.getId()}"/>
 
   <label for="nome">Nome:</label>
   <input id="nome" name="nome" required th:field="*{nome}" type="text" maxlength="200"/><br/>
@@ -208,43 +117,14 @@
   <input id="descricao" maxlength="2000" name="descricao" required th:field="*{descricao}" type="text"/><br/>
 
   <label for="preco">Preço:</label>
-  <input type="text" id="preco" name="preco" onkeyup="formatCurrency(this)" placeholder="0,00" required th:field="*{preco}"><br/>
+  <input type="text" id="preco" name="preco" th:value="${precoFormatado}" onkeyup="formatCurrency(this)" placeholder="0,00" required><br/>
 
   <label for="qtdEstoque">Quantidade:</label>
   <input type="number" id="qtdEstoque" name="qtdEstoque" min="0" step="1" required th:field="*{qtdEstoque}"><br/>
-
-<!--  <label for="imageUpload">Gerenciar sua(s) imagem(ns):</label>-->
-<!--  <button type="button" onclick="openModal()">Editar Imagens</button><br/>-->
-
-<!--  &lt;!&ndash; Campo oculto para armazenar os arquivos selecionados no modal &ndash;&gt;-->
-<!--  <input type="file" id="hiddenImageUpload" name="imageUpload" style="display:none" multiple/>-->
-
-<!--  &lt;!&ndash; Campo oculto para armazenar o índice da imagem principal &ndash;&gt;-->
-<!--  <input type="hidden" id="principalImage" name="principalImage" value="">-->
 
   <button type="submit">Atualizar</button>
     <button type="button" onclick="clearForm()">Limpar</button>
   <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Cancelar</button>
 </form>
-
-<!--<div id="imageModal" class="modal">-->
-<!--  <div class="modal-content">-->
-<!--    <h2>Imagens Anexadas</h2>-->
-<!--    &lt;!&ndash; Lista de visualização das imagens anexadas &ndash;&gt;-->
-<!--    <div id="imagePreviewList" style="display: flex; gap: 10px; flex-wrap: wrap;">-->
-<!--      <div th:each="imagem : ${imagens}">-->
-<!--        <img th:src="@{'/imagem/' + ${imagem.id}}" th:alt="${imagem.url}" style="width: 80px; cursor: pointer; border: 2px solid [[${imagem.principal} ? 'red' : 'transparent']];"-->
-<!--             th:onclick="|setPrincipalImage(${imagem.id}, this)|"/>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    &lt;!&ndash; Input de seleção de imagens &ndash;&gt;-->
-<!--    <input type="file" id="imageUpload" name="imageUpload" multiple onchange="addImage()" style="margin-top: 10px;"/>-->
-<!--    &lt;!&ndash; Botões para anexar e fechar o modal &ndash;&gt;-->
-<!--    <div style="margin-top: 20px; display: flex; gap: 10px;">-->
-<!--      <button class="save" onclick="saveAndCloseModal()">Salvar e Fechar</button>-->
-<!--      <button class="close" onclick="closeModal()">Cancelar</button>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
 </body>
 </html>
