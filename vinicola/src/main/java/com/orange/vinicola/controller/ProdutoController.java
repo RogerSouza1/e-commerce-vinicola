@@ -104,8 +104,10 @@ public class ProdutoController {
         if (produto.isPresent()) {
             DecimalFormat df = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
             String precoFormatado = df.format(produto.get().getPreco());
+            List<Imagem> imagens = imagemService.findByProdutoId(id);
             model.addAttribute("produto", produto.get());
             model.addAttribute("precoFormatado", precoFormatado);
+            model.addAttribute("imagens", imagens);
         }
         return "editar-produto";
     }
