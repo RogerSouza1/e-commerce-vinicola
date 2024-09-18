@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="/JS/openModal.js"></script>
+
 </head>
+
 <body>
 <div th:fragment="tabela-produtos">
     <table border="1" id="tabela-produtos" th:fragment="tabela-produtos">
@@ -28,10 +33,11 @@
             <td class="text-center">
 
                 <div class="btn-acao">
-                    <a class="btn-visu" th:href="@{/editar-produto(id=${produto.id})}" th:if="${produto.ativado}">Visualizar</a>
-                    <a class="btn-visu" href="javascript:void(0);" onclick="showInactiveUserError()"
-                       th:unless="${produto.ativado}">Visualizar</a>
-                <a class="btn-edit" th:href="@{/editar-produto(id=${produto.id})}" th:if="${produto.ativado}">Editar</a>
+
+                    <button for="imageUpload" class="btn-visu"  onclick="openModal()">Visualizar</button>
+
+
+                    <a class="btn-edit" th:href="@{/editar-produto(id=${produto.id})}" th:if="${produto.ativado}">Editar</a>
                 <a class="btn-edit" href="javascript:void(0);" onclick="showInactiveUserError()"
                    th:unless="${produto.ativado}">Editar</a>
 
@@ -40,10 +46,27 @@
                     <label th:for="'checkbox-toggle-status-' + ${produto.id}">Habilitar</label>
                 </div>
 
+
             </td>
         </tr>
+
         </tbody>
     </table>
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <h2>Imagens Anexadas</h2>
+            <!-- Lista de visualização das imagens anexadas -->
+            <div id="imagePreviewList" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+            <!-- Input de seleção de imagens -->
+            <input type="file" id="imageUpload" name="imageUpload" multiple onchange="addImage()" style="margin-top: 10px;"/>
+            <!-- Botões para anexar e fechar o modal -->
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button class="save" onclick="saveAndCloseModal()">Salvar e Fechar</button>
+                <button class="close" onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+
+    </div>
 </div>
 </body>
 </html>
