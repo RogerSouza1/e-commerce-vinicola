@@ -42,7 +42,7 @@
                    th:unless="${produto.ativado}">Editar</a>
 
                     <input type="checkbox" id="checkbox-toggle-status-${produto.id}" class="checkbox-toggle-status" th:checked="${produto.ativado}"
-                           th:onclick="|return confirmChange() ? window.location.href='@{/alterar-estado(id=${produto.id})}' : false|">
+                           th:onclick="|return confirmChange() ? window.location.href='@{/alterar-estado-produto(id=${produto.id})}' : false|">
                     <label th:for="'checkbox-toggle-status-' + ${produto.id}">Habilitar</label>
                 </div>
 

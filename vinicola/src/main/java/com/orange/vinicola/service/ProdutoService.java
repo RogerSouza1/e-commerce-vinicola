@@ -31,4 +31,9 @@ public class ProdutoService {
     public List<Produto> findByNome(String nome) {
         return produtoRepository.findByNome(nome);
     }
+
+    public void alterar_estado_produto(Produto produto) {
+        produto.setAtivado(!produto.isAtivado());
+        produtoRepository.save(produto);
+    }
 }
