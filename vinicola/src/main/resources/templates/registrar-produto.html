@@ -6,7 +6,28 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="/JS/openModal.js"></script>
+    <style>
+        .modal {
+            display: none; /* Oculta o modal por padrão */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
 
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+    </style>
 </head>
 <body>
 <h1>Cadastro de Produto</h1>
@@ -32,7 +53,7 @@
     <input type="number" id="qtdEstoque" name="qtdEstoque" min="0" step="1" required th:field="*{qtdEstoque}"><br/>
 
     <label for="imageUpload">Anexa sua(s) imagem(ns):</label>
-    <button type="button" onclick="openModal()">Gerenciar Imagens</button><br/>
+    <button type="button" onclick="openModalGerenciarImagem()">Gerenciar Imagens</button><br/>
 
     <!-- Campo oculto para armazenar os arquivos selecionados no modal -->
     <input type="file" id="hiddenImageUpload" name="imageUpload" style="display:none" multiple/>
@@ -44,7 +65,7 @@
     <button onclick="clearForm()" type="button">Limpar</button>
     <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Cancelar</button>
 </form>
-<div id="imageModal" class="modal">
+<div id="imageModalGerenciar" class="modal">
     <div class="modal-content">
         <h2>Imagens Anexadas</h2>
         <!-- Lista de visualização das imagens anexadas -->
@@ -54,10 +75,9 @@
         <!-- Botões para anexar e fechar o modal -->
         <div style="margin-top: 20px; display: flex; gap: 10px;">
             <button class="save" onclick="saveAndCloseModal()">Salvar e Fechar</button>
-            <button class="close" onclick="closeModal()">Cancelar</button>
+            <button class="close" onclick="closeModalGerenciar()">Cancelar</button>
         </div>
     </div>
-
 </div>
 </body>
 </html>
