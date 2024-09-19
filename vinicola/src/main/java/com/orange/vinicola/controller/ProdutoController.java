@@ -6,9 +6,12 @@ import com.orange.vinicola.service.ImagemService;
 import com.orange.vinicola.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,5 +111,18 @@ public class ProdutoController {
         List<Produto> todosProdutos = produtoService.findAll();
         model.addAttribute("produtos", todosProdutos);
         return "lista-produtos";
+    }
+
+    @GetMapping("/detalhes-produto")
+    public String detalhesProduto(@RequestParam("id") Long id, Model model) {
+        Optional<Produto> produtoOpt = produtoService.findById(id);
+        if (produtoOpt.isPresent()) {
+            Produto produto = produtoOpt.get();
+            model.addAttribute("produto", produto);
+            return "detalhes-produto";
+        } else {
+            model.addAttribute("mensagem", "Produto não encontrado!");
+            return "redirect:/lista-produtos";
+        }
     }
 }

@@ -16,10 +16,15 @@ public class ImageController {
 
     @GetMapping("/imagem/{id}")
     public ResponseEntity<byte[]> getImagem(@PathVariable Long id) {
-        Imagem imagem = imagemService.findById(id).orElseThrow(() -> new RuntimeException("Imagem não encontrada"));
+        Imagem imagem = imagemService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Imagem não encontrada"));
+
+        String contentType = "image/jpeg";
+
         return ResponseEntity.ok()
-                .header("Content-Type", "image/jpeg") // ou image/png, conforme o tipo da imagem
+                .header("Content-Type", contentType)
                 .body(imagem.getDados());
     }
+
 
 }
