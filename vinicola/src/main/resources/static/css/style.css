@@ -394,7 +394,7 @@ td a {
     font-size: 1vw;
     border: none;
     cursor: pointer;
-    background-image: url('https://img.icons8.com/ios-glyphs/30/ffffff/edit.png');
+    background-image: url('https://img.icons8.com/ios-glyphs/30/ffffff/visible.png');
     background-repeat: no-repeat;
     background-size: 1.3vw;
     background-position: 10px center;
@@ -402,7 +402,7 @@ td a {
 }
 
 .btn-visu:hover {
-    background-color: #A66F00;
+    background-color: #003105;
 }
 
 .btn-acao{
