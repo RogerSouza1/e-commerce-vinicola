@@ -56,7 +56,7 @@ public class ProdutoController {
             }
 
             // Verifica se o índice da imagem principal foi enviado
-            if (principalImageIndex == null || principalImageIndex < 0 || principalImageIndex >= files.length) {
+            if (principalImageIndex == null || principalImageIndex < 0) {
                 model.addAttribute("mensagem", "Selecione uma imagem principal válida.");
                 return "registrar-produto";
             }
@@ -137,7 +137,7 @@ public class ProdutoController {
             produtoEditado.setQtdEstoque(produto.getQtdEstoque());
             produtoService.save(produtoEditado);
 
-            if (files != null && files.length > 0) {
+            if (files != null) {
                 List<Imagem> imagensAntigas = imagemService.findByProdutoId(produtoEditado.getId());
 
                 if ("true".equals(substituteImages)) {

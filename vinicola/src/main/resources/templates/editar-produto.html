@@ -61,17 +61,20 @@
       document.getElementById("descricao").value = "";
       document.getElementById("preco").value = "0,00";
       document.getElementById("qtdEstoque").value = 0;
+      document.getElementById("hiddenImageUpload").value = "";
+      document.getElementById("principalImage").value = "";
+      document.getElementById("substituteImages").value = "";
+      document.getElementById("imagePreviewList").innerHTML = "";
     }
 
+    //***Funções do Modal***//
     let principalImageIndex = -1;
 
-    // Função para abrir o modal de imagens
     function openModal() {
       alert("Ao anexar novas imagens, você terá opção de anexar mais imagens e definir a imagem principal ou substituir para novas imagens.");
       document.getElementById("imageModal").style.display = "block";
     }
 
-    // Função para fechar o modal
     function closeModal() {
       document.getElementById("imageModal").style.display = "none";
     }
@@ -173,9 +176,9 @@
 
         alert('Novas imagens foram adicionadas.');
       }
-
       closeModal();
     }
+
   </script>
   <style>
     .modal {
@@ -229,7 +232,7 @@
   </style>
 </head>
 <body>
-<h1>Cadastro de Produto</h1>
+<h1>Editar Produto</h1>
 
 <div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
 
