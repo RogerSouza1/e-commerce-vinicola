@@ -21,5 +21,4 @@ public class ImageController {
                 .header("Content-Type", "image/jpeg") // ou image/png, conforme o tipo da imagem
                 .body(imagem.getDados());
     }
-
 }

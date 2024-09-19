@@ -4,6 +4,7 @@ import com.orange.vinicola.model.Imagem;
 import com.orange.vinicola.repository.ImagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class ImagemService {
         return imagemRepository.findById(id);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         imagemRepository.deleteById(id);
     }

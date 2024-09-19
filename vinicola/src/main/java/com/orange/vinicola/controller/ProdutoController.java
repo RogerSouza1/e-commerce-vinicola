@@ -114,7 +114,13 @@ public class ProdutoController {
     }
 
     @PostMapping("/editar-produto")
-    public String updateProduct(@RequestParam("id") Long id, Produto produto,@RequestParam("imageUpload") MultipartFile[] files, @RequestParam("principalImage") Integer principalImageIndex, Model model) {
+    public String updateProduct(
+            @RequestParam("id") Long id,
+            Produto produto,
+            @RequestParam("imageUpload") MultipartFile[] files,
+            @RequestParam(value = "principalImage", required = false) Integer principalImageIndex,
+            @RequestParam(value = "substituteImages", required = false) String substituteImages,
+            Model model) {
         try {
             Optional<Produto> produtoExistente = produtoService.findById(id);
 
@@ -131,45 +137,46 @@ public class ProdutoController {
             produtoEditado.setQtdEstoque(produto.getQtdEstoque());
             produtoService.save(produtoEditado);
 
-            System.out.println("Anexo: " + Arrays.toString(files));
+            if (files != null && files.length > 0) {
+                List<Imagem> imagensAntigas = imagemService.findByProdutoId(produtoEditado.getId());
 
-            if (Arrays.stream(files).toList().isEmpty()) {
-                model.addAttribute("mensagem", "Por favor, anexe pelo menos uma imagem.");
-                return "registrar-produto";
-            }
-
-            // Verifica se o índice da imagem principal foi enviado
-            if (principalImageIndex < 0 || principalImageIndex >= files.length) {
-                model.addAttribute("mensagem", "Selecione uma imagem principal válida.");
-                return "registrar-produto";
-            }
-
-            // Salva as imagens no banco
-            for (int i = 0; i < files.length; i++) {
-                MultipartFile file = files[i];
-                try {
-                    Imagem imagem = new Imagem();
-                    imagem.setProduto(produtoEditado);
-                    imagem.setDados(file.getBytes());
-                    imagem.setUrl(file.getOriginalFilename());
-
-                    // Verifica se a imagem atual deve ser a principal
-                    if (i == principalImageIndex) {
-                        // Desativa a imagem principal anterior, se houver
-                        List<Imagem> imagensExistentes = imagemService.findByProdutoId(produtoEditado.getId());
-                        for (Imagem img : imagensExistentes) {
-                            if (img.isPrincipal()) {
-                                img.setPrincipal(false);
-                                imagemService.save(img);
-                                break;
-                            }
-                        }
-                        imagem.setPrincipal(true);
+                if ("true".equals(substituteImages)) {
+                    // Exclui todas as imagens anteriores do produto
+                    for (Imagem imagem : imagensAntigas) {
+                        imagemService.deleteById(imagem.getId());
                     }
-                    imagemService.save(imagem);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    // Adicione tratamento de erro conforme necessário
+                }
+
+                // Verifica e redefine a imagem principal existente
+                if (principalImageIndex != null) {
+                    Imagem imagemPrincipalExistente = imagemService.findPrincipalByProdutoId(produtoEditado.getId());
+                    if (imagemPrincipalExistente != null) {
+                        imagemPrincipalExistente.setPrincipal(false);
+                        imagemService.save(imagemPrincipalExistente);
+                    }
+                }
+
+                // Salva as novas imagens
+                for (int i = 0; i < files.length; i++) {
+                    MultipartFile file = files[i];
+                    try {
+                        Imagem imagem = new Imagem();
+                        imagem.setProduto(produtoEditado);
+                        imagem.setDados(file.getBytes());
+                        imagem.setUrl(file.getOriginalFilename());
+
+                        // Define a imagem principal
+                        if (principalImageIndex != null && i == principalImageIndex) {
+                            imagem.setPrincipal(true);
+                        } else {
+                            imagem.setPrincipal(false);
+                        }
+
+                        imagemService.save(imagem);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        // Adicione tratamento de erro conforme necessário
+                    }
                 }
             }
 

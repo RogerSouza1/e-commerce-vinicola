@@ -67,7 +67,7 @@
 
     // Função para abrir o modal de imagens
     function openModal() {
-      alert("Ao anexar novas imagens, as imagens atuais no banco de dados serão substituídas.");
+      alert("Ao anexar novas imagens, você terá opção de anexar mais imagens e definir a imagem principal ou substituir para novas imagens.");
       document.getElementById("imageModal").style.display = "block";
     }
 
@@ -99,11 +99,6 @@
           };
 
           imagePreviewList.appendChild(img);
-
-          // Define a primeira imagem como principal se for a única
-          if (files.length === 1) {
-            setPrincipalImage(0, img);
-          }
         };
         reader.readAsDataURL(file);
       }
@@ -119,20 +114,65 @@
       imgElement.style.border = "2px solid red";
 
       document.getElementById('principalImage').value = index;
-
       alert("Imagem principal definida.");
     }
 
     function saveAndCloseModal() {
       const fileInput = document.getElementById("imageUpload");
+      const files = fileInput.files;
       const hiddenFileInput = document.getElementById("hiddenImageUpload");
+      const principalImageIndex = document.getElementById('principalImage').value;
 
-      const dt = new DataTransfer();
-      for (let i = 0; i < fileInput.files.length; i++) {
-        dt.items.add(fileInput.files[i]);
+      if (files.length === 0) {
+        alert('Nenhuma imagem anexada.');
+        return;
       }
 
-      hiddenFileInput.files = dt.files;
+      // Perguntar ao usuário se ele quer substituir as imagens
+      const confirmSubstitute = confirm('Você quer substituir as imagens por essas novas anexadas?');
+
+      if (confirmSubstitute) {
+        if (files.length === 1) {
+          // Se apenas uma imagem está anexada, defina automaticamente como principal
+          document.getElementById('principalImage').value = 0; // Define a primeira imagem como principal
+          document.getElementById('substituteImages').value = 'true';
+
+          // Copia os arquivos para o input oculto
+          const dt = new DataTransfer();
+          dt.items.add(files[0]);
+          hiddenFileInput.files = dt.files;
+
+          alert('Imagem substituída e definida como principal.');
+        } else if (files.length > 1 && principalImageIndex === '') {
+          // Se múltiplas imagens e nenhuma foi definida como principal
+          alert('Para substituir as imagens, selecione uma como principal.');
+          return; // Interrompe a execução
+        } else if (files.length > 1 && principalImageIndex !== '') {
+          // Se múltiplas imagens e uma foi definida como principal
+          document.getElementById('substituteImages').value = 'true';
+
+          // Copia os arquivos para o input oculto
+          const dt = new DataTransfer();
+          for (let i = 0; i < files.length; i++) {
+            dt.items.add(files[i]);
+          }
+          hiddenFileInput.files = dt.files;
+
+          alert('Imagens substituídas.');
+        }
+      } else {
+        // Caso o usuário opte por não substituir
+        document.getElementById('substituteImages').value = 'false';
+
+        // Copia os arquivos para o input oculto
+        const dt = new DataTransfer();
+        for (let i = 0; i < files.length; i++) {
+          dt.items.add(files[i]);
+        }
+        hiddenFileInput.files = dt.files;
+
+        alert('Novas imagens foram adicionadas.');
+      }
 
       closeModal();
     }
@@ -221,6 +261,8 @@
 
   <!-- Campo oculto para armazenar o índice da imagem principal -->
   <input type="hidden" id="principalImage" name="principalImage" value="">
+
+  <input type="hidden" id="substituteImages" name="substituteImages" value="">
 
   <button type="submit">Atualizar</button>
   <button type="button" onclick="clearForm()">Limpar</button>
