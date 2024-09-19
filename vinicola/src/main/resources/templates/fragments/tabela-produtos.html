@@ -1,41 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Cadastro de Produto</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    </script>
+    </scr>
+    <style>
+        /* Estilos para o modal */
+        .modal {
+            display: none; /* Oculta o modal por padrão */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+    </style>
 </head>
 <body>
+
 <div th:fragment="tabela-produtos">
-    <table>
+    <table border="1" id="tabela-produtos">
         <thead>
         <tr>
-            <th>Imagem Principal</th>
+            <th>ID</th>
             <th>Nome</th>
-            <th>Avaliação</th>
-            <th>Descrição</th>
-            <th>Preço</th>
             <th>Quantidade</th>
+            <th>Preço</th>
             <th>Status</th>
+            <th>Ações</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="produto : ${produtos}">
-            <td>
-                <img th:src="@{'/imagem/' + ${produto.imagemPrincipal.id}}" alt="Imagem Principal" width=80px/>
-            </td>
+            <td th:text="${produto.id}"></td>
             <td th:text="${produto.nome}">Nome</td>
-            <td th:text="${produto.avaliacao}">Avaliação</td>
-            <td th:text="${produto.descricao}">Descrição</td>
-            <td th:text="${produto.preco}">Preço</td>
             <td th:text="${produto.qtdEstoque}">Quantidade</td>
+            <td th:text="${produto.preco}">Preço</td>
             <td th:text="${produto.ativado ? 'Ativo' : 'Inativo'}"></td>
-
             <td class="text-center">
+                <button class="btn-visu" onclick="document.getElementById('modal-${produto.id}').style.display='block'">Visualizar</button>
+
+                <!-- Modal para o produto -->
+                <div id="modal-${produto.id}" class="modal">
+                    <div class="modal-content">
+                        <span onclick="document.getElementById('modal-${produto.id}').style.display='none'" class="close">&times;</span>
+                        <h2>Detalhes do Produto</h2>
+                        <p><strong>Nome:</strong> <span th:text="${produto.nome}"></span></p>
+                        <p><strong>Descrição:</strong> <span th:text="${produto.descricao}"></span></p>
+                        <p><strong>Avaliação:</strong> <span th:text="${produto.avaliacao}"></span></p>
+                        <p><strong>Estoque:</strong> <span th:text="${produto.qtdEstoque}"></span></p>
+                        <p><strong>Preço:</strong> <span th:text="${produto.preco}"></span></p>
+                    </div>
+                </div>
+
                 <a class="btn-edit" th:href="@{/editar-produto(id=${produto.id})}" th:if="${produto.ativado}">Editar</a>
-                <a class="btn-edit" href="javascript:void(0);" onclick="showInactiveProductError()" th:unless="${produto.ativado}">Editar</a>
+                <a class="btn-edit" href="javascript:void(0);" onclick="showInactiveUserError()"
+                   th:unless="${produto.ativado}">Editar</a>
+
+
+                <input sec:authorize="hasRole('ROLE_ADMINISTRADOR')" type="checkbox" id="checkbox-toggle-status-${produto.id}" class="checkbox-toggle-status" th:checked="${produto.ativado}"
+                       th:onclick="|return confirmChange() ? window.location.href='@{/alterar-estado-produto(id=${produto.id})}' : false|">
+                <label sec:authorize="hasRole('ROLE_ADMINISTRADOR')"  th:for="'checkbox-toggle-status-' + ${produto.id}">Habilitar</label>
+            </td>
         </tr>
         </tbody>
     </table>
 </div>
+
 </body>
 </html>

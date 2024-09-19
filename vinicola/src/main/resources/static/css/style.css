@@ -382,6 +382,36 @@ td a {
     background-color: #A66F00;
 }
 
+.btn-visu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #00730B;
+    color: #ffffff;
+    padding: 0.5vw 2vw;
+    border-radius: 10px;
+    font-size: 1vw;
+    border: none;
+    cursor: pointer;
+    background-image: url('https://img.icons8.com/ios-glyphs/30/ffffff/visible.png');
+    background-repeat: no-repeat;
+    background-size: 1.3vw;
+    background-position: 10px center;
+    padding-left: 3vw;
+}
+
+.btn-visu:hover {
+    background-color: #003105;
+}
+
+.btn-acao{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
 .btn-toggle-status {
     background-color: #ffffff;
 }
@@ -429,4 +459,37 @@ td a {
     vertical-align: middle;
     cursor: pointer;
     font-weight: normal;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+.save, .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.save, .close:hover,
+.save, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
