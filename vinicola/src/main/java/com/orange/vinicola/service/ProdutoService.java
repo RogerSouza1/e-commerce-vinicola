@@ -1,6 +1,7 @@
 package com.orange.vinicola.service;
 
 import com.orange.vinicola.model.Produto;
+import com.orange.vinicola.model.Usuario;
 import com.orange.vinicola.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,20 +23,17 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
 
-    public Optional<Produto> findById(Long id){
+    public Optional<Produto> findById(Long id) {
         return produtoRepository.findById(id);
     }
 
-    public Produto findByNome(String nome) {
+
+    public List<Produto> findByNome(String nome) {
         return produtoRepository.findByNome(nome);
     }
 
-    public List<Produto> findByNomes(String nome){
-        return produtoRepository.findByNomes(nome);
+    public void alterar_estado_produto(Produto produto) {
+        produto.setAtivado(!produto.isAtivado());
+        produtoRepository.save(produto);
     }
-
-    public void deleteById(Long id){
-        produtoRepository.deleteById(id);
-    }
-
 }

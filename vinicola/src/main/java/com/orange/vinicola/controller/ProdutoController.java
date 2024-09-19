@@ -6,14 +6,14 @@ import com.orange.vinicola.service.ImagemService;
 import com.orange.vinicola.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.Optional;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -33,8 +33,8 @@ public class ProdutoController {
     }
 
     @PostMapping("/cadastro-produto")
-    public String registerProduct(Produto produto, @RequestParam("imageUpload") MultipartFile[] files,  @RequestParam("principalImage") Integer principalImageIndex,
-                                  Model model)  {
+    public String registerProduct(Produto produto, @RequestParam("imageUpload") MultipartFile[] files, @RequestParam("principalImage") Integer principalImageIndex,
+                                  Model model) {
         try {
             if (produtoService.findByNome(produto.getNome()) != null) {
                 model.addAttribute("mensagem", "Produto já registrado!");
@@ -89,8 +89,24 @@ public class ProdutoController {
 
     @GetMapping("/buscar-produto")
     public String buscarProduto(@RequestParam("nome") String nome, Model model) {
-        List<Produto> produtos = produtoService.findByNomes(nome);
+        List<Produto> produtos = produtoService.findByNome(nome);
         model.addAttribute("produtos", produtos);
         return "fragments/tabela-produtos :: tabela-produtos";
+    }
+
+
+    @GetMapping("/alterar-estado-produto")
+    public String alterarEstadoProduto(@RequestParam("id") Long id, Model model) {
+        Optional<Produto> produtoOpt = produtoService.findById(id);
+        if (produtoOpt.isPresent()) {
+            Produto produto = produtoOpt.get();
+            produtoService.alterar_estado_produto(produto);
+            model.addAttribute("mensagem", "Estado do produto alterado com sucesso!");
+        } else {
+            model.addAttribute("mensagem", "Produto não encontrado!");
+        }
+        List<Produto> todosProdutos = produtoService.findAll();
+        model.addAttribute("produtos", todosProdutos);
+        return "lista-produtos";
     }
 }
