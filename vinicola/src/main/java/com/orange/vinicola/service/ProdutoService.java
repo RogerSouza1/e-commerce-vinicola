@@ -27,9 +27,12 @@ public class ProdutoService {
         return produtoRepository.findById(id);
     }
 
-
     public List<Produto> findByNome(String nome) {
         return produtoRepository.findByNome(nome);
+    }
+
+    public void deleteById(Long id){
+        produtoRepository.deleteById(id);
     }
 
     public void alterar_estado_produto(Produto produto) {

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Produto</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+  <script>
+
+    function validateForm() {
+      const nome = document.getElementById("nome").value.trim();
+      const avaliacao = document.getElementById("avaliacao").value;
+      const descricao = document.getElementById("descricao").value.trim();
+      const precoInput = document.getElementById("preco");
+      const preco = precoInput.value.replace(/[^\d,]/g, '').replace(',', '.');
+      const qtdEstoque = document.getElementById("qtdEstoque").value;
+
+      if (nome === "" || descricao === "" || preco === "" || qtdEstoque === "") {
+        alert("Todos os campos são obrigatórios.");
+        return false;
+      }
+
+      if (isNaN(preco) || parseFloat(preco) <= 0) {
+        alert("Preço deve ser um número positivo.");
+        return false;
+      }
+
+      if (isNaN(qtdEstoque) || parseInt(qtdEstoque) < 0) {
+        alert("Quantidade deve ser um número não negativo.");
+        return false;
+      }
+
+      precoInput.value = parseFloat(preco).toFixed(2);
+
+      return true;
+    }
+
+
+    function formatCurrency(input) {
+      let value = input.value.replace(/\D/g, '');
+      if (value.length === 0) {
+        input.value = 'R$ 0,00';
+        return;
+      }
+      value = (parseInt(value) / 100).toFixed(2);
+      value = value.replace('.', ',');
+      input.value = 'R$ ' + value;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const precoInput = document.getElementById("preco");
+      if (precoInput) {
+        precoInput.value = precoInput.value.replace('.', ',');
+        formatCurrency(precoInput);
+      }
+    });
+
+    function clearForm() {
+      document.getElementById("nome").value = "";
+      document.getElementById("avaliacao").value = 0;
+      document.getElementById("descricao").value = "";
+      document.getElementById("preco").value = "0,00";
+      document.getElementById("qtdEstoque").value = 0;
+      document.getElementById("hiddenImageUpload").value = "";
+      document.getElementById("principalImage").value = "";
+      document.getElementById("substituteImages").value = "";
+      document.getElementById("imagePreviewList").innerHTML = "";
+    }
+
+    //***Funções do Modal***//
+    let principalImageIndex = -1;
+
+    function openModal() {
+      alert("Ao anexar novas imagens, você terá opção de anexar mais imagens e definir a imagem principal ou substituir para novas imagens.");
+      document.getElementById("imageModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("imageModal").style.display = "none";
+    }
+
+    function addImage() {
+      const fileInput = document.getElementById("imageUpload");
+      const files = fileInput.files;
+      const imagePreviewList = document.getElementById("imagePreviewList");
+
+      imagePreviewList.innerHTML = ''; // Limpa as imagens anteriores
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.style.width = "80px";
+          img.style.cursor = "pointer";
+          img.style.border = "2px solid transparent";
+
+          img.onclick = function() {
+            setPrincipalImage(i, img);
+          };
+
+          imagePreviewList.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function setPrincipalImage(index, imgElement) {
+      const imagePreviewList = document.getElementById("imagePreviewList").children;
+
+      for (let i = 0; i < imagePreviewList.length; i++) {
+        imagePreviewList[i].style.border = "2px solid transparent";
+      }
+
+      imgElement.style.border = "2px solid red";
+
+      document.getElementById('principalImage').value = index;
+      alert("Imagem principal definida.");
+    }
+
+    function saveAndCloseModal() {
+      const fileInput = document.getElementById("imageUpload");
+      const files = fileInput.files;
+      const hiddenFileInput = document.getElementById("hiddenImageUpload");
+      const principalImageIndex = document.getElementById('principalImage').value;
+
+      if (files.length === 0) {
+        alert('Nenhuma imagem anexada.');
+        return;
+      }
+
+      // Perguntar ao usuário se ele quer substituir as imagens
+      const confirmSubstitute = confirm('Você quer substituir as imagens por essas novas anexadas?');
+
+      if (confirmSubstitute) {
+        if (files.length === 1) {
+          // Se apenas uma imagem está anexada, defina automaticamente como principal
+          document.getElementById('principalImage').value = 0; // Define a primeira imagem como principal
+          document.getElementById('substituteImages').value = 'true';
+
+          // Copia os arquivos para o input oculto
+          const dt = new DataTransfer();
+          dt.items.add(files[0]);
+          hiddenFileInput.files = dt.files;
+
+          alert('Imagem substituída e definida como principal.');
+        } else if (files.length > 1 && principalImageIndex === '') {
+          // Se múltiplas imagens e nenhuma foi definida como principal
+          alert('Para substituir as imagens, selecione uma como principal.');
+          return; // Interrompe a execução
+        } else if (files.length > 1 && principalImageIndex !== '') {
+          // Se múltiplas imagens e uma foi definida como principal
+          document.getElementById('substituteImages').value = 'true';
+
+          // Copia os arquivos para o input oculto
+          const dt = new DataTransfer();
+          for (let i = 0; i < files.length; i++) {
+            dt.items.add(files[i]);
+          }
+          hiddenFileInput.files = dt.files;
+
+          alert('Imagens substituídas.');
+        }
+      } else {
+        // Caso o usuário opte por não substituir
+        document.getElementById('substituteImages').value = 'false';
+
+        // Copia os arquivos para o input oculto
+        const dt = new DataTransfer();
+        for (let i = 0; i < files.length; i++) {
+          dt.items.add(files[i]);
+        }
+        hiddenFileInput.files = dt.files;
+
+        alert('Novas imagens foram adicionadas.');
+      }
+      closeModal();
+    }
+
+  </script>
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    .save, .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .save, .close:hover,
+    .save, .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    img {
+      width: 80px;
+      margin: 5px;
+    }
+
+    /* Destaque da imagem principal com borda vermelha */
+    .imagem-principal {
+      border: 2px solid red;
+    }
+
+    .imagem {
+      border: 2px solid transparent;
+    }
+  </style>
+</head>
+<body>
+<h1>Editar Produto</h1>
+
+<div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
+
+<form th:action="@{/editar-produto}" th:object="${produto}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+  <input type="hidden" name="id" th:value="${produto.getId()}"/>
+
+  <label for="nome">Nome:</label>
+  <input id="nome" name="nome" required th:field="*{nome}" type="text" maxlength="200"/><br/>
+
+  <label for="avaliacao">Avaliação:</label>
+  <input type="number" id="avaliacao" name="avaliacao" min="1" max="5" step="0.5" required
+         th:field="*{avaliacao}"><br>
+
+  <label for="descricao">Descrição:</label>
+  <input id="descricao" maxlength="2000" name="descricao" required th:field="*{descricao}" type="text"/><br/>
+
+  <label for="preco">Preço:</label>
+  <input type="text" id="preco" name="preco" th:value="${precoFormatado}" onkeyup="formatCurrency(this)"
+         placeholder="0,00" required><br/>
+
+  <label for="qtdEstoque">Quantidade:</label>
+  <input type="number" id="qtdEstoque" name="qtdEstoque" min="0" step="1" required th:field="*{qtdEstoque}"><br/>
+
+  <label for="imageUpload">Anexa sua(s) imagem(ns):</label>
+  <button type="button" onclick="openModal()">Gerenciar Imagens</button><br/>
+
+  <!-- Campo oculto para armazenar os arquivos selecionados no modal -->
+  <input type="file" id="hiddenImageUpload" name="imageUpload" style="display:none" multiple/>
+
+  <!-- Campo oculto para armazenar o índice da imagem principal -->
+  <input type="hidden" id="principalImage" name="principalImage" value="">
+
+  <input type="hidden" id="substituteImages" name="substituteImages" value="">
+
+  <button type="submit">Atualizar</button>
+  <button type="button" onclick="clearForm()">Limpar</button>
+  <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Cancelar</button>
+</form>
+
+<div id="imageModal" class="modal">
+  <div class="modal-content">
+    <h2>Imagens Anexadas</h2>
+    <!-- Lista de visualização das imagens anexadas -->
+    <div id="imagePreviewList" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+    <!-- Input de seleção de imagens -->
+    <input type="file" id="imageUpload" name="imageUpload" multiple onchange="addImage()" style="margin-top: 10px;"/>
+    <!-- Botões para anexar e fechar o modal -->
+    <div style="margin-top: 20px; display: flex; gap: 10px;">
+      <button class="save" onclick="saveAndCloseModal()">Salvar e Fechar</button>
+      <button class="close" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
