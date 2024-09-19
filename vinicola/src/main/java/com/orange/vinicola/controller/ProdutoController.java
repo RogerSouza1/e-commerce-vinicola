@@ -19,7 +19,12 @@ import java.util.Optional;
 
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 @Controller
 public class ProdutoController {
@@ -39,7 +44,7 @@ public class ProdutoController {
     public String registerProduct(Produto produto, @RequestParam("imageUpload") MultipartFile[] files, @RequestParam("principalImage") Integer principalImageIndex,
                                   Model model) {
         try {
-            if (produtoService.findByNome(produto.getNome()) != null) {
+            if (!produtoService.findByNome(produto.getNome()).isEmpty()) {
                 model.addAttribute("mensagem", "Produto já registrado!");
                 return "registrar-produto";
             }
@@ -54,7 +59,7 @@ public class ProdutoController {
             }
 
             // Verifica se o índice da imagem principal foi enviado
-            if (principalImageIndex == null || principalImageIndex < 0 || principalImageIndex >= files.length) {
+            if (principalImageIndex == null || principalImageIndex < 0) {
                 model.addAttribute("mensagem", "Selecione uma imagem principal válida.");
                 return "registrar-produto";
             }
@@ -97,6 +102,93 @@ public class ProdutoController {
         return "fragments/tabela-produtos :: tabela-produtos";
     }
 
+    @GetMapping("/editar-produto")
+    public String editarProduto(@RequestParam("id") Long id, Model model) {
+        Optional<Produto> produto = produtoService.findById(id);
+        if (produto.isPresent()) {
+            DecimalFormat df = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+            String precoFormatado = df.format(produto.get().getPreco());
+            List<Imagem> imagens = imagemService.findByProdutoId(id);
+            model.addAttribute("produto", produto.get());
+            model.addAttribute("precoFormatado", precoFormatado);
+            model.addAttribute("imagens", imagens);
+        }
+        return "editar-produto";
+    }
+
+    @PostMapping("/editar-produto")
+    public String updateProduct(
+            @RequestParam("id") Long id,
+            Produto produto,
+            @RequestParam("imageUpload") MultipartFile[] files,
+            @RequestParam(value = "principalImage", required = false) Integer principalImageIndex,
+            @RequestParam(value = "substituteImages", required = false) String substituteImages,
+            Model model) {
+        try {
+            Optional<Produto> produtoExistente = produtoService.findById(id);
+
+            if (produtoExistente.isEmpty()) {
+                model.addAttribute("mensagem", "Produto não encontrado!");
+                return "erro";
+            }
+
+            Produto produtoEditado = produtoExistente.get();
+            produtoEditado.setNome(produto.getNome());
+            produtoEditado.setAvaliacao(produto.getAvaliacao());
+            produtoEditado.setDescricao(produto.getDescricao());
+            produtoEditado.setPreco(produto.getPreco());
+            produtoEditado.setQtdEstoque(produto.getQtdEstoque());
+            produtoService.save(produtoEditado);
+
+            if (files != null) {
+                List<Imagem> imagensAntigas = imagemService.findByProdutoId(produtoEditado.getId());
+
+                if ("true".equals(substituteImages)) {
+                    // Exclui todas as imagens anteriores do produto
+                    for (Imagem imagem : imagensAntigas) {
+                        imagemService.deleteById(imagem.getId());
+                    }
+                }
+
+                // Verifica e redefine a imagem principal existente
+                if (principalImageIndex != null) {
+                    Imagem imagemPrincipalExistente = imagemService.findPrincipalByProdutoId(produtoEditado.getId());
+                    if (imagemPrincipalExistente != null) {
+                        imagemPrincipalExistente.setPrincipal(false);
+                        imagemService.save(imagemPrincipalExistente);
+                    }
+                }
+
+                // Salva as novas imagens
+                for (int i = 0; i < files.length; i++) {
+                    MultipartFile file = files[i];
+                    try {
+                        Imagem imagem = new Imagem();
+                        imagem.setProduto(produtoEditado);
+                        imagem.setDados(file.getBytes());
+                        imagem.setUrl(file.getOriginalFilename());
+
+                        // Define a imagem principal
+                        if (principalImageIndex != null && i == principalImageIndex) {
+                            imagem.setPrincipal(true);
+                        } else {
+                            imagem.setPrincipal(false);
+                        }
+
+                        imagemService.save(imagem);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        // Adicione tratamento de erro conforme necessário
+                    }
+                }
+            }
+
+            model.addAttribute("mensagem", "Produto atualizado com sucesso!");
+            return "redirect:/lista-produtos";
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("mensagem", "Erro: Produto já registrado!");
+            return "redirect:/lista-produtos";
+        }
 
     @GetMapping("/alterar-estado-produto")
     public String alterarEstadoProduto(@RequestParam("id") Long id, Model model) {
@@ -126,3 +218,4 @@ public class ProdutoController {
         }
     }
 }
+

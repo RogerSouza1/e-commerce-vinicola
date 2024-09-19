@@ -25,12 +25,12 @@
     </nav>
 </header>
 
-<main class="main-index">
+<main>
     <div class="button-container">
-        <button class="btn-register" onclick="window.location.href='/lista-produtos'" type="button">Listar Produtos</button>
+        <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Listar Produtos</button>
 
         <div sec:authorize="hasRole('ROLE_ADMINISTRADOR')">
-            <button class="btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Listar Usuários</button>
+            <button class="btn btn-register" onclick="window.location.href='/lista-usuarios'" type="button">Listar Usuários</button>
         </div>
     </div>
 </main>

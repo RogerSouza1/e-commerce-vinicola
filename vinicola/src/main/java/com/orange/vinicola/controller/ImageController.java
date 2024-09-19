@@ -25,6 +25,4 @@ public class ImageController {
                 .header("Content-Type", contentType)
                 .body(imagem.getDados());
     }
-
-
 }
