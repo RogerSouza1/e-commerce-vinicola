@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html  xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Produto</title>
@@ -49,7 +49,7 @@
             <td th:text="${produto.preco}">Preço</td>
             <td th:text="${produto.ativado ? 'Ativo' : 'Inativo'}"></td>
             <td class="text-center">
-                <button onclick="document.getElementById('modal-${produto.id}').style.display='block'">Visualizar</button>
+                <button class="btn-visu" onclick="document.getElementById('modal-${produto.id}').style.display='block'">Visualizar</button>
 
                 <!-- Modal para o produto -->
                 <div id="modal-${produto.id}" class="modal">
@@ -68,9 +68,10 @@
                 <a class="btn-edit" href="javascript:void(0);" onclick="showInactiveUserError()"
                    th:unless="${produto.ativado}">Editar</a>
 
-                <input type="checkbox" id="checkbox-toggle-status-${produto.id}" class="checkbox-toggle-status" th:checked="${produto.ativado}"
+
+                <input sec:authorize="hasRole('ROLE_ADMINISTRADOR')" type="checkbox" id="checkbox-toggle-status-${produto.id}" class="checkbox-toggle-status" th:checked="${produto.ativado}"
                        th:onclick="|return confirmChange() ? window.location.href='@{/alterar-estado-produto(id=${produto.id})}' : false|">
-                <label th:for="'checkbox-toggle-status-' + ${produto.id}">Habilitar</label>
+                <label sec:authorize="hasRole('ROLE_ADMINISTRADOR')"  th:for="'checkbox-toggle-status-' + ${produto.id}">Habilitar</label>
             </td>
         </tr>
         </tbody>
