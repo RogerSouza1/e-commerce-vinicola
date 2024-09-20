@@ -81,7 +81,7 @@ body {
 }
 
 /* CONTAINER DE LOGIN */
-.main-login, .main-index, .main-cadastro-usuario, .main-editar-usuario{
+.main-login, .main-index, .main-cadastro-usuario, .main-editar-usuario, .main-editar-produto, .main-cadastro-produto{
     display: flex;
     justify-content: center;
     align-items: center;

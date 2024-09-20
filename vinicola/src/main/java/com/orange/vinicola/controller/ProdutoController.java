@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -103,12 +104,15 @@ public class ProdutoController {
     }
 
     @GetMapping("/editar-produto")
-    public String editarProduto(@RequestParam("id") Long id, Model model) {
+    public String editarProduto(@RequestParam("id") Long id, Authentication authentication, Model model) {
         Optional<Produto> produto = produtoService.findById(id);
         if (produto.isPresent()) {
             DecimalFormat df = new DecimalFormat("R$ #,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
             String precoFormatado = df.format(produto.get().getPreco());
             List<Imagem> imagens = imagemService.findByProdutoId(id);
+            String userRole = authentication.getAuthorities().stream().findFirst().get().getAuthority();
+            model.addAttribute("userRole", userRole);
+            System.out.println(userRole);
             model.addAttribute("produto", produto.get());
             model.addAttribute("precoFormatado", precoFormatado);
             model.addAttribute("imagens", imagens);
@@ -133,6 +137,7 @@ public class ProdutoController {
             }
 
             Produto produtoEditado = produtoExistente.get();
+            produtoEditado.setId(produto.getId());
             produtoEditado.setNome(produto.getNome());
             produtoEditado.setAvaliacao(produto.getAvaliacao());
             produtoEditado.setDescricao(produto.getDescricao());
@@ -189,6 +194,7 @@ public class ProdutoController {
             model.addAttribute("mensagem", "Erro: Produto já registrado!");
             return "redirect:/lista-produtos";
         }
+    }
 
     @GetMapping("/alterar-estado-produto")
     public String alterarEstadoProduto(@RequestParam("id") Long id, Model model) {

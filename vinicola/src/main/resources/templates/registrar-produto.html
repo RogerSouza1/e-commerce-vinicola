@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Produto</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="/JS/openModal.js"></script>
@@ -30,54 +31,93 @@
     </style>
 </head>
 <body>
-<h1>Cadastro de Produto</h1>
-
-<div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
-
-<form th:action="@{/cadastro-produto}" th:object="${produto}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-    <input type="hidden" name="produtoId" th:value="${produto.id}"/>
-
-    <label for="nome">Nome:</label>
-    <input id="nome" name="nome" required th:field="*{nome}" type="text" maxlength="200"/><br/>
-
-    <label for="avaliacao">Avaliação:</label>
-    <input type="number" id="avaliacao" name="avaliacao" min="1" max="5" step="0.5" required th:field="*{avaliacao}"><br>
-
-    <label for="descricao">Descrição:</label>
-    <input id="descricao" maxlength="2000" name="descricao" required th:field="*{descricao}" type="text"/><br/>
-
-    <label for="preco">Preço:</label>
-    <input type="text" id="preco" name="preco" onkeyup="formatCurrency(this)" placeholder="0,00" required th:field="*{preco}"><br/>
-
-    <label for="qtdEstoque">Quantidade:</label>
-    <input type="number" id="qtdEstoque" name="qtdEstoque" min="0" step="1" required th:field="*{qtdEstoque}"><br/>
-
-    <label for="imageUpload">Anexa sua(s) imagem(ns):</label>
-    <button type="button" onclick="openModalGerenciarImagem()">Gerenciar Imagens</button><br/>
-
-    <!-- Campo oculto para armazenar os arquivos selecionados no modal -->
-    <input type="file" id="hiddenImageUpload" name="imageUpload" style="display:none" multiple/>
-
-    <!-- Campo oculto para armazenar o índice da imagem principal -->
-    <input type="hidden" id="principalImage" name="principalImage" value="">
-
-    <button type="submit">Cadastrar</button>
-    <button onclick="clearForm()" type="button">Limpar</button>
-    <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Cancelar</button>
-</form>
-<div id="imageModalGerenciar" class="modal">
-    <div class="modal-content">
-        <h2>Imagens Anexadas</h2>
-        <!-- Lista de visualização das imagens anexadas -->
-        <div id="imagePreviewList" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
-        <!-- Input de seleção de imagens -->
-        <input type="file" id="imageUpload" name="imageUpload" multiple onchange="addImage()" style="margin-top: 10px;"/>
-        <!-- Botões para anexar e fechar o modal -->
-        <div style="margin-top: 20px; display: flex; gap: 10px;">
-            <button class="save" onclick="saveAndCloseModal()">Salvar e Fechar</button>
-            <button class="close" onclick="closeModalGerenciar()">Cancelar</button>
+<header>
+    <nav>
+        <div class="logo-container">
+            <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+            <div class="dropdown">
+                <button class="dropdown-btn" sec:authorize="isAuthenticated()">
+                    [[${#authentication.name}]] &#9662;
+                </button>
+                <div class="dropdown-content">
+                    <form method="post" th:action="@{/logout}">
+                        <button class="btn-logout" type="submit">Sair</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    </nav>
+    <button class="btn-voltar" onclick="window.location.href='/lista-produtos'" type="button"><img
+            th:src="@{images/seta.png}"></button>
+</header>
+
+<main class="main-cadastro-produto">
+    <section class="form-container">
+        <h2 class="form-title">Cadastro de Produto</h2>
+
+        <div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
+
+        <form th:action="@{/cadastro-produto}" th:object="${produto}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <input type="hidden" name="produtoId" th:value="${produto.id}"/>
+
+            <div class="input-group">
+            <label for="nome">Nome:</label>
+            <input id="nome" name="nome" required th:field="*{nome}" type="text" maxlength="200"/><br/>
+            </div>
+
+            <div class="input-group">
+            <label for="avaliacao">Avaliação:</label>
+            <input type="number" id="avaliacao" name="avaliacao" min="1" max="5" step="0.5" required th:field="*{avaliacao}"><br>
+            </div>
+
+            <div class="input-group">
+            <label for="descricao">Descrição:</label>
+            <input id="descricao" maxlength="2000" name="descricao" required th:field="*{descricao}" type="text"/><br/>
+            </div>
+
+            <div class="input-group">
+            <label for="preco">Preço:</label>
+            <input type="text" id="preco" name="preco" onkeyup="formatCurrency(this)" placeholder="0,00" required th:field="*{preco}"><br/>
+            </div>
+
+            <div class="input-group">
+            <label for="qtdEstoque">Quantidade:</label>
+            <input type="number" id="qtdEstoque" name="qtdEstoque" min="0" step="1" required th:field="*{qtdEstoque}"><br/>
+            </div>
+
+            <div class="input-group">
+            <label for="imageUpload">Anexa sua(s) imagem(ns):</label>
+            <button type="button" onclick="openModalGerenciarImagem()">Gerenciar Imagens</button><br/>
+            </div>
+
+            <!-- Campo oculto para armazenar os arquivos selecionados no modal -->
+            <input type="file" id="hiddenImageUpload" name="imageUpload" style="display:none" multiple/>
+
+            <!-- Campo oculto para armazenar o índice da imagem principal -->
+            <input type="hidden" id="principalImage" name="principalImage" value="">
+
+            <div class="button-group">
+            <button type="submit" class="btn-padrao">Cadastrar</button>
+            <button onclick="clearForm()" type="button" class="btn-limpar">Limpar</button>
+            <button class="btn-cancel" onclick="window.location.href='/lista-produtos'" type="button">Cancelar</button>
+            </div>
+        </form>
+        <div id="imageModalGerenciar" class="modal">
+            <div class="modal-content">
+                <h2>Imagens Anexadas</h2>
+                <!-- Lista de visualização das imagens anexadas -->
+                <div id="imagePreviewList" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                <!-- Input de seleção de imagens -->
+                <input type="file" id="imageUpload" name="imageUpload" multiple onchange="addImage()" style="margin-top: 10px;"/>
+                <!-- Botões para anexar e fechar o modal -->
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="save" onclick="saveAndCloseModal()">Salvar e Fechar</button>
+                    <button class="close" onclick="closeModalGerenciar()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
 </body>
 </html>
