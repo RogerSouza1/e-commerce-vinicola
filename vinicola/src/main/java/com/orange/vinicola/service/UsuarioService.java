@@ -32,6 +32,10 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.findByEmail(email);
     }
 
+    public long findIdByEmail(String email) {
+        return usuarioRepository.findIdByEmail(email);
+    }
+
     public Optional<Usuario> findById(Long id) {
         return usuarioRepository.findById(id);
     }
