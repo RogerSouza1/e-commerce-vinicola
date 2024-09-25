@@ -23,7 +23,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/h2-console/**", "/css/**", "/images/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/h2-console/**", "/css/**", "/images/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("senha")
-                        .defaultSuccessUrl("/index", true)
+                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
                         .failureHandler(new CustomAuthenticationFailureHandler())
                 )
