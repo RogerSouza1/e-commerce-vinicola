@@ -16,4 +16,5 @@ public class HomeController {
     public String indexPost() {
         return "dashboard";
     }
+
 }
