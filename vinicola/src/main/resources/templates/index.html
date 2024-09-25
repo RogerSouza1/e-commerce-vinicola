@@ -11,14 +11,14 @@
 <body>
 <header>
   <section id="header">
-    <a href="#"><img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo"></a>
+    <a href="#"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
 
     <div>
       <ul id="navbar">
         <li><a class="active" href="#">Início</a></li>
         <li><a class="link-navbar" href="#">Produtos</a></li>
-        <li><a href="#"><img th:src="@{images/sacola.png}" alt="carrinho"></a></li>
-        <li><a class="icone-navbar" href="login"><img th:src="@{images/user.png}" alt="login"></a></li>
+        <li><a href="#"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
+        <li><a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a></li>
       </ul>
     </div>
   </section>
@@ -27,7 +27,7 @@
 <main>
   <section id="banner">
     <div class="banner">
-      <h1 class="frase-cima">Cada garrafa connta uma história.</h1>
+      <h1 class="frase-cima">Cada garrafa conta uma história.</h1>
       <div class="frase">
         <h1>Escolha a sua na</h1>
         <h1 class="frase-palavra">WINERY!</h1>
@@ -37,564 +37,32 @@
     </div>
   </section>
 
-  <section id="protutos1" class="section-p1">
+  <section class="section-p1" id="produtos1">
     <h2>Mais Vendidos</h2>
     <p>Vinhos de Qualidade</p>
     <div class="pro-container">
-      <div class="pro">
+      <!-- Itera sobre a lista de produtos vinda do banco de dados -->
+      <div class="pro" th:each="produto : ${produtos}">
+        <!-- Imagem do produto -->
         <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
+          <img alt="Imagem do Produto" class="img-produto" th:src="@{/imagem/{id}(id=${produto.imagemPrincipal.id})}">
         </div>
         <div class="des">
-          <h4>Vinho Tinto</h4>
+          <!-- Nome do produto -->
+          <h4 th:text="${produto.nome}">Nome do Produto</h4>
+          <!-- Exibe a avaliação do produto dinamicamente com base em estrelas -->
           <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
+            <span th:each="i : ${#numbers.sequence(1, 5)}">
+              <svg class="estrela" fill="currentColor" th:classappend="${i <= produto.avaliacao} ? 'cheia' : 'vazia'" viewBox="0 0 24 24"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+              </svg>
+            </span>
           </div>
-          <h4>R$ 99,99</h4>
+          <!-- Preço do produto -->
+          <h4 th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}">Preço</h4>
           <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="mini-banner">
-    <h3>BRINDE OS MELHORES MOMENTOS DA VIDA!</h3>
-    <h4>Vinhos nobres e de qualidade.</h4>
-    <a href="#" class="btn-compre">Saiba mais!</a>
-  </section>
-
-  <section id="protutos2" class="section-p1">
-    <h2>Novas Safras</h2>
-    <p>Uvas Finas e de Qualidade</p>
-    <div class="pro-container">
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
-          </div>
-        </div>
-      </div>
-      <div class="pro">
-        <div class="image-container">
-          <img th:src="@{images/26490-01.png}" alt="produto 1">
-        </div>
-        <div class="des">
-          <h4>Vinho Tinto</h4>
-          <div class="avaliacao-estrelas">
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela cheia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <svg class="estrela vazia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="currentColor">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-          </div>
-          <h4>R$ 99,99</h4>
-          <div class="saiba-mais-container">
-            <a href="#">Saiba mais!</a>
+            <a th:href="@{/produto/{id}(id=${produto.id})}">Saiba mais!</a>
           </div>
         </div>
       </div>
@@ -645,6 +113,5 @@
     <p>Winery - Projeto Integrador - 4ª Semestre</p>
   </div>
 </footer>
-
 </body>
 </html>
