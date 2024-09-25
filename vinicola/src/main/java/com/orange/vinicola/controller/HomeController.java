@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class HomeController {
 
-    @GetMapping("/index")
+    @GetMapping("/dashboard")
     public String index() {
-        return "index";
+        return "dashboard";
     }
 
-    @PostMapping("/index")
+    @PostMapping("/dashboard")
     public String indexPost() {
-        return "index";
+        return "dashboard";
     }
+
 }
