@@ -149,7 +149,7 @@ public class UsuarioController {
         } else {
             Authentication auth = new UsernamePasswordAuthenticationToken(usuario.get().getEmail(), usuario.get().getSenha(), usuario.get().getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
-            return "redirect:/index";
+            return "redirect:/dashboard";
         }
 
     }

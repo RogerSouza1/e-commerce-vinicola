@@ -6,23 +6,17 @@ import com.orange.vinicola.service.ImagemService;
 import com.orange.vinicola.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.Optional;
-
 
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -92,6 +86,7 @@ public class ProdutoController {
     @GetMapping("/lista-produtos")
     public String listarProduto(Model model) {
         List<Produto> produtos = produtoService.findAll();
+        produtos.sort((p1, p2) -> p2.getId().compareTo(p1.getId()));
         model.addAttribute("produtos", produtos);
         return "lista-produtos";
     }
@@ -174,11 +169,7 @@ public class ProdutoController {
                         imagem.setUrl(file.getOriginalFilename());
 
                         // Define a imagem principal
-                        if (principalImageIndex != null && i == principalImageIndex) {
-                            imagem.setPrincipal(true);
-                        } else {
-                            imagem.setPrincipal(false);
-                        }
+                        imagem.setPrincipal(principalImageIndex != null && i == principalImageIndex);
 
                         imagemService.save(imagem);
                     } catch (IOException e) {
