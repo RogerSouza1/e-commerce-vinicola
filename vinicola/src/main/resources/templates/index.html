@@ -62,7 +62,7 @@
           <!-- Preço do produto -->
           <h4 th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}">Preço</h4>
           <div class="saiba-mais-container">
-            <a th:href="@{/produto/{id}(id=${produto.id})}">Saiba mais!</a>
+            <a th:href="@{/detalhes-produto-cliente(id=${produto.id})}">Saiba mais!</a>
           </div>
         </div>
       </div>

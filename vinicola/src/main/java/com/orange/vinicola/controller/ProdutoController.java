@@ -214,5 +214,18 @@ public class ProdutoController {
             return "redirect:/lista-produtos";
         }
     }
+
+    @GetMapping("/detalhes-produto-cliente")
+    public String detalhesProdutoCliente(@RequestParam("id") Long id, Model model) {
+        Optional<Produto> produtoOpt = produtoService.findById(id);
+        if (produtoOpt.isPresent()) {
+            Produto produto = produtoOpt.get();
+            model.addAttribute("produto", produto);
+            return "detalhe-produto-cliente";
+        } else {
+            model.addAttribute("mensagem", "Produto não encontrado!");
+            return "redirect:/index";
+        }
+    }
 }
 
