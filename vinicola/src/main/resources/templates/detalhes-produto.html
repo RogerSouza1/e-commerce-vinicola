@@ -5,16 +5,25 @@
     <title>Detalhes do Produto</title>
 </head>
 <body>
-<h1>Detalhes do Produto</h1>
-<p><strong>Nome:</strong> <span th:text="${produto.nome}"></span></p>
-<p><strong>Descrição:</strong> <span th:text="${produto.descricao}"></span></p>
-<p><strong>Avaliação:</strong> <span th:text="${produto.avaliacao}"></span></p>
-<p><strong>Estoque:</strong> <span th:text="${produto.qtdEstoque}"></span></p>
-<p><strong>Preço:</strong> <span th:text="${produto.preco}"></span></p>
+<header>
+    <nav>
+        <div class="logo-container">
+            <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+        </div>
+    </nav>
+</header>
+<main>
+    <h1>Detalhes do Produto</h1>
+    <p><strong>Nome:</strong> <span th:text="${produto.nome}"></span></p>
+    <p><strong>Descrição:</strong> <span th:text="${produto.descricao}"></span></p>
+    <p><strong>Avaliação:</strong> <span th:text="${produto.avaliacao}"></span></p>
+    <p><strong>Estoque:</strong> <span th:text="${produto.qtdEstoque}"></span></p>
+    <p><strong>Preço:</strong> <span th:text="${produto.preco}"></span></p>
 
-<!-- Imagens do produto -->
-<div th:each="imagem : ${produto.imagens}">
-    <img th:src="@{/imagem/{id}(id=${imagem.id})}" alt="Imagem do Produto" style="width: 300px; height: 300px;" />
-</div>
+    <!-- Imagens do produto -->
+    <div th:each="imagem : ${produto.imagens}">
+        <img th:src="@{/imagem/{id}(id=${imagem.id})}" alt="Imagem do Produto" style="width: 300px; height: 300px;" />
+    </div>
+</main>
 </body>
 </html>

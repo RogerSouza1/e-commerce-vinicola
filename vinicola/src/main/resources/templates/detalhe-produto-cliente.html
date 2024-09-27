@@ -3,18 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalhes do Produto</title>
+    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
 </head>
 <body>
-<h1>Detalhes do Produto</h1>
-<p><strong>Nome:</strong> <span th:text="${produto.nome}"></span></p>
-<p><strong>Descrição:</strong> <span th:text="${produto.descricao}"></span></p>
-<p><strong>Avaliação:</strong> <span th:text="${produto.avaliacao}"></span></p>
-<p><strong>Estoque:</strong> <span th:text="${produto.qtdEstoque}"></span></p>
-<p><strong>Preço:</strong> <span th:text="${produto.preco}"></span></p>
+<header>
+    <section id="header">
+        <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
 
-<!-- Imagens do produto -->
-<div th:each="imagem : ${produto.imagens}">
-    <img alt="Imagem do Produto" style="width: 300px; height: 300px;" th:src="@{/imagem/{id}(id=${imagem.id})}"/>
-</div>
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="/">Início</a></li>
+                <li><a class="link-navbar" href="#">Produtos</a></li>
+                <li><a href="#"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
+                <li><a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a></li>
+            </ul>
+        </div>
+    </section>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+            th:src="@{images/seta.png}"></button>
+</header>
+<main class="main-detalhe-produto-cliente">
+    <section class="conteudo-container">
+        <div class="conteudo-container-imagem">
+            <div th:each="imagem : ${produto.imagens}">
+                <img alt="Imagem do Produto" th:src="@{/imagem/{id}(id=${produto.imagemPrincipal.id})}"/>
+            </div>
+        </div>
+        <div class="conteudo-container-info">
+            <p><strong><span th:text="${produto.nome}"></span></strong></p>
+            <p><span th:text="${produto.descricao}"></span></p>
+            <p><strong>Avaliação:</strong> <span th:text="${produto.avaliacao}"></span></p>
+            <p><strong>Quantidade em Estoque: </strong> <span th:text="${produto.qtdEstoque}"></span></p>
+            <p><strong>R$: <span th:text="${produto.preco}"></span></strong> </p>
+            <a class="btn-adicionar-carrinho">Adicionar Carrinho</a>
+        </div>
+    </section>
+</main>
 </body>
 </html>

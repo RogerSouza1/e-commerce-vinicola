@@ -115,6 +115,55 @@ p {
     margin: 0 0 0 2vw;
 }
 
+/* MAIN */
+.main-detalhe-produto, main-detalhe-produto-cliente{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.conteudo-container{
+    display: flex;
+    justify-content: space-between; /* Espaçamento entre as divs */
+    align-items: flex-start; /* Alinhamento superior */
+    overflow: hidden; /* Evita o conteúdo de ultrapassar o container */
+    background-color: #fff;
+    margin: 2vh;
+    padding: 3vw;
+    border-radius: 2vw;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+    width: 95vw;
+    text-align: center;
+}
+
+.conteudo-container-imagem,
+.conteudo-container-info {
+    flex: 1; /* Faz as divs ocuparem a mesma largura */
+    margin: 0 10px; /* Espaçamento entre as divs */
+    overflow: hidden; /* Garante que o conteúdo não vai ultrapassar */
+}
+
+.conteudo-container-imagem{
+
+}
+
+.conteudo-container-imagem img {
+    max-width: 50%;
+    height: auto; /* Garante que a imagem se adapte ao espaço sem distorcer */
+    display: block; /* Remove espaços em branco abaixo da imagem */
+}
+
+.conteudo-container-info{
+    margin: 2vh;
+    padding: 3vw;
+    text-align: center;
+}
+.conteudo-container-info p {
+    margin-bottom: 10px; /* Adiciona espaçamento de 10px entre os elementos */
+    line-height: 1.2;
+}
+
 /* BANNER */
 #banner {
     background-image: url("../images/banner.png");
@@ -157,6 +206,15 @@ p {
     margin-left: 1vw;
 }
 
+.btn-voltar {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    align-self: flex-start;
+    margin: 2vw 5vh;
+}
+
 .btn-compre {
     text-decoration: none;
     color: var(--branco);
@@ -170,6 +228,17 @@ p {
 
 .btn-compre:hover {
     background: var(--hover-vinho);
+}
+
+.btn-adicionar-carrinho{
+    text-decoration: none;
+    color: var(--branco);
+    background: var(--cor-principal-vinho);
+    padding: 1vw 2vw;
+    border-radius: 1vw;
+    transition: 0.3s ease;
+    font-size: 1.5vw;
+    font-weight: 600;
 }
 
 /*MAIS VENDIDOS e NOVAS SAFRAS*/
