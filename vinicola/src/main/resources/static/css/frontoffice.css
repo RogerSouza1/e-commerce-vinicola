@@ -125,9 +125,9 @@ p {
 
 .conteudo-container{
     display: flex;
-    justify-content: space-between; /* Espaçamento entre as divs */
-    align-items: flex-start; /* Alinhamento superior */
-    overflow: hidden; /* Evita o conteúdo de ultrapassar o container */
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow: hidden;
     background-color: #fff;
     margin: 2vh;
     padding: 3vw;
@@ -139,19 +139,15 @@ p {
 
 .conteudo-container-imagem,
 .conteudo-container-info {
-    flex: 1; /* Faz as divs ocuparem a mesma largura */
-    margin: 0 10px; /* Espaçamento entre as divs */
-    overflow: hidden; /* Garante que o conteúdo não vai ultrapassar */
-}
-
-.conteudo-container-imagem{
-
+    flex: 1;
+    margin: 0 10px;
+    overflow: hidden;
 }
 
 .conteudo-container-imagem img {
     max-width: 50%;
-    height: auto; /* Garante que a imagem se adapte ao espaço sem distorcer */
-    display: block; /* Remove espaços em branco abaixo da imagem */
+    height: auto;
+    display: block;
 }
 
 .conteudo-container-info{
@@ -159,8 +155,9 @@ p {
     padding: 3vw;
     text-align: center;
 }
+
 .conteudo-container-info p {
-    margin-bottom: 10px; /* Adiciona espaçamento de 10px entre os elementos */
+    margin-bottom: 2vw;
     line-height: 1.2;
 }
 
@@ -289,6 +286,14 @@ p {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin-bottom: 1vw;
+}
+
+avaliacao-estrelas-detalhe{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 1vw;
     margin-bottom: 1vw;
 }
 
