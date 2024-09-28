@@ -5,6 +5,18 @@
     <title>Detalhes do Produto</title>
     <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <script>
+        function alterarQuantidade(valor) {
+            const inputQuantidade = document.getElementById('quantidade');
+            let novaQuantidade = parseInt(inputQuantidade.value) + valor;
+
+            if (novaQuantidade < 0) {
+                novaQuantidade = 0; // Não permite valores negativos
+            }
+
+            inputQuantidade.value = novaQuantidade;
+        }
+    </script>
 </head>
 <body>
 <header>
@@ -27,7 +39,7 @@
         <section class="conteudo-container">
             <div class="conteudo-container-imagem">
                 <div th:each="imagem : ${produto.imagens}">
-                    <img class="conteudo-imagem" alt="Imagem do Produto" th:src="@{/imagem/{id}(id=${produto.imagemPrincipal.id})}"/>
+                    <img class="conteudo-imagem" alt="Imagem do Produto" th:src="@{/imagem/{id}(id=${imagem.id})}"/>
                 </div>
             </div>
             <div class="conteudo-container-info">
@@ -41,10 +53,17 @@
                 </span></p>
                 </div>
                 <p><span th:text="${produto.descricao}"></span></p>
-                <p><strong>Quantidade em Estoque: </strong> <span th:text="${produto.qtdEstoque}"></span></p>
-                <p><strong>R$: <span th:text="${produto.preco}"></span></strong> </p>
-                <a class="btn-adicionar-carrinho">Adicionar Carrinho</a>
-            </div>
+                <h3 class="conteudo-container-info-preco">R$: <span th:text="${produto.preco}"></span></h3>
+                <em class="quantidade-p">Quantidade</em>
+                <div class="quantidade-e-botao">
+                    <div class="quantidade-produto">
+                        <button type="button" class="btn-decrementar" onclick="alterarQuantidade(-1)">-</button>
+                        <input type="number" id="quantidade" value="0" min="0" readonly>
+                        <button type="button" class="btn-incrementar" onclick="alterarQuantidade(1)">+</button>
+                    </div>
+                    <a href="#" class="btn-adicionar-carrinho">Adicionar Carrinho</a>
+                </div>
+                </div>
         </section>
 </main>
 </body>

@@ -144,6 +144,12 @@ p {
     overflow: hidden;
 }
 
+.conteudo-container-imagem {
+    display: flex;
+    justify-content: center; /* Alinha a imagem horizontalmente ao centro */
+    align-items: center; /* Alinha a imagem verticalmente ao centro */
+}
+
 .conteudo-container-imagem img {
     max-width: 50%;
     height: auto;
@@ -153,10 +159,10 @@ p {
 .conteudo-container-info{
     margin: 2vh;
     padding: 3vw;
-    text-align: center;
+    text-align: left;
 }
 
-.conteudo-container-info p {
+.conteudo-container-info p, .conteudo-container-info-preco {
     margin-bottom: 2vw;
     line-height: 1.2;
 }
@@ -212,6 +218,10 @@ p {
     margin: 2vw 5vh;
 }
 
+.btn-voltar:hover img {
+    opacity: 0.7;
+}
+
 .btn-compre {
     text-decoration: none;
     color: var(--branco);
@@ -227,6 +237,12 @@ p {
     background: var(--hover-vinho);
 }
 
+.quantidade-e-botao {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaço entre os elementos */
+}
+
 .btn-adicionar-carrinho{
     text-decoration: none;
     color: var(--branco);
@@ -236,6 +252,23 @@ p {
     transition: 0.3s ease;
     font-size: 1.5vw;
     font-weight: 600;
+}
+
+.quantidade-produto button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.quantidade-produto input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin: 0 5px;
 }
 
 /*MAIS VENDIDOS e NOVAS SAFRAS*/
