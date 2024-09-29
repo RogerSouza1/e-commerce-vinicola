@@ -151,10 +151,46 @@ p {
     align-items: center; /* Alinha a imagem verticalmente ao centro */
 }
 
+.carrossel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+}
+.slide {
+    display: none; /* Todos os slides ficam ocultos inicialmente */
+}
+
+/* Setas de navegação */
+.seta {
+    position: absolute;
+    top: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 2em;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.seta.esquerda {
+    left: 10px;
+}
+
+.seta.direita {
+    right: 10px;
+}
+
+/* Animação da transição */
+.carrossel img {
+    transition: all 1.0s ease-in-out;
+}
+
 .conteudo-imagem {
     width: 100%; /* A imagem ocupará 100% do espaço disponível dentro do contêiner */
     height: auto;
-    display: block;
 }
 
 .conteudo-container-info{
