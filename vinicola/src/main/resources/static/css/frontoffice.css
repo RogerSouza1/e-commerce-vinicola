@@ -145,13 +145,14 @@ p {
 }
 
 .conteudo-container-imagem {
+    position: relative;
     display: flex;
     justify-content: center; /* Alinha a imagem horizontalmente ao centro */
     align-items: center; /* Alinha a imagem verticalmente ao centro */
 }
 
-.conteudo-container-imagem img {
-    max-width: 50%;
+.conteudo-imagem {
+    width: 100%; /* A imagem ocupará 100% do espaço disponível dentro do contêiner */
     height: auto;
     display: block;
 }

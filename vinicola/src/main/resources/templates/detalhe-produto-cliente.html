@@ -53,7 +53,7 @@
                 </span></p>
                 </div>
                 <p><span th:text="${produto.descricao}"></span></p>
-                <h3 class="conteudo-container-info-preco">R$: <span th:text="${produto.preco}"></span></h3>
+                <h3 class="conteudo-container-info-preco" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}"></h3>
                 <em class="quantidade-p">Quantidade</em>
                 <div class="quantidade-e-botao">
                     <div class="quantidade-produto">
