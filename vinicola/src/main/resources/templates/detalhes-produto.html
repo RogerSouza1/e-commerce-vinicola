@@ -1,29 +1,95 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Detalhes do Produto</title>
+    <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slides = document.querySelectorAll('.slide');
+            const carrossel = document.getElementById('carrossel');
+            const setaEsquerda = document.getElementById('seta-esquerda');
+            const setaDireita = document.getElementById('seta-direita');
+            let currentIndex = 0;
+
+            // Mostrar ou ocultar setas baseado na quantidade de imagens
+            if (slides.length <= 1) {
+                setaEsquerda.style.display = 'none';
+                setaDireita.style.display = 'none';
+            }
+
+            function mostrarSlide(index) {
+                // Reseta a visibilidade de todos os slides
+                slides.forEach((slide, i) => {
+                    slide.style.display = i === index ? 'block' : 'none';
+                });
+            }
+
+            function moverParaEsquerda() {
+                currentIndex = (currentIndex === 0) ? slides.length - 1 : currentIndex - 1;
+                mostrarSlide(currentIndex);
+            }
+
+            function moverParaDireita() {
+                currentIndex = (currentIndex === slides.length - 1) ? 0 : currentIndex + 1;
+                mostrarSlide(currentIndex);
+            }
+
+            setaEsquerda.addEventListener('click', moverParaEsquerda);
+            setaDireita.addEventListener('click', moverParaDireita);
+
+            // Mostrar o slide inicial
+            mostrarSlide(currentIndex);
+        });
+    </script>
 </head>
 <body>
 <header>
     <nav>
         <div class="logo-container">
             <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+            <div class="dropdown">
+                <button class="dropdown-btn" sec:authorize="isAuthenticated()">
+                    [[${#authentication.name}]] &#9662;
+                </button>
+                <div class="dropdown-content">
+                    <form method="post" th:action="@{/logout}">
+                        <button class="btn-logout" type="submit">Sair</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </nav>
+    <button class="btn-voltar" onclick="window.location.href='/lista-produtos'" type="button"><img
+            th:src="@{images/seta.png}"></button>
 </header>
-<main>
-    <h1>Detalhes do Produto</h1>
-    <p><strong>Nome:</strong> <span th:text="${produto.nome}"></span></p>
-    <p><strong>Descrição:</strong> <span th:text="${produto.descricao}"></span></p>
-    <p><strong>Avaliação:</strong> <span th:text="${produto.avaliacao}"></span></p>
-    <p><strong>Estoque:</strong> <span th:text="${produto.qtdEstoque}"></span></p>
-    <p><strong>Preço:</strong> <span th:text="${produto.preco}"></span></p>
-
-    <!-- Imagens do produto -->
-    <div th:each="imagem : ${produto.imagens}">
-        <img th:src="@{/imagem/{id}(id=${imagem.id})}" alt="Imagem do Produto" style="width: 300px; height: 300px;" />
-    </div>
+<main class="main-detalhe-produto">
+    <section class="conteudo-container">
+        <div class="conteudo-container-imagem">
+            <button class="seta esquerda" id="seta-esquerda">&#10094;</button>
+            <div class="carrossel" id="carrossel">
+                <div th:each="imagem : ${produtoImagens}" class="slide">
+                    <img class="conteudo-imagem" alt="Imagem do Produto" th:src="@{/imagem/{id}(id=${imagem.id})}"/>
+                </div>
+            </div>
+            <button class="seta direita" id="seta-direita">&#10095;</button>
+        </div>
+        <div class="conteudo-container-info">
+            <h3><strong><span th:text="${produto.nome}"></span></strong></h3>
+            <p><span th:text="${produto.descricao}"></span></p>
+            <p><strong>Quantidade em estoque:</strong> <span th:text="${produto.qtdEstoque}"></span></p>
+            <div class="avaliacao-estrelas-detalhe">
+                <p><span th:each="i : ${#numbers.sequence(1, 5)}">
+                  <svg class="estrela" fill="currentColor" th:classappend="${i <= produto.avaliacao} ? 'cheia' : 'vazia'" viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                  </svg>
+                </span></p>
+            </div>
+            <h3 class="conteudo-container-info-preco" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}"></h3>
+        </div>
+    </section>
 </main>
 </body>
 </html>

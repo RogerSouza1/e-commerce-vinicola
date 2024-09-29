@@ -207,6 +207,13 @@ public class ProdutoController {
         Optional<Produto> produtoOpt = produtoService.findById(id);
         if (produtoOpt.isPresent()) {
             Produto produto = produtoOpt.get();
+
+            Imagem imagemPrincipal = imagemService.findPrincipalByProdutoId(id);
+            List<Imagem> imagensProduto = imagemService.findByProduto(id);
+            imagensProduto.removeIf(imagem -> imagem.getId().equals(imagemPrincipal.getId()));
+            imagensProduto.add(0, imagemPrincipal);
+
+            model.addAttribute("produtoImagens", imagensProduto);
             model.addAttribute("produto", produto);
             return "detalhes-produto";
         } else {
@@ -220,6 +227,13 @@ public class ProdutoController {
         Optional<Produto> produtoOpt = produtoService.findById(id);
         if (produtoOpt.isPresent()) {
             Produto produto = produtoOpt.get();
+
+            Imagem imagemPrincipal = imagemService.findPrincipalByProdutoId(id);
+            List<Imagem> imagensProduto = imagemService.findByProduto(id);
+            imagensProduto.removeIf(imagem -> imagem.getId().equals(imagemPrincipal.getId()));
+            imagensProduto.add(0, imagemPrincipal);
+
+            model.addAttribute("produtoImagens", imagensProduto);
             model.addAttribute("produto", produto);
             return "detalhe-produto-cliente";
         } else {
