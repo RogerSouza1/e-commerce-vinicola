@@ -77,17 +77,17 @@
         </div>
         <div class="conteudo-container-info">
             <h3><strong><span th:text="${produto.nome}"></span></strong></h3>
-            <p><span th:text="${produto.descricao}"></span></p>
-            <p><strong>Quantidade em estoque:</strong> <span th:text="${produto.qtdEstoque}"></span></p>
-            <div class="avaliacao-estrelas-detalhe">
-                <p><span th:each="i : ${#numbers.sequence(1, 5)}">
+            <p><span th:each="i : ${#numbers.sequence(1, 5)}">
                   <svg class="estrela" fill="currentColor" th:classappend="${i <= produto.avaliacao} ? 'cheia' : 'vazia'" viewBox="0 0 24 24"
                        xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                   </svg>
                 </span></p>
+            <p><span th:text="${produto.descricao}"></span></p>
+            <div class="avaliacao-estrelas-detalhe">
             </div>
             <h3 class="conteudo-container-info-preco" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}"></h3>
+            <a href="#" class="btn-adicionar-carrinho disabled">Adicionar Carrinho</a>
         </div>
     </section>
 </main>
