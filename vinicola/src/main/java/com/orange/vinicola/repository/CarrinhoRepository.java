@@ -9,5 +9,4 @@ public interface CarrinhoRepository extends JpaRepository<Carrinho, Long> {
 
     Carrinho findByUsuarioId(Long usuarioId);
 
-    void deleteByUsuarioId(Long usuarioId);
 }

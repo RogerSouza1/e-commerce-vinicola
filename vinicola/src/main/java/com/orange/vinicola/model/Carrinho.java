@@ -28,6 +28,9 @@ public class Carrinho {
     @Column(nullable = false)
     private double valorTotal;
 
+    @Column
+    private double valorComFrete;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco enderecoEntrega;
 

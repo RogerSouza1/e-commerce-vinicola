@@ -43,4 +43,8 @@ public class ProdutoService {
         return produtoRepository.findAllAtivado();
     }
 
+    public int quantidadeEstoquePorProduto(Long id) {
+        return produtoRepository.quantidadeEstoquePorProduto(id);
+    }
+
 }

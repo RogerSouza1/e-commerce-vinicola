@@ -11,13 +11,13 @@
 <body>
 <header>
   <section id="header">
-    <a href="#"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
+    <a href="index"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
 
     <div>
       <ul id="navbar">
-        <li><a class="active" href="#">Início</a></li>
-        <li><a class="link-navbar" href="#">Produtos</a></li>
-        <li><a href="#"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
+        <li><a class="active" href="index">Início</a></li>
+        <li><a class="link-navbar" href="#produtos1">Produtos</a></li>
+        <li><a href="/carrinho/abrirCarrinho"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
         <li><a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a></li>
       </ul>
     </div>
@@ -33,7 +33,7 @@
         <h1 class="frase-palavra">WINERY!</h1>
       </div>
       <h3>Vinhos com até 60% de desconto!</h3>
-      <a href="#" class="btn-compre">Compre agora!</a>
+      <a href="#produtos1" class="btn-compre">Compre agora!</a>
     </div>
   </section>
 

@@ -29,5 +29,5 @@ public class Item {
     private int quantidade;
 
     @Column(nullable = false)
-    private double valorProduto;
+    private double valorItem;
 }

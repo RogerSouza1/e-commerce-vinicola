@@ -14,7 +14,6 @@ import java.util.Collections;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Usuario")
 public class Usuario implements UserDetails {

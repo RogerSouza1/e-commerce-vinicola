@@ -7,14 +7,19 @@
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <script>
         function alterarQuantidade(valor) {
-            const inputQuantidade = document.getElementById('quantidade');
+            let inputQuantidade = parseInt(document.getElementById('quantidade').value);
+            let qtdEstoque = parseInt(document.getElementById('qtdEstoque').value);
             let novaQuantidade = parseInt(inputQuantidade.value) + valor;
 
-            if (novaQuantidade < 0) {
-                novaQuantidade = 0; // Não permite valores negativos
+            if (novaQuantidade > qtdEstoque) {
+                alert('Quantidade em estoque insuficiente');
+            } else {
+                if (novaQuantidade <= 0) {
+                    novaQuantidade = 1;
+                }
+                inputQuantidade.value = novaQuantidade;
             }
 
-            inputQuantidade.value = novaQuantidade;
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -74,6 +79,8 @@
 </header>
 <main class="main-detalhe-produto-cliente">
         <section class="conteudo-container">
+            <form th:action="@{/carrinho/adicionarProduto}" method="post" >
+                <input type="hidden" id="produtoId" name="produtoId" th:value="${produto.id}">
             <div class="conteudo-container-imagem">
                 <button class="seta esquerda" id="seta-esquerda">&#10094;</button>
                 <div class="carrossel" id="carrossel">
@@ -99,12 +106,16 @@
                 <div class="quantidade-e-botao">
                     <div class="quantidade-produto">
                         <button type="button" class="btn-decrementar" onclick="alterarQuantidade(-1)">-</button>
-                        <input type="number" id="quantidade" value="0" min="0" readonly>
+                        <label for="quantidade">Quantidade</label>
+                        <input type="number" id="quantidade" value="1" name="quantidade" th:min="1" th:max="${produto.qtdEstoque}" readonly>
                         <button type="button" class="btn-incrementar" onclick="alterarQuantidade(1)">+</button>
+                        <label for="qtdEstoque" class="qtdEstoque">Quantidade em Estoque</label>
+                        <input th:text="${produto.qtdEstoque}" type="hidden" id="qtdEstoque">
                     </div>
-                    <a href="#" class="btn-adicionar-carrinho">Adicionar Carrinho</a>
+                    <button type="submit" class="btn-adicionar-carrinho">Adicionar Carrinho</button>
                 </div>
                 </div>
+            </form>
         </section>
 </main>
 </body>
