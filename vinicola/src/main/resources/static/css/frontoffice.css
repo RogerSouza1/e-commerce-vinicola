@@ -255,11 +255,6 @@ p {
     margin: 2vw 5vh;
 }
 
-.btn-voltar img {
-    width: 2vw;
-    height: auto;
-}
-
 .btn-voltar:hover img {
     opacity: 0.7;
 }
@@ -278,6 +273,7 @@ p {
 .btn-compre:hover {
     background: var(--hover-vinho);
 }
+
 
 .quantidade-e-botao {
     display: flex;
@@ -532,4 +528,123 @@ avaliacao-estrelas-detalhe{
 
 .logo-rodape img {
     width: 10vw;
+}
+
+
+
+
+
+
+
+
+.meu-carrinho{
+    margin-top: 3em;
+    margin-left: 2.5em;
+}
+
+.conteudo {
+    display: flex;
+    flex-direction: row;
+    max-width: 800px;
+    padding: 10px;
+    margin-top: 1em;
+    margin-left: 4em;
+
+}
+
+.card-row{
+    margin-bottom: 3em;
+}
+
+.desc-produto-row{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    margin-bottom: 3em;
+    margin-top: 2em;
+    width: 50em;
+
+}
+
+.info-produto{
+    display: flex;
+    flex-direction: column;
+    margin-top: 3em;
+    margin-left: 1em;
+}
+
+
+.botao-row{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    height: 3em;
+    width: 5em;
+    margin-top: 5em;
+    margin-right: 2em;
+}
+
+th, td {
+    padding: 10px;
+
+    text-align: left;
+}
+
+.total {
+    text-align: right;
+    margin-top: 20px;
+}
+
+
+
+.card-column2{
+    margin-left: 7em;
+    margin-top: 2em;
+}
+
+
+
+.calcular{
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    padding: 1em;
+    width: 30em;
+
+}
+
+.valor-calculo{
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    padding: 1em;
+    width: 30em;
+}
+
+
+.desc-entrega{
+    margin-top: .5em;
+    margin-bottom: 2em;
+}
+
+.cep-calc{
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+}
+
+.finalizar{
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    padding: 1em;
+    width: 30em;
+}
+
+.finalizar-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

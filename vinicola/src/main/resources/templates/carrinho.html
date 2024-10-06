@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Carrinho</title>
+    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calcularBtn = document.querySelector('.calcular-btn');
+            const cepInput = document.querySelector('.cep-input');
+            const optionsSelect = document.querySelector('.options-select');
+            const valorFrete = document.querySelector('.valor-frete');
+            const valorCalculo = document.querySelector('.valor-calculo');
+            const calcularContainer = document.querySelector('.calcular');
+
+            calcularBtn.addEventListener('click', function() {
+                const cep = cepInput.value;
+
+                if (!/^\d{5}-?\d{3}$/.test(cep)) {
+                    alert('Por favor, insira um CEP válido.');
+                    return;
+                }
+
+                calcularContainer.style.display = 'none';
+                valorCalculo.style.display = 'block';
+
+                const min = 9;
+                const max = 32;
+                const options = optionsSelect.options;
+                for (let i = 0; i < options.length; i++) {
+                    const randomValue = (Math.random() * (max - min) + min).toFixed(2);
+                    options[i].text = `Opção ${i + 1} - R$ ${randomValue}`;
+                    options[i].value = randomValue;
+                }
+            });
+
+            optionsSelect.addEventListener('change', function() {
+                const selectedValue = this.options[this.selectedIndex].value;
+                valorFrete.innerText = `R$ ${selectedValue}`;
+            });
+        });
+
+        function confirmChange() {
+            return confirm("Tem certeza que deseja tirar esse produto do seu carrinho?");
+        }
+    </script>
+</head>
+
+<body>
+<header>
+    <section id="header">
+        <a href="/"><img alt="Logo Winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
+        <nav>
+            <ul id="navbar">
+                <li><a class="active" href="/">Início</a></li>
+                <li><a class="link-navbar" href="/">Produtos</a></li>
+                <li><a href="/carrinho/abrirCarrinho"><img alt="Carrinho" th:src="@{/images/sacola.png}"></a></li>
+                <li><a class="icone-navbar" href="/login"><img alt="Login" th:src="@{/images/user.png}"></a></li>
+            </ul>
+        </nav>
+    </section>
+</header>
+
+<main class="container">
+    <h2 class="meu-carrinho">Meu Carrinho</h2>
+    <div class="conteudo">
+        <div class="card-row">
+            <div th:each="item : ${carrinho.itens}">
+                <div class="desc-produto-row">
+                    <div th:each="imagem : ${item.produto.imagens}">
+                        <img alt="Imagem do Produto" style="width: 150px; height: 150px;" th:src="@{/imagem/{id}(id=${imagem.id})}"/>
+                    </div>
+                    <p class="info-produto">
+                        <strong>Produto:</strong> <span th:text="${item.produto.nome}"></span>
+                    </p>
+                    <p class="info-produto">
+                        <strong>Quantidade:</strong>
+                    <div class="botao-row">
+                        <form th:action="@{/carrinho/diminuirQuantidade}" method="post">
+                            <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                            <button type="submit" class="decrement" style="width: 20px; height: 20px; cursor: pointer;">-</button>
+                        </form>
+                        <span th:text="${item.quantidade}"></span>
+                        <form th:action="@{/carrinho/aumentarQuantidade}" method="post">
+                            <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                            <button type="submit" class="decrement" style="width: 20px; height: 20px; cursor: pointer;">+</button>
+                        </form>
+                    </div>
+                    </p>
+
+                    <p class="info-produto">
+                        <strong>Preço:</strong>
+                        <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
+                    </p>
+
+                    <form th:action="@{/carrinho/removerProduto}" method="post" th:onsubmit="confirmChange()">
+                        <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                        <button  type="submit">Remover Produto</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-column2">
+            <div class="calcular">
+                <strong class="titulo-entrega">Entrega</strong>
+                <p class="desc-entrega">Confira as opções de entrega para seus itens.</p>
+                <strong>CEP:</strong>
+                <div class="cep-calc">
+                    <input type="text" class="cep-input" name="cep" placeholder="XXXXX-XXX" style="border: 1px solid #ddd; border-radius: 4px; width: 18em; height: 3em;" required>
+                    <button class="calcular-btn" style="cursor: pointer; border: 1px solid #ddd; border-radius: 8px; background-color: black; color: white; margin-left: 2em; width: 12em; height: 3em;">Calcular</button>
+                </div>
+            </div>
+
+            <div class="valor-calculo" style="margin-top: 2em; display: none;">
+                <strong class="titulo-entrega">Opções de Entrega</strong>
+                <select class="options-select" name="options" style="border: 1px solid #ddd; border-radius: 4px; width: 27em; height: 3em;">
+                    <option value="">Selecione uma opção</option>
+                    <option value="option1">Expressa</option>
+                    <option value="option2">Padrão</option>
+                    <option value="option3">Econômica</option>
+                </select>
+                <p class="valor-frete">R$0,00</p>
+            </div>
+
+            <div class="finalizar" style="margin-top: 2em;">
+                <div class="finalizar-row">
+                    <p class="valor-produto">Subtotal</p>
+                    <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorTotal, 1, 2)}"></span>
+                </div>
+                <div class="finalizar-row">
+                    <p>Frete:</p>
+                    <p class="valor-frete">R$ 0,00</p>
+                </div>
+                <div class="finalizar-row">
+                    <strong>Total:</strong>
+                    <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
+                </div>
+                <button style="background-color: #5C0A0A; border-radius: 2em; height: 4em; width: 33em; margin-top: 2em;">
+                    <p class="finalizar-compra" style="font-size: 1.5em; color: white;">Finalizar Compra</p>
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="rodape">
+        <a href="index.html" class="logo-rodape"><img th:src="@{images/logo_winery.png}" alt="Logo Winery"></a>
+        <div class="footer-container">
+            <nav class="navegacao">
+                <ul>
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#">Produtos</a></li>
+                </ul>
+            </nav>
+            <div class="contatos">
+                <ul>
+                    <li><a href="#"><img th:src="@{images/phone.svg}" alt="Telefone"/>(11) 3881-3637</a></li>
+                    <li><a href="#"><img th:src="@{images/whatsapp.svg}" alt="WhatsApp"/>(11) 98066-7105</a></li>
+                    <li><a href="#"><img th:src="@{images/email.svg}" alt="Email"/>winery@gmail.com</a></li>
+                </ul>
+            </div>
+            <div class="redes-sociais">
+                <ul>
+                    <li><a href="#"><img th:src="@{images/linkedin.svg}" alt="LinkedIn"/></a></li>
+                    <li><a href="#"><img th:src="@{images/facebook.svg}" alt="Facebook"/></a></li>
+                    <li><a href="#"><img th:src="@{images/instagram.svg}" alt="Instagram"/></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="rodape-frase">
+        <p>Winery - Projeto Integrador - 4º Semestre</p>
+    </div>
+</footer>
+</body>
+
+</html>
