@@ -44,7 +44,11 @@
         });
 
         function confirmChange() {
-            return confirm("Tem certeza que deseja tirar esse produto do seu carrinho?");
+            if (confirm("Tem certeza que deseja tirar esse produto do seu carrinho?")) {
+                return true;
+            } else {
+                return false;
+            }
         }
     </script>
 </head>
@@ -62,6 +66,8 @@
             </ul>
         </nav>
     </section>
+    <button class="btn-voltar" onclick="window.history.back()" type="button"><img
+            th:src="@{/images/seta.png}"></button>
 </header>
 
 <main class="container">
@@ -96,9 +102,9 @@
                         <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
                     </p>
 
-                    <form th:action="@{/carrinho/removerProduto}" method="post" th:onsubmit="confirmChange()">
+                    <form th:action="@{/carrinho/removerProduto}" method="post" onsubmit="return confirmChange()">
                         <input type="hidden" name="produtoId" th:value="${item.produto.id}">
-                        <button  type="submit">Remover Produto</button>
+                        <button type="submit">Remover Produto</button>
                     </form>
                 </div>
             </div>
@@ -149,7 +155,7 @@
 
 <footer>
     <div class="rodape">
-        <a href="index.html" class="logo-rodape"><img th:src="@{images/logo_winery.png}" alt="Logo Winery"></a>
+        <a href="index.html" class="logo-rodape"><img th:src="@{/images/logo_winery.png}" alt="Logo Winery"></a>
         <div class="footer-container">
             <nav class="navegacao">
                 <ul>
@@ -159,16 +165,16 @@
             </nav>
             <div class="contatos">
                 <ul>
-                    <li><a href="#"><img th:src="@{images/phone.svg}" alt="Telefone"/>(11) 3881-3637</a></li>
-                    <li><a href="#"><img th:src="@{images/whatsapp.svg}" alt="WhatsApp"/>(11) 98066-7105</a></li>
-                    <li><a href="#"><img th:src="@{images/email.svg}" alt="Email"/>winery@gmail.com</a></li>
+                    <li><a href="#"><img th:src="@{/images/phone.svg}" alt="Telefone"/>(11) 3881-3637</a></li>
+                    <li><a href="#"><img th:src="@{/images/whatsapp.svg}" alt="WhatsApp"/>(11) 98066-7105</a></li>
+                    <li><a href="#"><img th:src="@{/images/email.svg}" alt="Email"/>winery@gmail.com</a></li>
                 </ul>
             </div>
             <div class="redes-sociais">
                 <ul>
-                    <li><a href="#"><img th:src="@{images/linkedin.svg}" alt="LinkedIn"/></a></li>
-                    <li><a href="#"><img th:src="@{images/facebook.svg}" alt="Facebook"/></a></li>
-                    <li><a href="#"><img th:src="@{images/instagram.svg}" alt="Instagram"/></a></li>
+                    <li><a href="#"><img th:src="@{/images/linkedin.svg}" alt="LinkedIn"/></a></li>
+                    <li><a href="#"><img th:src="@{/images/facebook.svg}" alt="Facebook"/></a></li>
+                    <li><a href="#"><img th:src="@{/images/instagram.svg}" alt="Instagram"/></a></li>
                 </ul>
             </div>
         </div>

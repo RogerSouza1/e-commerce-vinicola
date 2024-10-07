@@ -71,6 +71,11 @@ public class CarrinhoController {
 
         Carrinho carrinhoAtualizado = carrinhoService.removerProduto(carrinho, produtoId);
 
+        if (carrinhoAtualizado.getValorTotal() < 0) {
+            carrinhoAtualizado.setValorTotal(0);
+            carrinhoAtualizado.setValorComFrete(0);
+        }
+
         if (request.getSession().getAttribute("usuario") != null) {
             carrinhoService.save(carrinhoAtualizado);
         }
@@ -88,6 +93,11 @@ public class CarrinhoController {
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
 
         Carrinho carrinhoAtualizado = carrinhoService.decrementarQuantidade(carrinho, produtoId);
+
+        if (carrinhoAtualizado.getValorTotal() < 0) {
+            carrinhoAtualizado.setValorTotal(0);
+            carrinhoAtualizado.setValorComFrete(0);
+        }
 
         if (request.getSession().getAttribute("usuario") != null) {
             carrinhoService.save(carrinhoAtualizado);

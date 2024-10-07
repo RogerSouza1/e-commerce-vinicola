@@ -68,13 +68,13 @@
         <div>
             <ul id="navbar">
                 <li><a class="active" href="/">Início</a></li>
-                <li><a class="link-navbar" href="#">Produtos</a></li>
-                <li><a href="#"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
+                <li><a class="link-navbar" href="/">Produtos</a></li>
+                <li><a href="/carrinho/abrirCarrinho"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
                 <li><a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a></li>
             </ul>
         </div>
     </section>
-    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+    <button class="btn-voltar" onclick="window.history.back()" type="button"><img
             th:src="@{images/seta.png}"></button>
 </header>
 <main class="main-detalhe-produto-cliente">
@@ -82,13 +82,13 @@
             <form th:action="@{/carrinho/adicionarProduto}" method="post" >
                 <input type="hidden" id="produtoId" name="produtoId" th:value="${produto.id}">
             <div class="conteudo-container-imagem">
-                <button class="seta esquerda" id="seta-esquerda">&#10094;</button>
+                <button type="button" class="seta esquerda" id="seta-esquerda">&#10094;</button>
                 <div class="carrossel" id="carrossel">
                     <div th:each="imagem : ${produtoImagens}" class="slide">
                         <img class="conteudo-imagem" alt="Imagem do Produto" th:src="@{/imagem/{id}(id=${imagem.id})}"/>
                     </div>
                 </div>
-                <button class="seta direita" id="seta-direita">&#10095;</button>
+                <button type="button" class="seta direita" id="seta-direita">&#10095;</button>
             </div>
             <div class="conteudo-container-info">
                 <h3><strong><span th:text="${produto.nome}"></span></strong></h3>
