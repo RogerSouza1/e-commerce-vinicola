@@ -138,8 +138,8 @@
                     <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorTotal, 1, 2)}"></span>
                 </div>
                 <div class="finalizar-row">
-                    <p>Frete:</p>
-                    <p class="valor-frete">R$ 0,00</p>
+                    <p class="valor-frete">Frete:</p>
+                    <span class="valor-frete" th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.frete, 1, 2)}"></span>
                 </div>
                 <div class="finalizar-row">
                     <strong>Total:</strong>
