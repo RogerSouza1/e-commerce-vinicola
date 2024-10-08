@@ -416,6 +416,12 @@ td a {
     background-color: #ffffff;
 }
 
+.btn-adicionar-carrinho.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .button-container {
     display: flex;
     flex-direction: column;

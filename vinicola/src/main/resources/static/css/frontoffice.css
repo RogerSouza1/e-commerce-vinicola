@@ -115,6 +115,95 @@ p {
     margin: 0 0 0 2vw;
 }
 
+/* MAIN */
+.main-detalhe-produto, main-detalhe-produto-cliente{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.conteudo-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow: hidden;
+    background-color: #fff;
+    margin: 2vh;
+    padding: 3vw;
+    border-radius: 2vw;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+    width: 95vw;
+    text-align: center;
+}
+
+.conteudo-container-imagem,
+.conteudo-container-info {
+    flex: 1;
+    margin: 0 10px;
+    overflow: hidden;
+}
+
+.conteudo-container-imagem {
+    position: relative;
+    display: flex;
+    justify-content: center; /* Alinha a imagem horizontalmente ao centro */
+    align-items: center; /* Alinha a imagem verticalmente ao centro */
+}
+
+.carrossel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+}
+.slide {
+    display: none; /* Todos os slides ficam ocultos inicialmente */
+}
+
+/* Setas de navegação */
+.seta {
+    position: absolute;
+    top: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 2em;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.seta.esquerda {
+    left: 10px;
+}
+
+.seta.direita {
+    right: 10px;
+}
+
+/* Animação da transição */
+.carrossel img {
+    transition: all 1.0s ease-in-out;
+}
+
+.conteudo-imagem {
+    width: 100%; /* A imagem ocupará 100% do espaço disponível dentro do contêiner */
+    height: auto;
+}
+
+.conteudo-container-info{
+    margin: 2vh;
+    padding: 3vw;
+    text-align: left;
+}
+
+.conteudo-container-info p, .conteudo-container-info-preco {
+    margin-bottom: 2vw;
+    line-height: 1.2;
+}
+
 /* BANNER */
 #banner {
     background-image: url("../images/banner.png");
@@ -157,6 +246,19 @@ p {
     margin-left: 1vw;
 }
 
+.btn-voltar {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    align-self: flex-start;
+    margin: 2vw 5vh;
+}
+
+.btn-voltar:hover img {
+    opacity: 0.7;
+}
+
 .btn-compre {
     text-decoration: none;
     color: var(--branco);
@@ -170,6 +272,41 @@ p {
 
 .btn-compre:hover {
     background: var(--hover-vinho);
+}
+
+
+.quantidade-e-botao {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaço entre os elementos */
+}
+
+.btn-adicionar-carrinho{
+    text-decoration: none;
+    color: var(--branco);
+    background: var(--cor-principal-vinho);
+    padding: 1vw 2vw;
+    border-radius: 1vw;
+    transition: 0.3s ease;
+    font-size: 1.5vw;
+    font-weight: 600;
+}
+
+.quantidade-produto button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.quantidade-produto input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin: 0 5px;
 }
 
 /*MAIS VENDIDOS e NOVAS SAFRAS*/
@@ -220,6 +357,14 @@ p {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin-bottom: 1vw;
+}
+
+avaliacao-estrelas-detalhe{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 1vw;
     margin-bottom: 1vw;
 }
 
@@ -383,4 +528,123 @@ p {
 
 .logo-rodape img {
     width: 10vw;
+}
+
+
+
+
+
+
+
+
+.meu-carrinho{
+    margin-top: 3em;
+    margin-left: 2.5em;
+}
+
+.conteudo {
+    display: flex;
+    flex-direction: row;
+    max-width: 800px;
+    padding: 10px;
+    margin-top: 1em;
+    margin-left: 4em;
+
+}
+
+.card-row{
+    margin-bottom: 3em;
+}
+
+.desc-produto-row{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    margin-bottom: 3em;
+    margin-top: 2em;
+    width: 50em;
+
+}
+
+.info-produto{
+    display: flex;
+    flex-direction: column;
+    margin-top: 3em;
+    margin-left: 1em;
+}
+
+
+.botao-row{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    height: 3em;
+    width: 5em;
+    margin-top: 5em;
+    margin-right: 2em;
+}
+
+th, td {
+    padding: 10px;
+
+    text-align: left;
+}
+
+.total {
+    text-align: right;
+    margin-top: 20px;
+}
+
+
+
+.card-column2{
+    margin-left: 7em;
+    margin-top: 2em;
+}
+
+
+
+.calcular{
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    padding: 1em;
+    width: 30em;
+
+}
+
+.valor-calculo{
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    padding: 1em;
+    width: 30em;
+}
+
+
+.desc-entrega{
+    margin-top: .5em;
+    margin-bottom: 2em;
+}
+
+.cep-calc{
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+}
+
+.finalizar{
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    padding: 1em;
+    width: 30em;
+}
+
+.finalizar-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

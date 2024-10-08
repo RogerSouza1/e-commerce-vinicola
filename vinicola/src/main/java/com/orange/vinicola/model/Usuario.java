@@ -14,7 +14,6 @@ import java.util.Collections;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Usuario")
 public class Usuario implements UserDetails {
@@ -41,6 +40,9 @@ public class Usuario implements UserDetails {
     @Getter
     @Column(nullable = false)
     private boolean ativado;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Carrinho carrinho;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -76,5 +78,4 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return this.ativado;
     }
-
 }
