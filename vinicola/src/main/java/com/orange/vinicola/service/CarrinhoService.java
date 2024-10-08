@@ -176,8 +176,9 @@ public class CarrinhoService {
             throw new RuntimeException("Carrinho não encontrado");
         }
 
+        carrinho.setValorComFrete(carrinho.getValorComFrete() - carrinho.getFrete());
         carrinho.setFrete(frete);
-        carrinho.setValorTotal(carrinho.getValorTotal() + carrinho.getFrete());
+        carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
         return carrinho;
     }
 

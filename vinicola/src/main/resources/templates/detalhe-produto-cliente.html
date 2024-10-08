@@ -7,19 +7,19 @@
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <script>
         function alterarQuantidade(valor) {
-            let inputQuantidade = parseInt(document.getElementById('quantidade').value);
-            let qtdEstoque = parseInt(document.getElementById('qtdEstoque').value);
+            let inputQuantidade = document.getElementById('quantidade');
+            let qtdEstoque = parseInt(document.getElementById('qtdEstoque').textContent);
             let novaQuantidade = parseInt(inputQuantidade.value) + valor;
 
             if (novaQuantidade > qtdEstoque) {
-                alert('Quantidade em estoque insuficiente');
-            } else {
-                if (novaQuantidade <= 0) {
-                    novaQuantidade = 1;
-                }
-                inputQuantidade.value = novaQuantidade;
+                novaQuantidade = qtdEstoque;
             }
-
+            if (novaQuantidade < 1) {
+                novaQuantidade = 1;
+            }
+            inputQuantidade.value = novaQuantidade;
+            document.querySelector('.btn-incrementar').disabled = novaQuantidade >= qtdEstoque;
+            document.querySelector('.btn-decrementar').disabled = novaQuantidade <= 1;
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -106,8 +106,7 @@
                 <div class="quantidade-e-botao">
                     <div class="quantidade-produto">
                         <button type="button" class="btn-decrementar" onclick="alterarQuantidade(-1)">-</button>
-                        <label for="quantidade">Quantidade</label>
-                        <input type="number" id="quantidade" value="1" name="quantidade" th:min="1" th:max="${produto.qtdEstoque}" readonly>
+                        <input type="number" id="quantidade" value="1" name="quantidade" th:min="1" th:max="${produto.qtdEstoque}" onkeydown="return false;">
                         <button type="button" class="btn-incrementar" onclick="alterarQuantidade(1)">+</button>
                         <label for="qtdEstoque" class="qtdEstoque">Quantidade em Estoque</label>
                         <input th:text="${produto.qtdEstoque}" type="hidden" id="qtdEstoque">

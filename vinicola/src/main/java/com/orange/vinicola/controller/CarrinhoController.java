@@ -1,16 +1,17 @@
 package com.orange.vinicola.controller;
 
 import com.orange.vinicola.model.Carrinho;
+import com.orange.vinicola.model.Produto;
 import com.orange.vinicola.service.CarrinhoService;
-import jakarta.servlet.http.HttpServlet;
+import com.orange.vinicola.service.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/carrinho")
@@ -18,6 +19,8 @@ public class CarrinhoController {
 
     @Autowired
     private CarrinhoService carrinhoService;
+    @Autowired
+    private ProdutoService produtoService;
 
     @RequestMapping("/abrirCarrinho")
     public ModelAndView abrirCarrinho(HttpServletRequest request) {
@@ -40,6 +43,17 @@ public class CarrinhoController {
     public ModelAndView adicionarProduto(@RequestParam("produtoId") Long produtoId, @RequestParam("quantidade") int quantidade, HttpServletRequest request) {
 
         ModelAndView mv = new ModelAndView("redirect:/carrinho/abrirCarrinho");
+        Optional<Produto> produto =  produtoService.findById(produtoId);
+
+        // Verifica se a quantidade de produtos é maior que a quantidade em estoque
+        if (quantidade > produto.get().getQtdEstoque()) {
+            mv.setViewName("redirect:/detalhes-produto-cliente");
+            return mv;
+        }
+        if (quantidade < 1) {
+            mv.setViewName("redirect:/detalhes-produto-cliente");
+            return mv;
+        }
 
         if (request.getSession().getAttribute("carrinho") == null) {
             if (request.getSession().getAttribute("usuario") != null) {
@@ -127,8 +141,7 @@ public class CarrinhoController {
     }
 
     @RequestMapping("/selecionarFrete")
-    public ModelAndView selecionarFrete(@RequestParam("frete") double frete, HttpServletRequest request) {
-
+    public ModelAndView selecionarFrete(@RequestParam("freteValue") double frete, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("redirect:/carrinho/abrirCarrinho");
 
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
