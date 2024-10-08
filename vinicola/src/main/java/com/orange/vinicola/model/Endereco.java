@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity(name = "Endereco")
+@Entity
 public class Endereco {
 
     @Id
@@ -37,5 +37,7 @@ public class Endereco {
     @Column(nullable = false)
     private String estado;
 
-
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
 }

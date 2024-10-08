@@ -142,7 +142,6 @@ public class CarrinhoController {
 
     @RequestMapping("/selecionarFrete")
     public ModelAndView selecionarFrete(@RequestParam("freteValue") double frete, HttpServletRequest request) {
-
         ModelAndView mv = new ModelAndView("redirect:/carrinho/abrirCarrinho");
 
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");

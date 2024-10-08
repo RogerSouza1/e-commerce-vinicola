@@ -40,6 +40,8 @@
             optionsSelect.addEventListener('change', function() {
                 const selectedValue = this.options[this.selectedIndex].value;
                 valorFrete.innerText = `R$ ${selectedValue}`;
+
+                window.location.href = `/carrinho/selecionarFrete?freteValue=${selectedValue}`;
             });
         });
 
@@ -124,10 +126,9 @@
             <div class="valor-calculo" style="margin-top: 2em; display: none;">
                 <strong class="titulo-entrega">Opções de Entrega</strong>
                 <select class="options-select" name="options" style="border: 1px solid #ddd; border-radius: 4px; width: 27em; height: 3em;">
-                    <option value="">Selecione uma opção</option>
-                    <option value="option1">Expressa</option>
-                    <option value="option2">Padrão</option>
-                    <option value="option3">Econômica</option>
+                    <option value="option1"></option>
+                    <option value="option2"></option>
+                    <option value="option3"></option>
                 </select>
                 <p class="valor-frete">R$0,00</p>
             </div>
