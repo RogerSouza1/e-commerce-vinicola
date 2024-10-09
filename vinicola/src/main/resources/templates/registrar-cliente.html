@@ -6,6 +6,11 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<h1>Cadastrar-se</h1>
+
+<div th:if="${mensagem}">
+    <p style="color: red;" th:text="${mensagem}"></p>
+</div>
 <form th:action="@{/cliente/cadastro-cliente}" th:object="${cliente}" method="post">
     <div>
         <label for="nome">Nome:</label>
@@ -36,6 +41,41 @@
         <label for="dataNascimento">Data de Nascimento:</label>
         <input type="date" id="dataNascimento" th:field="*{dataNascimento}" />
         <div th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
+    </div>
+    <div>
+        <label for="cep">CEP:</label>
+        <input type="text" id="cep" th:field="*{enderecoFaturamento.cep}" />
+        <div th:if="${#fields.hasErrors('enderecoFaturamento.cep')}" th:errors="*{enderecoFaturamento.cep}"></div>
+    </div>
+    <div>
+        <label for="logradouro">Logradouro:</label>
+        <input type="text" id="logradouro" th:field="*{enderecoFaturamento.logradouro}" />
+        <div th:if="${#fields.hasErrors('enderecoFaturamento.logradouro')}" th:errors="*{enderecoFaturamento.logradouro}"></div>
+    </div>
+    <div>
+        <label for="numero">Número:</label>
+        <input type="text" id="numero" th:field="*{enderecoFaturamento.numero}" />
+        <div th:if="${#fields.hasErrors('enderecoFaturamento.numero')}" th:errors="*{enderecoFaturamento.numero}"></div>
+    </div>
+    <div>
+        <label for="nomeRua">Nome da Rua:</label>
+        <input type="text" id="nomeRua" th:field="*{enderecoFaturamento.complemento}" />
+        <div th:if="${#fields.hasErrors('enderecoFaturamento.complemento')}" th:errors="*{enderecoFaturamento.complemento}"></div>
+    </div>
+    <div>
+        <label for="bairro">Bairro:</label>
+        <input type="text" id="bairro" th:field="*{enderecoFaturamento.bairro}" />
+        <div th:if="${#fields.hasErrors('enderecoFaturamento.bairro')}" th:errors="*{enderecoFaturamento.bairro}"></div>
+    </div>
+    <div>
+        <label for="cidade">Cidade:</label>
+        <input type="text" id="cidade" th:field="*{enderecoFaturamento.cidade}" />
+        <div th:if="${#fields.hasErrors('enderecoFaturamento.cidade')}" th:errors="*{enderecoFaturamento.cidade}"></div>
+    </div>
+    <div>
+        <label for="estado">Estado:</label>
+        <input type="text" id="estado" th:field="*{enderecoFaturamento.estado}" />
+        <div th:if="${#fields.hasErrors('enderecoFaturamento.estado')}" th:errors="*{enderecoFaturamento.estado}"></div>
     </div>
     <button type="submit">Registrar</button>
 </form>

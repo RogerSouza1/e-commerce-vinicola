@@ -21,14 +21,31 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     @Autowired
+    private EnderecoService enderecoService;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public void save(Cliente cliente){
-        clienteRepository.save(cliente);
+    public Cliente save(Cliente cliente){
+
+        if (cliente.getEnderecoFaturamento() != null) {
+            cliente.getEnderecoFaturamento().setCliente(cliente); // Associa o cliente ao endereço de faturamento
+        }
+        Cliente clienteSalvo = clienteRepository.saveAndFlush(cliente);
+
+        if (cliente.getEnderecoFaturamento() != null) {
+            enderecoService.save(cliente.getEnderecoFaturamento()); // Salva o endereço após associar ao cliente
+        }
+
+        return clienteSalvo;
     }
 
     public Cliente findByEmail(String email){
         return clienteRepository.findByEmail(email);
+    }
+
+    public Cliente findByCPF(String cpf){
+        return clienteRepository.findByCpf(cpf);
     }
 
     public Optional<Cliente> findById(Long id){

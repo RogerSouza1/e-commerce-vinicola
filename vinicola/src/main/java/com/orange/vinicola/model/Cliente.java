@@ -23,7 +23,7 @@ public class Cliente {
 
     @Column(nullable = false)
     @NotNull(message = "O nome não pode ser nulo")
-    @Pattern(regexp = "^[a-zA-Z]{3,}\\s[a-zA-Z]{3,}$", message = "O nome deve conter duas palavras, cada uma com no mínimo 3 letras")
+    @Pattern(regexp = "^(?=.*\\b\\w{3,}\\b.*\\b\\w{3,}\\b).*$", message = "O nome deve conter ao menos duas palavras, cada uma com no mínimo 3 letras")
     private String nome;
 
     @Column(nullable = false, unique = true, updatable = false)
@@ -32,7 +32,7 @@ public class Cliente {
     private String email;
 
     @Column(nullable = false)
-    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos.")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter somente número com 11 dígitos.")
     private String cpf;
 
     @Column(nullable = false)
