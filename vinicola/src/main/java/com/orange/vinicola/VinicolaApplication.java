@@ -1,12 +1,13 @@
 package com.orange.vinicola;
 
+import jdk.jfr.Enabled;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
 
 @SpringBootApplication
-public class        VinicolaApplication {
+public class VinicolaApplication {
 
     public static void main(String[] args) {
         //Verificação base de tamanho de disco livre para o banco de dados

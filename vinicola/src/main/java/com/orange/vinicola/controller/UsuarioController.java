@@ -96,7 +96,7 @@ public class UsuarioController {
         }
 
         usuario.setSenha(encoder.encode(usuario.getSenha()));
-        UsuarioService.update(usuario);
+        UsuarioService.save(usuario);
         model.addAttribute("mensagem", "Usuário atualizado com sucesso!");
         return "redirect:/lista-usuarios";
     }

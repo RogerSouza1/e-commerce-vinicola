@@ -7,6 +7,7 @@ import com.orange.vinicola.service.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,7 +23,7 @@ public class CarrinhoController {
     @Autowired
     private ProdutoService produtoService;
 
-    @RequestMapping("/abrirCarrinho")
+    @GetMapping("/abrirCarrinho")
     public ModelAndView abrirCarrinho(HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("carrinho");
 
@@ -33,6 +34,12 @@ public class CarrinhoController {
             } else {
                 request.getSession().setAttribute("carrinho", new Carrinho());
             }
+        }
+        Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
+
+        if(carrinho.getValorTotal() == 0){
+            carrinho.setFrete(0);
+            carrinho.setValorComFrete(0);
         }
 
         mv.addObject("carrinho", request.getSession().getAttribute("carrinho"));
@@ -85,8 +92,9 @@ public class CarrinhoController {
 
         Carrinho carrinhoAtualizado = carrinhoService.removerProduto(carrinho, produtoId);
 
-        if (carrinhoAtualizado.getValorTotal() < 0) {
+        if (carrinhoAtualizado.getValorTotal() <= 0) {
             carrinhoAtualizado.setValorTotal(0);
+            carrinhoAtualizado.setFrete(0);
             carrinhoAtualizado.setValorComFrete(0);
         }
 
@@ -108,8 +116,9 @@ public class CarrinhoController {
 
         Carrinho carrinhoAtualizado = carrinhoService.decrementarQuantidade(carrinho, produtoId);
 
-        if (carrinhoAtualizado.getValorTotal() < 0) {
+        if (carrinhoAtualizado.getValorTotal() <= 0) {
             carrinhoAtualizado.setValorTotal(0);
+            carrinhoAtualizado.setFrete(0);
             carrinhoAtualizado.setValorComFrete(0);
         }
 

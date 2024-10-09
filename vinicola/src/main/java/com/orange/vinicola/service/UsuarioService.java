@@ -40,10 +40,6 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.findById(id);
     }
 
-    public void update(Usuario usuario) {
-        usuarioRepository.save(usuario);
-    }
-
     public void alterar_estado(Usuario usuario) {
 
         usuario.setAtivado(!usuario.isAtivado());
