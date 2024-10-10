@@ -70,9 +70,13 @@ public class ClienteController {
             String encodedPassword = encoder.encode(cliente.getSenha());
             cliente.setSenha(encodedPassword);
 
+            if (cliente.getEnderecoFaturamento() != null) {
+                cliente.getEnderecoFaturamento().setCliente(cliente);
+            }
+
             clienteService.save(cliente);
-            cliente.getEnderecoFaturamento().setCliente(cliente);
             enderecoService.save(cliente.getEnderecoFaturamento());
+
             redirectAttributes.addFlashAttribute("cliente", cliente);
 
         } catch (DataIntegrityViolationException e) {
