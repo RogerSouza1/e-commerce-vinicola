@@ -59,6 +59,10 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.findIdByNome(nome);
     }
 
+    public Usuario findByCpf(String cpf) {
+        return usuarioRepository.findByCpf(cpf);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) {
 

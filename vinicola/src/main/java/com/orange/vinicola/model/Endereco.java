@@ -3,15 +3,13 @@ package com.orange.vinicola.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 @Entity
 public class Endereco {
 
@@ -20,7 +18,7 @@ public class Endereco {
     private Long id;
 
     @Column(nullable = false)
-    @Pattern(regexp = "\\d{8}", message = "O cep deve conter somente número com máximo de 8 dígitos.")
+    @Pattern(regexp = "\\d{8}", message = "O cep deve conter somente números com máximo de 8 dígitos.")
     private String cep;
 
     @Column(nullable = false)
@@ -31,6 +29,7 @@ public class Endereco {
     @NotNull(message = "O numero não pode ser nulo")
     private String numero;
 
+    @Column()
     private String complemento;
 
     @Column(nullable = false)

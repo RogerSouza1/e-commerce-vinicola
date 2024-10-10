@@ -3,6 +3,8 @@ package com.orange.vinicola.controller;
 import com.orange.vinicola.model.Cliente;
 import com.orange.vinicola.model.Endereco;
 import com.orange.vinicola.service.ClienteService;
+import com.orange.vinicola.service.EnderecoService;
+import com.orange.vinicola.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,9 +27,15 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private EnderecoService enderecoService;
+
+    @Autowired
     private BCryptPasswordEncoder encoder;
 
-    @GetMapping("/cadastro-cliente")
+    @GetMapping("/cadastro")
     public String showForm(Model model) {
         Cliente cliente = new Cliente();
         cliente.setEnderecoFaturamento(new Endereco());
@@ -35,24 +43,26 @@ public class ClienteController {
         return "registrar-cliente";
     }
 
-    @PostMapping("/cadastro-cliente")
-    public ModelAndView registerCliente(@ModelAttribute("cliente")@Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    @PostMapping("/cadastro")
+    public ModelAndView registerCliente(@ModelAttribute("cliente") @Valid Cliente cliente,
+                                        BindingResult result, Model model,
+                                        RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             return new ModelAndView("registrar-cliente", "cliente", cliente);
         }
-           cliente.setEmail(cliente.getEmail().toLowerCase());
+
+        cliente.setEmail(cliente.getEmail().toLowerCase());
+
         try {
-            if (clienteService.findByEmail(cliente.getEmail()) != null) {
-                System.out.println("Entrou no if de email");
-                redirectAttributes.addFlashAttribute("mensagem", "Email já registrado!");
+            if (clienteService.findByEmail(cliente.getEmail()) != null || usuarioService.findByEmail(cliente.getEmail()) != null) {
+                model.addAttribute("mensagem", "Email já registrado!");
                 redirectAttributes.addFlashAttribute("cliente", cliente);
                 return new ModelAndView("registrar-cliente");
             }
 
-            if(clienteService.findByCPF(cliente.getCpf()) != null){
-                System.out.println("Entrou no if de cpf");
-                redirectAttributes.addFlashAttribute("mensagem", "CPF já registrado!");
+            if (clienteService.findByCPF(cliente.getCpf()) != null || usuarioService.findByCpf(cliente.getCpf()) != null) {
+                model.addAttribute("mensagem", "CPF já registrado!");
                 redirectAttributes.addFlashAttribute("cliente", cliente);
                 return new ModelAndView("registrar-cliente");
             }
@@ -61,11 +71,16 @@ public class ClienteController {
             cliente.setSenha(encodedPassword);
 
             clienteService.save(cliente);
+            cliente.getEnderecoFaturamento().setCliente(cliente);
+            enderecoService.save(cliente.getEnderecoFaturamento());
             redirectAttributes.addFlashAttribute("cliente", cliente);
 
         } catch (DataIntegrityViolationException e) {
             model.addAttribute("mensagem", "Email já registrado!");
         }
+
         return new ModelAndView("redirect:/login");
     }
+
+
 }

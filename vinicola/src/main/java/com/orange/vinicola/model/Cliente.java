@@ -1,7 +1,10 @@
 package com.orange.vinicola.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,7 +35,7 @@ public class Cliente {
     private String email;
 
     @Column(nullable = false)
-    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter somente número com 11 dígitos.")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter somente números com 11 dígitos.")
     private String cpf;
 
     @Column(nullable = false)

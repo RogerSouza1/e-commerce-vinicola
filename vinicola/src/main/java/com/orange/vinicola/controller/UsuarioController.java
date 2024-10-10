@@ -47,6 +47,8 @@ public class UsuarioController {
             String encodedPassword = encoder.encode(usuario.getSenha());
             usuario.setSenha(encodedPassword);
 
+            usuario.setCpf(usuario.getCpf().replaceAll("[^\\d]", ""));
+
             UsuarioService.save(usuario);
             model.addAttribute("mensagem", "Funcionário registrado com sucesso!");
 

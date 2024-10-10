@@ -4,6 +4,92 @@
     <meta charset="UTF-8">
     <title>Registrar Cliente</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script>
+        function buscarCep() {
+            var cep = document.getElementById("cep").value;
+
+            cep = cep.replace(/\D/g, '');
+
+            if (cep.length !== 8) {
+                alert("Por favor, insira um CEP válido com 8 dígitos.");
+                return;
+            }
+
+            var url = `https://viacep.com.br/ws/${cep}/json/`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) {
+                        alert("CEP não encontrado.");
+                        return;
+                    }
+
+                    document.getElementById("cep").value = cep;
+                    document.getElementById("logradouro").value = data.logradouro;
+                    document.getElementById("bairro").value = data.bairro;
+                    document.getElementById("cidade").value = data.localidade;
+                    document.getElementById("estado").value = data.uf;
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar o CEP:", error);
+                    alert("Erro ao buscar o CEP.");
+                });
+        }
+
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/[^\d]+/g, '');
+
+            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+                return false;
+            }
+
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(cpf.charAt(i)) * (10 - i);
+            }
+            let primeiroDigito = 11 - (soma % 11);
+            primeiroDigito = primeiroDigito > 9 ? 0 : primeiroDigito;
+
+            if (parseInt(cpf.charAt(9)) !== primeiroDigito) {
+                return false;
+            }
+
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(cpf.charAt(i)) * (11 - i);
+            }
+            let segundoDigito = 11 - (soma % 11);
+            segundoDigito = segundoDigito > 9 ? 0 : segundoDigito;
+
+            return parseInt(cpf.charAt(10)) === segundoDigito;
+        }
+
+        function validarFormulario(event) {
+            const nomeInput = document.getElementById("nome").value;
+            const emailInput = document.getElementById("email").value;
+            const cpfInput = document.getElementById("cpf").value;
+            const senhaInput = document.getElementById("senha").value;
+            const generoInput = document.getElementById("genero").value;
+            const dataNascimentoInput = document.getElementById("dataNascimento").value;
+
+            // Verifica se todos os campos obrigatórios estão preenchidos
+            if (!nomeInput || !emailInput || !cpfInput || !senhaInput || !generoInput || !dataNascimentoInput) {
+                event.preventDefault();
+                alert("Por favor, preencha todos os campos obrigatórios.");
+                return false;
+            }
+
+            // Valida o CPF
+            if (!validarCPF(cpfInput)) {
+                event.preventDefault(); // Impede o envio do formulário
+                alert("CPF inválido. Por favor, insira um CPF válido.");
+                return false;
+            }
+
+            return true; // O formulário é válido
+        }
+    </script>
 </head>
 <body>
 <h1>Cadastrar-se</h1>
@@ -11,70 +97,75 @@
 <div th:if="${mensagem}">
     <p style="color: red;" th:text="${mensagem}"></p>
 </div>
-<form th:action="@{/cliente/cadastro-cliente}" th:object="${cliente}" method="post">
+<form method="post" onsubmit="return validarFormulario(event);" th:action="@{/cliente/cadastro}" th:object="${cliente}">
     <div>
         <label for="nome">Nome:</label>
         <input type="text" id="nome" th:field="*{nome}" required />
-        <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" ></div>
+        <div th:errors="*{nome}" th:if="${#fields.hasErrors('nome')}"></div>
     </div>
     <div>
         <label for="email">Email:</label>
-        <input type="email" id="email" th:field="*{email}" />
+        <input id="email" required th:field="*{email}" type="email"/>
         <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
     </div>
     <div>
         <label for="cpf">CPF:</label>
-        <input type="text" id="cpf" th:field="*{cpf}" />
+        <input id="cpf" required th:field="*{cpf}" type="text"/>
         <div th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
     </div>
     <div>
         <label for="senha">Senha:</label>
-        <input type="password" id="senha" th:field="*{senha}" />
+        <input id="senha" required th:field="*{senha}" type="password"/>
         <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
     </div>
     <div>
         <label for="genero">Gênero:</label>
-        <input type="text" id="genero" th:field="*{genero}" />
+        <select id="genero" required th:field="*{genero}">
+            <option value="MASCULINO">Masculino</option>
+            <option value="FEMININO">Feminino</option>
+            <option value="OUTRO">Outro</option>
+        </select>
         <div th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
     </div>
     <div>
         <label for="dataNascimento">Data de Nascimento:</label>
-        <input type="date" id="dataNascimento" th:field="*{dataNascimento}" />
+        <input id="dataNascimento" required th:field="*{dataNascimento}" type="date"/>
         <div th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
     </div>
     <div>
         <label for="cep">CEP:</label>
         <input type="text" id="cep" th:field="*{enderecoFaturamento.cep}" />
+        <button onclick="buscarCep()" type="button">Buscar CEP</button>
         <div th:if="${#fields.hasErrors('enderecoFaturamento.cep')}" th:errors="*{enderecoFaturamento.cep}"></div>
     </div>
     <div>
         <label for="logradouro">Logradouro:</label>
-        <input type="text" id="logradouro" th:field="*{enderecoFaturamento.logradouro}" />
+        <input id="logradouro" readonly required th:field="*{enderecoFaturamento.logradouro}" type="text"/>
         <div th:if="${#fields.hasErrors('enderecoFaturamento.logradouro')}" th:errors="*{enderecoFaturamento.logradouro}"></div>
     </div>
     <div>
         <label for="numero">Número:</label>
-        <input type="text" id="numero" th:field="*{enderecoFaturamento.numero}" />
+        <input id="numero" required th:field="*{enderecoFaturamento.numero}" type="text"/>
         <div th:if="${#fields.hasErrors('enderecoFaturamento.numero')}" th:errors="*{enderecoFaturamento.numero}"></div>
     </div>
     <div>
-        <label for="nomeRua">Nome da Rua:</label>
-        <input type="text" id="nomeRua" th:field="*{enderecoFaturamento.complemento}" />
+        <label for="complemento">Complemento:</label>
+        <input id="complemento" th:field="*{enderecoFaturamento.complemento}" type="text"/>
         <div th:if="${#fields.hasErrors('enderecoFaturamento.complemento')}" th:errors="*{enderecoFaturamento.complemento}"></div>
     </div>
     <div>
         <label for="bairro">Bairro:</label>
-        <input type="text" id="bairro" th:field="*{enderecoFaturamento.bairro}" />
+        <input id="bairro" readonly required th:field="*{enderecoFaturamento.bairro}" type="text"/>
         <div th:if="${#fields.hasErrors('enderecoFaturamento.bairro')}" th:errors="*{enderecoFaturamento.bairro}"></div>
     </div>
     <div>
         <label for="cidade">Cidade:</label>
-        <input type="text" id="cidade" th:field="*{enderecoFaturamento.cidade}" />
+        <input id="cidade" readonly required th:field="*{enderecoFaturamento.cidade}" type="text"/>
         <div th:if="${#fields.hasErrors('enderecoFaturamento.cidade')}" th:errors="*{enderecoFaturamento.cidade}"></div>
     </div>
     <div>
         <label for="estado">Estado:</label>
-        <input type="text" id="estado" th:field="*{enderecoFaturamento.estado}" />
+        <input id="estado" readonly required th:field="*{enderecoFaturamento.estado}" type="text"/>
         <div th:if="${#fields.hasErrors('enderecoFaturamento.estado')}" th:errors="*{enderecoFaturamento.estado}"></div>
     </div>
     <button type="submit">Registrar</button>
