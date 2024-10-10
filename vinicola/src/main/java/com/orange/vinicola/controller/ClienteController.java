@@ -74,8 +74,13 @@ public class ClienteController {
                 cliente.getEnderecoFaturamento().setCliente(cliente);
             }
 
+            if (cliente.getEnderecosEntrega().get(0) != null) {
+                cliente.getEnderecosEntrega().get(0).setCliente(cliente);
+            }
+
             clienteService.save(cliente);
             enderecoService.save(cliente.getEnderecoFaturamento());
+            enderecoService.save(cliente.getEnderecosEntrega().get(0));
 
             redirectAttributes.addFlashAttribute("cliente", cliente);
 

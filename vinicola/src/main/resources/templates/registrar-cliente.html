@@ -1,174 +1,287 @@
-<!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Registrar Cliente</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <script>
-        function buscarCep() {
-            var cep = document.getElementById("cep").value;
+    <!DOCTYPE html>
+    <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registrar Cliente</title>
+        <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+        <script>
+            function buscarCep() {
+                var cep = document.getElementById("cep").value;
 
-            cep = cep.replace(/\D/g, '');
+                cep = cep.replace(/\D/g, '');
 
-            if (cep.length !== 8) {
-                alert("Por favor, insira um CEP válido com 8 dígitos.");
-                return;
+                if (cep.length !== 8) {
+                    alert("Por favor, insira um CEP válido com 8 dígitos.");
+                    return;
+                }
+
+                var url = `https://viacep.com.br/ws/${cep}/json/`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.erro) {
+                            alert("CEP não encontrado.");
+                            return;
+                        }
+
+                        document.getElementById("cep").value = cep;
+                        document.getElementById("logradouro").value = data.logradouro;
+                        document.getElementById("bairro").value = data.bairro;
+                        document.getElementById("cidade").value = data.localidade;
+                        document.getElementById("estado").value = data.uf;
+                    })
+                    .catch(error => {
+                        console.error("Erro ao buscar o CEP:", error);
+                        alert("Erro ao buscar o CEP.");
+                    });
             }
 
-            var url = `https://viacep.com.br/ws/${cep}/json/`;
+            function validarCPF(cpf) {
+                cpf = cpf.replace(/[^\d]+/g, '');
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.erro) {
-                        alert("CEP não encontrado.");
-                        return;
-                    }
+                if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+                    return false;
+                }
 
-                    document.getElementById("cep").value = cep;
-                    document.getElementById("logradouro").value = data.logradouro;
-                    document.getElementById("bairro").value = data.bairro;
-                    document.getElementById("cidade").value = data.localidade;
-                    document.getElementById("estado").value = data.uf;
-                })
-                .catch(error => {
-                    console.error("Erro ao buscar o CEP:", error);
-                    alert("Erro ao buscar o CEP.");
-                });
-        }
+                let soma = 0;
+                for (let i = 0; i < 9; i++) {
+                    soma += parseInt(cpf.charAt(i)) * (10 - i);
+                }
+                let primeiroDigito = 11 - (soma % 11);
+                primeiroDigito = primeiroDigito > 9 ? 0 : primeiroDigito;
 
-        function validarCPF(cpf) {
-            cpf = cpf.replace(/[^\d]+/g, '');
+                if (parseInt(cpf.charAt(9)) !== primeiroDigito) {
+                    return false;
+                }
 
-            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-                return false;
+                soma = 0;
+                for (let i = 0; i < 10; i++) {
+                    soma += parseInt(cpf.charAt(i)) * (11 - i);
+                }
+                let segundoDigito = 11 - (soma % 11);
+                segundoDigito = segundoDigito > 9 ? 0 : segundoDigito;
+
+                return parseInt(cpf.charAt(10)) === segundoDigito;
             }
 
-            let soma = 0;
-            for (let i = 0; i < 9; i++) {
-                soma += parseInt(cpf.charAt(i)) * (10 - i);
-            }
-            let primeiroDigito = 11 - (soma % 11);
-            primeiroDigito = primeiroDigito > 9 ? 0 : primeiroDigito;
+            function validarFormulario(event) {
+                const nomeInput = document.getElementById("nome").value;
+                const emailInput = document.getElementById("email").value;
+                const cpfInput = document.getElementById("cpf").value;
+                const senhaInput = document.getElementById("senha").value;
+                const generoInput = document.getElementById("genero").value;
+                const dataNascimentoInput = document.getElementById("dataNascimento").value;
 
-            if (parseInt(cpf.charAt(9)) !== primeiroDigito) {
-                return false;
-            }
+                // Verifica se todos os campos obrigatórios estão preenchidos
+                if (!nomeInput || !emailInput || !cpfInput || !senhaInput || !generoInput || !dataNascimentoInput) {
+                    event.preventDefault();
+                    alert("Por favor, preencha todos os campos obrigatórios.");
+                    return false;
+                }
 
-            soma = 0;
-            for (let i = 0; i < 10; i++) {
-                soma += parseInt(cpf.charAt(i)) * (11 - i);
-            }
-            let segundoDigito = 11 - (soma % 11);
-            segundoDigito = segundoDigito > 9 ? 0 : segundoDigito;
+                // Valida o CPF
+                if (!validarCPF(cpfInput)) {
+                    event.preventDefault(); // Impede o envio do formulário
+                    alert("CPF inválido. Por favor, insira um CPF válido.");
+                    return false;
+                }
 
-            return parseInt(cpf.charAt(10)) === segundoDigito;
-        }
-
-        function validarFormulario(event) {
-            const nomeInput = document.getElementById("nome").value;
-            const emailInput = document.getElementById("email").value;
-            const cpfInput = document.getElementById("cpf").value;
-            const senhaInput = document.getElementById("senha").value;
-            const generoInput = document.getElementById("genero").value;
-            const dataNascimentoInput = document.getElementById("dataNascimento").value;
-
-            // Verifica se todos os campos obrigatórios estão preenchidos
-            if (!nomeInput || !emailInput || !cpfInput || !senhaInput || !generoInput || !dataNascimentoInput) {
-                event.preventDefault();
-                alert("Por favor, preencha todos os campos obrigatórios.");
-                return false;
+                return true; // O formulário é válido
             }
 
-            // Valida o CPF
-            if (!validarCPF(cpfInput)) {
-                event.preventDefault(); // Impede o envio do formulário
-                alert("CPF inválido. Por favor, insira um CPF válido.");
-                return false;
+            function mostrarNovoFormulario() {
+                var novoFormulario = document.getElementById("forms-endereco-entrega");
+                if (novoFormulario.style.display === "none") {
+                    novoFormulario.style.display = "block";
+                } else {
+                    novoFormulario.style.display = "none";
+                }
+            }
+            function validarFormularioEndereco(event) {
+                const cepInput = document.getElementById("cepEntrega").value;
+                const logradouroInput = document.getElementById("logradouroEntrega").value;
+                const numeroInput = document.getElementById("numeroEntrega").value;
+                const bairroInput = document.getElementById("bairroEntrega").value;
+                const cidadeInput = document.getElementById("cidadeEntrega").value;
+
+                if (!cepInput || !logradouroInput || !numeroInput || !bairroInput || !cidadeInput) {
+                    event.preventDefault();
+                    alert("Por favor, preencha todos os campos obrigatórios.");
+                    return false;
+                }
+
+                return true;
             }
 
-            return true; // O formulário é válido
-        }
-    </script>
-</head>
-<body>
-<h1>Cadastrar-se</h1>
+            function buscarCepEntrega() {
+                var cep = document.getElementById("cepEntrega").value;
+                cep = cep.replace(/\D/g, '');
 
-<div th:if="${mensagem}">
-    <p style="color: red;" th:text="${mensagem}"></p>
-</div>
-<form method="post" onsubmit="return validarFormulario(event);" th:action="@{/cliente/cadastro}" th:object="${cliente}">
-    <div>
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" th:field="*{nome}" required />
-        <div th:errors="*{nome}" th:if="${#fields.hasErrors('nome')}"></div>
+                if (cep.length !== 8) {
+                    alert("Por favor, insira um CEP válido com 8 dígitos.");
+                    return;
+                }
+
+                var url = `https://viacep.com.br/ws/${cep}/json/`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.erro) {
+                            alert("CEP não encontrado.");
+                            return;
+                        }
+
+                        document.getElementById("cepEntrega").value = cep;
+                        document.getElementById("logradouroEntrega").value = data.logradouro;
+                        document.getElementById("bairroEntrega").value = data.bairro;
+                        document.getElementById("cidadeEntrega").value = data.localidade;
+                        document.getElementById("estadoEntrega").value = data.uf;
+                    })
+                    .catch(error => {
+                        console.error("Erro ao buscar o CEP:", error);
+                        alert("Erro ao buscar o CEP.");
+                    });
+            }
+        </script>
+    </head>
+    <body>
+    <header>
+        <section id="header">
+            <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
+
+            <div>
+                <ul id="navbar">
+                    <li><a class="active" href="/">Início</a></li>
+                    <li><a class="link-navbar" href="/">Produtos</a></li>
+                    <li><a href="/carrinho/abrirCarrinho"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
+                    <li><a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a></li>
+                </ul>
+            </div>
+        </section>
+        <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+                th:src="@{/images/seta.png}"></button>
+    </header>
+    <h1>Cadastrar-se</h1>
+
+    <div th:if="${mensagem}">
+        <p style="color: red;" th:text="${mensagem}"></p>
     </div>
-    <div>
-        <label for="email">Email:</label>
-        <input id="email" required th:field="*{email}" type="email"/>
-        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-    </div>
-    <div>
-        <label for="cpf">CPF:</label>
-        <input id="cpf" required th:field="*{cpf}" type="text"/>
-        <div th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
-    </div>
-    <div>
-        <label for="senha">Senha:</label>
-        <input id="senha" required th:field="*{senha}" type="password"/>
-        <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
-    </div>
-    <div>
-        <label for="genero">Gênero:</label>
-        <select id="genero" required th:field="*{genero}">
-            <option value="MASCULINO">Masculino</option>
-            <option value="FEMININO">Feminino</option>
-            <option value="OUTRO">Outro</option>
-        </select>
-        <div th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
-    </div>
-    <div>
-        <label for="dataNascimento">Data de Nascimento:</label>
-        <input id="dataNascimento" required th:field="*{dataNascimento}" type="date"/>
-        <div th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
-    </div>
-    <div>
-        <label for="cep">CEP:</label>
-        <input type="text" id="cep" th:field="*{enderecoFaturamento.cep}" />
-        <button onclick="buscarCep()" type="button">Buscar CEP</button>
-        <div th:if="${#fields.hasErrors('enderecoFaturamento.cep')}" th:errors="*{enderecoFaturamento.cep}"></div>
-    </div>
-    <div>
-        <label for="logradouro">Logradouro:</label>
-        <input id="logradouro" readonly required th:field="*{enderecoFaturamento.logradouro}" type="text"/>
-        <div th:if="${#fields.hasErrors('enderecoFaturamento.logradouro')}" th:errors="*{enderecoFaturamento.logradouro}"></div>
-    </div>
-    <div>
-        <label for="numero">Número:</label>
-        <input id="numero" required th:field="*{enderecoFaturamento.numero}" type="text"/>
-        <div th:if="${#fields.hasErrors('enderecoFaturamento.numero')}" th:errors="*{enderecoFaturamento.numero}"></div>
-    </div>
-    <div>
-        <label for="complemento">Complemento:</label>
-        <input id="complemento" th:field="*{enderecoFaturamento.complemento}" type="text"/>
-        <div th:if="${#fields.hasErrors('enderecoFaturamento.complemento')}" th:errors="*{enderecoFaturamento.complemento}"></div>
-    </div>
-    <div>
-        <label for="bairro">Bairro:</label>
-        <input id="bairro" readonly required th:field="*{enderecoFaturamento.bairro}" type="text"/>
-        <div th:if="${#fields.hasErrors('enderecoFaturamento.bairro')}" th:errors="*{enderecoFaturamento.bairro}"></div>
-    </div>
-    <div>
-        <label for="cidade">Cidade:</label>
-        <input id="cidade" readonly required th:field="*{enderecoFaturamento.cidade}" type="text"/>
-        <div th:if="${#fields.hasErrors('enderecoFaturamento.cidade')}" th:errors="*{enderecoFaturamento.cidade}"></div>
-    </div>
-    <div>
-        <label for="estado">Estado:</label>
-        <input id="estado" readonly required th:field="*{enderecoFaturamento.estado}" type="text"/>
-        <div th:if="${#fields.hasErrors('enderecoFaturamento.estado')}" th:errors="*{enderecoFaturamento.estado}"></div>
-    </div>
-    <button type="submit">Registrar</button>
-</form>
-</body>
-</html>
+    <form method="post" onsubmit="return validarFormulario(event);" th:action="@{/cliente/cadastro}" th:object="${cliente}">
+        <div>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" th:field="*{nome}" required />
+            <div th:errors="*{nome}" th:if="${#fields.hasErrors('nome')}"></div>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input id="email" required th:field="*{email}" type="email"/>
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+        <div>
+            <label for="cpf">CPF:</label>
+            <input id="cpf" required th:field="*{cpf}" type="text"/>
+            <div th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
+        </div>
+        <div>
+            <label for="senha">Senha:</label>
+            <input id="senha" required th:field="*{senha}" type="password"/>
+            <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
+        </div>
+        <div>
+            <label for="genero">Gênero:</label>
+            <select id="genero" required th:field="*{genero}">
+                <option value="MASCULINO">Masculino</option>
+                <option value="FEMININO">Feminino</option>
+                <option value="OUTRO">Outro</option>
+            </select>
+            <div th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
+        </div>
+        <div>
+            <label for="dataNascimento">Data de Nascimento:</label>
+            <input id="dataNascimento" required th:field="*{dataNascimento}" type="date"/>
+            <div th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
+        </div>
+        <div>
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" th:field="*{enderecoFaturamento.cep}" />
+            <button onclick="buscarCep()" type="button">Buscar CEP</button>
+            <div th:if="${#fields.hasErrors('enderecoFaturamento.cep')}" th:errors="*{enderecoFaturamento.cep}"></div>
+        </div>
+        <div>
+            <label for="logradouro">Logradouro:</label>
+            <input id="logradouro" readonly required th:field="*{enderecoFaturamento.logradouro}" type="text"/>
+            <div th:if="${#fields.hasErrors('enderecoFaturamento.logradouro')}" th:errors="*{enderecoFaturamento.logradouro}"></div>
+        </div>
+        <div>
+            <label for="numero">Número:</label>
+            <input id="numero" required th:field="*{enderecoFaturamento.numero}" type="text"/>
+            <div th:if="${#fields.hasErrors('enderecoFaturamento.numero')}" th:errors="*{enderecoFaturamento.numero}"></div>
+        </div>
+        <div>
+            <label for="complemento">Complemento:</label>
+            <input id="complemento" th:field="*{enderecoFaturamento.complemento}" type="text"/>
+            <div th:if="${#fields.hasErrors('enderecoFaturamento.complemento')}" th:errors="*{enderecoFaturamento.complemento}"></div>
+        </div>
+        <div>
+            <label for="bairro">Bairro:</label>
+            <input id="bairro" readonly required th:field="*{enderecoFaturamento.bairro}" type="text"/>
+            <div th:if="${#fields.hasErrors('enderecoFaturamento.bairro')}" th:errors="*{enderecoFaturamento.bairro}"></div>
+        </div>
+        <div>
+            <label for="cidade">Cidade:</label>
+            <input id="cidade" readonly required th:field="*{enderecoFaturamento.cidade}" type="text"/>
+            <div th:if="${#fields.hasErrors('enderecoFaturamento.cidade')}" th:errors="*{enderecoFaturamento.cidade}"></div>
+        </div>
+        <div>
+            <label for="estado">Estado:</label>
+            <input id="estado" readonly required th:field="*{enderecoFaturamento.estado}" type="text"/>
+            <div th:if="${#fields.hasErrors('enderecoFaturamento.estado')}" th:errors="*{enderecoFaturamento.estado}"></div>
+        </div>
+        <div>
+            <button type="button" id="adicionarEndereco" onclick="mostrarNovoFormulario()">Adicionar Endereço de Entrega</button>
+        </div>
+        <div  id="forms-endereco-entrega" style="display: none;">
+            <h2>Endereço de Entrega</h2>
+            <div>
+                <label for="cepEntrega">CEP:</label>
+                <input id="cepEntrega" required th:field="*{enderecosEntrega[0].cep}" />
+                <button onclick="buscarCepEntrega()" type="button">Buscar CEP</button>
+                <div th:errors="*{enderecosEntrega[0].cep}" th:if="${#fields.hasErrors('enderecosEntrega[0].cep')}"></div>
+            </div>
+            <div>
+                <label for="logradouroEntrega">Logradouro:</label>
+                <input id="logradouroEntrega" readonly required th:field="*{enderecosEntrega[0].logradouro}" />
+                <div th:errors="*{enderecosEntrega[0].logradouro}" th:if="${#fields.hasErrors('enderecosEntrega[0].logradouro')}"></div>
+            </div>
+            <div>
+                <label for="numeroEntrega">Número:</label>
+                <input id="numeroEntrega" required th:field="*{enderecosEntrega[0].numero}" />
+                <div th:errors="*{enderecosEntrega[0].numero}" th:if="${#fields.hasErrors('enderecosEntrega[0].numero')}"></div>
+            </div>
+            <div>
+                <label for="complementoEntrega">Complemento:</label>
+                <input id="complementoEntrega" th:field="*{enderecosEntrega[0].complemento}" />
+                <div th:errors="*{enderecosEntrega[0].complemento}" th:if="${#fields.hasErrors('enderecosEntrega[0].complemento')}"></div>
+            </div>
+            <div>
+                <label for="bairroEntrega">Bairro:</label>
+                <input id="bairroEntrega" readonly required th:field="*{enderecosEntrega[0].bairro}" />
+                <div th:errors="*{enderecosEntrega[0].bairro}" th:if="${#fields.hasErrors('enderecosEntrega[0].bairro')}"></div>
+            </div>
+            <div>
+                <label for="cidadeEntrega">Cidade:</label>
+                <input id="cidadeEntrega" readonly required th:field="*{enderecosEntrega[0].cidade}" />
+                <div th:errors="*{enderecosEntrega[0].cidade}" th:if="${#fields.hasErrors('enderecosEntrega[0].cidade')}"></div>
+            </div>
+            <div>
+                <label for="estadoEntrega">Estado:</label>
+                <input id="estadoEntrega" readonly required th:field="*{enderecosEntrega[0].estado}" />
+                <div th:errors="*{enderecosEntrega[0].estado}" th:if="${#fields.hasErrors('enderecosEntrega[0].estado')}"></div>
+            </div>
+        </div>
+        <button type="submit">Registrar</button>
+    </form>
+    </body>
+    </html>
