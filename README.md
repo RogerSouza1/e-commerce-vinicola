@@ -1,6 +1,6 @@
 # e-commerce-vinicola
 ## Sobre a Winery
-> O projeto MedEasy é uma iniciativa desenvolvida para avaliar o conteúdo da disciplina de PI (Projeto Integrador) no curso de ADS do Centro Universitário Senac.
+> O projeto Winery é uma iniciativa desenvolvida para avaliar o conteúdo da disciplina de PI (Projeto Integrador) no curso de ADS do Centro Universitário Senac.
 > Winery é um e-commerce desenvolvido para facilitar a compra de vinhos de alta qualidade diretamente de sua vinícola preferida. Com uma interface amigável e um sistema seguro, o Winery oferece uma experiência de compra tranquila e agradável para todos os amantes de vinho.
 > O sistema será completo, incluindo módulos essenciais como compras, carrinho, criptografia de senha, entre outros. Apresentará uma interface front-end intuitiva para facilitar a interação do usuário, desde o cadastro. Todos os dados serão armazenados com segurança em nosso banco de dados, garantindo a privacidade dos usuários.
 
