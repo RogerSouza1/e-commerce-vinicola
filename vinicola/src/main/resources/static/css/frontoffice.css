@@ -9,7 +9,7 @@
     --dourado-estrelas: #C1A57B;
     --bege: #F5E6CC;
     --branco: #fff;
-    --font-size-base: 1rem; /* rem para adaptabilidade */
+    --font-size-base: 1rem;
 }
 
 * {
@@ -123,6 +123,7 @@ p {
     flex-grow: 1;
 }
 
+/* TELA DE DETALHE DE PRODUTO */
 .conteudo-container{
     display: flex;
     justify-content: space-between;
@@ -134,21 +135,14 @@ p {
     border-radius: 2vw;
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
     width: 95vw;
-    text-align: center;
-}
-
-.conteudo-container-imagem,
-.conteudo-container-info {
-    flex: 1;
-    margin: 0 10px;
-    overflow: hidden;
 }
 
 .conteudo-container-imagem {
+    width: 100%;
     position: relative;
     display: flex;
-    justify-content: center; /* Alinha a imagem horizontalmente ao centro */
-    align-items: center; /* Alinha a imagem verticalmente ao centro */
+    justify-content: center;
+    align-items: center;
 }
 
 .carrossel {
@@ -159,7 +153,7 @@ p {
     width: 100%;
 }
 .slide {
-    display: none; /* Todos os slides ficam ocultos inicialmente */
+    display: none;
 }
 
 /* Setas de navegação */
@@ -183,13 +177,12 @@ p {
     right: 10px;
 }
 
-/* Animação da transição */
 .carrossel img {
     transition: all 1.0s ease-in-out;
 }
 
 .conteudo-imagem {
-    width: 100%; /* A imagem ocupará 100% do espaço disponível dentro do contêiner */
+    width: 100%;
     height: auto;
 }
 
@@ -202,6 +195,75 @@ p {
 .conteudo-container-info p, .conteudo-container-info-preco {
     margin-bottom: 2vw;
     line-height: 1.2;
+}
+
+.btn-decrementar, .btn-incrementar {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background-color: #d1d1d1;
+    color: #333;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 10px;
+}
+
+.btn-decrementar:hover, .btn-incrementar:hover {
+    background-color: #b3b3b3;
+}
+
+.btn-decrementar:disabled, .btn-incrementar:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+    color: #aaa;
+}
+
+input#quantidade {
+    width: 60px;
+    text-align: center;
+    font-size: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+    margin: 0 10px;
+}
+
+.quantidade-produto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.btn-adicionar-carrinho {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1vw 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1vw;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.quantidade-numero {
+    margin-left: 0.5vw ;
+}
+
+.btn-adicionar-carrinho:hover {
+    background-color: #930000;
+}
+
+.quantidade-e-botao {
+    display: flex;
+    align-items: center;
 }
 
 /* BANNER */
@@ -278,7 +340,7 @@ p {
 .quantidade-e-botao {
     display: flex;
     align-items: center;
-    gap: 20px; /* Espaço entre os elementos */
+    gap: 20px;
 }
 
 .btn-adicionar-carrinho{
@@ -326,6 +388,9 @@ p {
     width: calc(25% - 2rem);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .pro img {
@@ -340,6 +405,20 @@ p {
 
 .des {
     text-align: left;
+    flex-grow: 1;
+}
+
+.preco-saiba-mais {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+}
+
+.preco-produto {
+    font-size: 1.25vw;
+    color: var(--cor-principal-vinho);
+    font-weight: 600;
+    margin-bottom: 1vw;
 }
 
 #protutos1 h2, #protutos2 h2 {
@@ -383,7 +462,7 @@ avaliacao-estrelas-detalhe{
 .des h4:last-of-type {
     font-size: 1.25vw;
     color: var(--cor-principal-vinho);
-    margin-top: 1rem;
+    margin-top: auto;
     font-weight: 600;
     margin-bottom: 2vw;
 }
@@ -391,7 +470,7 @@ avaliacao-estrelas-detalhe{
 .saiba-mais-container {
     display: flex;
     justify-content: center;
-    margin-top: 1vw;
+    margin-top: auto;
 }
 
 .saiba-mais-container a {
@@ -531,21 +610,15 @@ avaliacao-estrelas-detalhe{
 }
 
 
-
-
-
-
-
-
+/*CARRINHO*/
 .meu-carrinho{
-    margin-top: 3em;
-    margin-left: 2.5em;
+    padding: 2vh 5vw;
 }
 
 .conteudo {
     display: flex;
     flex-direction: row;
-    max-width: 800px;
+    max-width: 100%;
     padding: 10px;
     margin-top: 1em;
     margin-left: 4em;
@@ -557,8 +630,8 @@ avaliacao-estrelas-detalhe{
 }
 
 .desc-produto-row{
+    justify-content: space-between;
     display: flex;
-    flex-direction: row;
     border: 1px solid #ddd;
     border-radius: 9px;
     margin-bottom: 3em;
@@ -578,17 +651,14 @@ avaliacao-estrelas-detalhe{
 .botao-row{
     display: flex;
     flex-direction: row;
-    border: 1px solid #ddd;
     border-radius: 9px;
-    height: 3em;
-    width: 5em;
-    margin-top: 5em;
     margin-right: 2em;
+    align-items: center;
+    justify-content: center;
 }
 
 th, td {
     padding: 10px;
-
     text-align: left;
 }
 
@@ -600,7 +670,7 @@ th, td {
 
 
 .card-column2{
-    margin-left: 7em;
+    margin-left: 4em;
     margin-top: 2em;
 }
 
@@ -636,7 +706,6 @@ th, td {
 .finalizar{
     display: flex;
     flex-direction: column;
-
     border: 1px solid #ddd;
     border-radius: 9px;
     padding: 1em;
@@ -647,4 +716,51 @@ th, td {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.imagem-produto-carrinho{
+    width: 7em;
+    height: 10em;
+}
+
+.btn-remover {
+    border: none;
+    background: none;
+}
+
+.produto-carrinho {
+    width: 20%;
+}
+
+.botao-remover-carrinho {
+    background: none;
+    border: none;
+    padding: 0.5vw 1vw;
+    cursor: pointer;
+}
+
+.botao-remover-carrinho-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.carrinho-vazio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20vw;
+    padding: 0 12vw;
+}
+
+.quantidade-itens {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: var(--cor-principal-vinho);
+    color: white;
+    border-radius: 60%;
+    padding: 5px;
+    font-size: 12px;
 }
