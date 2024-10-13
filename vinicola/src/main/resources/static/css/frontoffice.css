@@ -764,3 +764,22 @@ th, td {
     padding: 5px;
     font-size: 12px;
 }
+
+/* TELA DE CADASTRO */
+.cep-cliente {
+    display: flex;
+}
+
+.btn-buscar-cep{
+    background-color: #242424;
+    color: #ffffff;
+    border: none;
+    padding: 1vw 0;
+    font-size: 1.2vw;
+    border-radius: 1vw;
+    cursor: pointer;
+    width: 50%;
+    margin-left: 1vw;
+    text-align: center;
+}
+
