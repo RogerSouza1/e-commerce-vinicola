@@ -5,27 +5,6 @@
 > O sistema será completo, incluindo módulos essenciais como compras, carrinho, criptografia de senha, entre outros. Apresentará uma interface front-end intuitiva para facilitar a interação do usuário, desde o cadastro. Todos os dados serão armazenados com segurança em nosso banco de dados, garantindo a privacidade dos usuários.
 
 ## 🔧Lista de Funcionalidades
-### Como Usuário Não Logado
-
-#### Requisitos Funcionais
-- [ ] O sistema deve validar os dados de login no banco de dados.
-- [ ] O login deve ser realizado utilizando o email do usuário.
-- [ ] A senha deve ser encriptada antes de ser validada com o dado no banco de dados.
-- [ ] O sistema deve negar a entrada do usuário no backoffice se o login não for localizado.
-- [ ] Se as credenciais estiverem corretas e o usuário estiver habilitado, o sistema deve redirecionar para a página principal do backoffice.
-- [ ] O sistema deve criar a sessão com o usuário e seu grupo (administrador ou estoquista) ao logar.
-- [ ] O sistema deve rejeitar clientes que tentarem logar com email e senha na tela de login do backoffice.
-
-#### Requisitos Não Funcionais
-- [ ] A senha deve ser encriptada antes de ser validada com o dado no banco de dados, que também deve estar encriptado.
-- [ ] Toda alteração realizada no sistema deve refletir diretamente no banco de dados.
-- [ ] O sistema deve garantir a performance adequada durante a validação e encriptação de senhas.
-- [ ] O sistema deve ser seguro e proteger as informações dos usuários, especialmente as senhas.
-
-#### Regras de Negócio
-- [ ] O sistema deve negar o acesso ao usuário se o login não for localizado no banco de dados.
-- [ ] Não é permitido cadastrar dois usuários com o mesmo login (email).
-
 ### Como Administrador
 
 #### Requisitos Funcionais
@@ -146,6 +125,14 @@
 ### Como Cliente não logado
 
 #### Requisitos Funcionais
+- [ ] O sistema deve validar os dados de login no banco de dados.
+- [ ] O login deve ser realizado utilizando o email do usuário.
+- [ ] A senha deve ser encriptada antes de ser validada com o dado no banco de dados.
+- [ ] O sistema deve negar a entrada do usuário no backoffice se o login não for localizado.
+- [ ] Se as credenciais estiverem corretas e o usuário estiver habilitado, o sistema deve redirecionar para a página principal do backoffice.
+- [ ] O sistema deve criar a sessão com o usuário e seu grupo (administrador ou estoquista) ao logar.
+- [ ] O sistema deve rejeitar clientes que tentarem logar com email e senha na tela de login do backoffice.
+      
 - [ ] O e-mail do cliente não pode existir na base de dados.
 - [ ] O CPF deve ser único e validado.
 - [ ] O endereço de faturamento é obrigatório, devendo incluir:
@@ -167,6 +154,16 @@
 - [ ] Validar usuário e senha (usuário = e-mail) no banco de dados.
 - [ ] Se o usuário existir, deve-se criar uma sessão com o cliente logado.
 - [ ] Caso não exista, deve ser gerado um erro informando que não foi localizado o usuário e/ou senha.
+
+#### Requisitos Não Funcionais
+- [ ] A senha deve ser encriptada antes de ser validada com o dado no banco de dados, que também deve estar encriptado.
+- [ ] Toda alteração realizada no sistema deve refletir diretamente no banco de dados.
+- [ ] O sistema deve garantir a performance adequada durante a validação e encriptação de senhas.
+- [ ] O sistema deve ser seguro e proteger as informações dos usuários, especialmente as senhas.
+
+#### Regras de Negócio
+- [ ] O sistema deve negar o acesso ao usuário se o login não for localizado no banco de dados.
+- [ ] Não é permitido cadastrar dois usuários com o mesmo login (email).
 
 ### Como Cliente logado
 
