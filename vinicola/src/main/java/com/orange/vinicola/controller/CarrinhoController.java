@@ -26,14 +26,17 @@ public class CarrinhoController {
     @RequestMapping
     public ModelAndView abrirCarrinho(HttpServletRequest request) {
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
+        Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
 
+        if (cliente != null && cliente.getCarrinho() != null) {
+            carrinho = cliente.getCarrinho();
+        }
 
         if (carrinho == null) {
             carrinho = new Carrinho();
             carrinho.setItens(new ArrayList<>());
-            request.getSession().setAttribute("carrinho", carrinho);
         }
-
+        request.getSession().setAttribute("carrinho", carrinho);
         return new ModelAndView("carrinho").addObject("carrinho", carrinho);
     }
 

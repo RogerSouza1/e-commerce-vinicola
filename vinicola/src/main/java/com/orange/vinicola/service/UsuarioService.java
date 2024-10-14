@@ -3,20 +3,14 @@ package com.orange.vinicola.service;
 import com.orange.vinicola.model.Usuario;
 import com.orange.vinicola.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -62,32 +56,5 @@ public class UsuarioService implements UserDetailsService {
     public Usuario findByCpf(String cpf) {
         return usuarioRepository.findByCpf(cpf);
     }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) {
-
-        String userEmail = email.toLowerCase();
-
-        Usuario usuario = usuarioRepository.findByEmail(userEmail);
-
-        if (usuario == null) {
-            System.out.println("Usuário não encontrado: " + userEmail);
-            throw new UsernameNotFoundException("Usuário não encontrado");
-        }
-
-        if (!usuario.isAtivado()) {
-            System.out.println("Usuário desativado: " + userEmail);
-            throw new UsernameNotFoundException("Usuário desativado");
-        }
-
-        if (usuario.getGrupo().equals("CLIENTE")) {
-            System.out.println("Usuário não autorizado: " + userEmail);
-            throw new UsernameNotFoundException("Usuário não autorizado");
-        }
-
-        return new User(usuario.getEmail(), usuario.getSenha(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getGrupo())));
-    }
-
 
 }

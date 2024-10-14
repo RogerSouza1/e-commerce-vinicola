@@ -7,6 +7,7 @@ import com.orange.vinicola.model.Produto;
 import com.orange.vinicola.repository.CarrinhoRepository;
 import com.orange.vinicola.repository.ItemRepository;
 import com.orange.vinicola.repository.ProdutoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,20 +26,20 @@ public class CarrinhoService {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private TransationalService self;
+
     public Carrinho adicionarProduto(Carrinho carrinho, Long produtoId, int quantidade, Cliente cliente) {
 
-        System.out.println("Antes de adicionar o produto: " + carrinho.getItens());
-
-
-        if (carrinho == null) {
+        if (cliente != null && cliente.getCarrinho() != null) {
+            carrinho = cliente.getCarrinho();
+        } else if (carrinho == null) {
             carrinho = new Carrinho();
             carrinho.setItens(new ArrayList<>());
             carrinho.setValorTotal(0);
             carrinho.setFrete(0);
             carrinho.setValorComFrete(0);
-            if (cliente != null) {
-                carrinho.setCliente(cliente);
-            }
+            carrinho.setCliente(cliente);
         }
 
         Optional<Produto> optionalProduto = produtoRepository.findById(produtoId);
@@ -77,7 +78,9 @@ public class CarrinhoService {
 
 
         if (cliente != null) {
-            carrinhoRepository.save(carrinho);
+            carrinho.setCliente(cliente);
+            cliente.setCarrinho(carrinho);
+            self.save(carrinho);
         }
 
         return carrinho;
@@ -113,7 +116,9 @@ public class CarrinhoService {
         }
 
         if (cliente != null) {
-            carrinhoRepository.save(carrinho);
+            carrinho.setCliente(cliente);
+            cliente.setCarrinho(carrinho);
+            self.save(carrinho);
         }
 
         return carrinho;
@@ -148,7 +153,9 @@ public class CarrinhoService {
         }
 
         if (cliente != null) {
-            carrinhoRepository.save(carrinho);
+            carrinho.setCliente(cliente);
+            cliente.setCarrinho(carrinho);
+            self.save(carrinho);
         }
 
         return carrinho;
@@ -165,7 +172,9 @@ public class CarrinhoService {
         carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
 
         if (cliente != null) {
-            carrinhoRepository.save(carrinho);
+            carrinho.setCliente(cliente);
+            cliente.setCarrinho(carrinho);
+            self.save(carrinho);
         }
 
         return carrinho;
@@ -191,8 +200,16 @@ public class CarrinhoService {
         carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
         carrinho.getItens().remove(itemRemovido);
 
+        if (carrinho.getItens().isEmpty()) {
+            carrinho.setFrete(0);
+            carrinho.setValorTotal(0);
+            carrinho.setValorComFrete(0);
+        }
+
         if (cliente != null) {
-            carrinhoRepository.save(carrinho);
+            carrinho.setCliente(cliente);
+            cliente.setCarrinho(carrinho);
+            self.save(carrinho);
         }
 
         return carrinho;
@@ -219,7 +236,7 @@ public class CarrinhoService {
         carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
     }
 
-
+    @Transactional
     public void save(Carrinho carrinho) {
         carrinhoRepository.save(carrinho);
     }
