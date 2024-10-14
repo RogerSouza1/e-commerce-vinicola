@@ -39,8 +39,9 @@ public class Carrinho {
 
     private String formaPagamento;
 
-    @OneToOne(mappedBy = "carrinho", cascade = CascadeType.ALL)
-    private Usuario usuario;
+    @OneToOne
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    private Cliente cliente;
 
     @Column(nullable = false)
     private boolean finalizado;

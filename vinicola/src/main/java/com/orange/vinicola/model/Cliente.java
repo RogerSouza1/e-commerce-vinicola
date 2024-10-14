@@ -55,4 +55,7 @@ public class Cliente {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", orphanRemoval = true)
     private List<Endereco> enderecosEntrega = new ArrayList<>();
+
+    @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Carrinho carrinho;
 }
