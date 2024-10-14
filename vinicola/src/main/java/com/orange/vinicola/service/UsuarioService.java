@@ -40,10 +40,6 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.findById(id);
     }
 
-    public void update(Usuario usuario) {
-        usuarioRepository.save(usuario);
-    }
-
     public void alterar_estado(Usuario usuario) {
 
         usuario.setAtivado(!usuario.isAtivado());
@@ -61,6 +57,10 @@ public class UsuarioService implements UserDetailsService {
 
     public Long findIdByNome(String nome) {
         return usuarioRepository.findIdByNome(nome);
+    }
+
+    public Usuario findByCpf(String cpf) {
+        return usuarioRepository.findByCpf(cpf);
     }
 
     @Override

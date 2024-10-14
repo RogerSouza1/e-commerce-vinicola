@@ -2,12 +2,13 @@ package com.orange.vinicola.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,8 +26,8 @@ public class Cliente {
 
     @Column(nullable = false)
     @NotNull(message = "O nome não pode ser nulo")
-    @Pattern(regexp = "^[a-zA-Z]{3,}\\s[a-zA-Z]{3,}$", message = "O nome deve conter duas palavras, cada uma com no mínimo 3 letras")
-    private String name;
+    @Pattern(regexp = "^(?=.*\\b\\w{3,}\\b.*\\b\\w{3,}\\b).*$", message = "O nome deve conter ao menos duas palavras, cada uma com no mínimo 3 letras")
+    private String nome;
 
     @Column(nullable = false, unique = true, updatable = false)
     @Email(message = "O email deve ser válido")
@@ -34,7 +35,7 @@ public class Cliente {
     private String email;
 
     @Column(nullable = false)
-    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos.")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter somente números com 11 dígitos.")
     private String cpf;
 
     @Column(nullable = false)
@@ -46,7 +47,9 @@ public class Cliente {
     private String genero;
 
     @Column(nullable = false)
-    @FutureOrPresent(message = "A data de nascimento não pode ser anterior a hoje")
+    @NotNull(message = "A data de nascimento não pode ser nula")
+    @PastOrPresent(message = "A data de nascimento não pode ser posterior a hoje")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dataNascimento;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
