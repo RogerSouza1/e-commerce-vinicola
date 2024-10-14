@@ -40,9 +40,6 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private boolean ativado;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Carrinho carrinho;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + grupo));
