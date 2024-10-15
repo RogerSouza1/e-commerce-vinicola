@@ -19,7 +19,7 @@ public class Carrinho {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Item> itens;
 
     @Column(nullable = false)
@@ -39,8 +39,9 @@ public class Carrinho {
 
     private String formaPagamento;
 
-    @OneToOne(mappedBy = "carrinho", cascade = CascadeType.ALL)
-    private Usuario usuario;
+    @OneToOne
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    private Cliente cliente;
 
     @Column(nullable = false)
     private boolean finalizado;

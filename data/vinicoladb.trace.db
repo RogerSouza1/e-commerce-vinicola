@@ -3627,20 +3627,22 @@ Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection wa
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 16 more
-2024-10-12 22:10:07.347896-03:00 database: wrong user or password; user: "SA"
-org.h2.message.DbException: Wrong user name or password [28000-224]
+2024-10-14 16:56:56.208489-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Cannot drop "CLIENTE" because "FKD2AMLXDQ5N5MHO547C1338TM6, FK8S7IVTL4FOYHRFAM9XQOM73N9" depends on it; SQL statement:
+DROP TABLE CLIENTE [90107-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:644)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	at org.h2.message.DbException.get(DbException.java:223)
-	at org.h2.message.DbException.get(DbException.java:199)
-	at org.h2.message.DbException.get(DbException.java:188)
-	at org.h2.engine.Engine.openSession(Engine.java:154)
-	at org.h2.engine.Engine.openSession(Engine.java:222)
-	at org.h2.engine.Engine.createSession(Engine.java:201)
-	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:343)
-	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:125)
-	at org.h2.util.JdbcUtils.getConnection(JdbcUtils.java:288)
-	at org.h2.server.web.WebServer.getConnection(WebServer.java:811)
-	at org.h2.server.web.WebApp.login(WebApp.java:1039)
-	at org.h2.server.web.WebApp.process(WebApp.java:227)
+	at org.h2.command.ddl.DropTable.prepareDrop(DropTable.java:108)
+	at org.h2.command.ddl.DropTable.update(DropTable.java:133)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:169)
+	at org.h2.command.Command.executeUpdate(Command.java:256)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:262)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1345)
+	at org.h2.server.web.WebApp.query(WebApp.java:1143)
+	at org.h2.server.web.WebApp.query(WebApp.java:1119)
+	at org.h2.server.web.WebApp.process(WebApp.java:245)
 	at org.h2.server.web.WebApp.processRequest(WebApp.java:177)
 	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
 	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
@@ -3725,17 +3727,41 @@ org.h2.message.DbException: Wrong user name or password [28000-224]
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:1570)
-Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name or password [28000-224]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:522)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	... 97 more
-2024-10-12 22:10:22.948041-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP [*]TBALE ITEM"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"; SQL statement:
-DROP TBALE ITEM [42001-224]
-2024-10-12 22:12:56.516641-03:00 jdbc[4]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUTO" not found; SQL statement:
-select p1_0.id,p1_0.ativado,p1_0.avaliacao,p1_0.descricao,p1_0.nome,p1_0.preco,p1_0.qtd_estoque from produto p1_0 where p1_0.ativado=true [42102-224]
-2024-10-12 22:12:59.926232-03:00 jdbc[8]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUTO" not found; SQL statement:
-select p1_0.id,p1_0.ativado,p1_0.avaliacao,p1_0.descricao,p1_0.nome,p1_0.preco,p1_0.qtd_estoque from produto p1_0 where p1_0.ativado=true [42102-224]
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2024-10-14 17:08:12.297076-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]ITEM"; expected "INSERT"; SQL statement:
+ITEM [42001-224]
+2024-10-14 17:08:14.407306-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]ITEM"; expected "INSERT"; SQL statement:
+ITEM [42001-224]
+2024-10-14 17:08:17.316836-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]CARRINHO"; expected "COMMIT, CREATE, CALL, CHECKPOINT, COMMENT"; SQL statement:
+CARRINHO [42001-224]
+2024-10-14 17:12:53.183481-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'' (USUARIO: ""ATIVADO"" BOOLEAN NOT NULL)"; SQL statement:
+INSERT INTO "PUBLIC"."USUARIO"("ID","ATIVADO","CPF","EMAIL","GRUPO","NOME","SENHA")VALUES(?,?,?,?,?,?,?) [22018-224]
+2024-10-14 17:12:53.188453-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'' (USUARIO: ""ATIVADO"" BOOLEAN NOT NULL)"; SQL statement:
+INSERT INTO "PUBLIC"."USUARIO"("ID","ATIVADO","CPF","EMAIL","GRUPO","NOME","SENHA")VALUES(?,?,?,?,?,?,?) [22018-224]
+2024-10-14 20:29:29 jdbc[3]: exception
+java.sql.SQLClientInfoException: Client info name 'ApplicationName' not supported.
+	at org.h2.jdbc.JdbcConnection.setClientInfo(JdbcConnection.java:1573)
+	at com.intellij.database.remote.jdbc.impl.RemoteConnectionImpl.setClientInfo(RemoteConnectionImpl.java:469)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:714)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:598)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:844)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:721)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:720)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2024-10-14 17:48:16.885945-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]=CARRINHO"; SQL statement:
+=CARRINHO [42000-224]

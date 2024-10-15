@@ -15,15 +15,9 @@
 
     <div>
       <ul id="navbar">
-        <li><a class="active" href="/">Início</a></li>
-        <li><a class="link-navbar" href="/">Produtos</a></li>
-        <li>
-          <a href="/carrinho/abrirCarrinho">
-            <img alt="carrinho" th:src="@{/images/sacola.png}">
-            <span class="quantidade-itens" th:text="${carrinho != null ? carrinho.itens.size() : 0}"></span>
-          </a>
-        </li>
-
+        <li><a class="active" href="index">Início</a></li>
+        <li><a class="link-navbar" href="#produtos1">Produtos</a></li>
+        <li><a href="/carrinho"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
         <li><a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a></li>
       </ul>
     </div>
@@ -57,20 +51,16 @@
           <!-- Nome do produto -->
           <h4 th:text="${produto.nome}">Nome do Produto</h4>
           <!-- Exibe a avaliação do produto dinamicamente com base em estrelas -->
-
-        </div>
-        <!-- Preço e Saiba Mais -->
-        <div class="preco-saiba-mais">
-          <!-- Preço do produto -->
           <div class="avaliacao-estrelas">
             <span th:each="i : ${#numbers.sequence(1, 5)}">
-                <svg class="estrela" fill="currentColor" th:classappend="${i <= produto.avaliacao} ? 'cheia' : 'vazia'" viewBox="0 0 24 24"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                </svg>
+              <svg class="estrela" fill="currentColor" th:classappend="${i <= produto.avaliacao} ? 'cheia' : 'vazia'" viewBox="0 0 24 24"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+              </svg>
             </span>
           </div>
-          <h4 class="preco-produto" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}">Preço</h4>
+          <!-- Preço do produto -->
+          <h4 th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}">Preço</h4>
           <div class="saiba-mais-container">
             <a th:href="@{/detalhes-produto-cliente(id=${produto.id})}">Saiba mais!</a>
           </div>
