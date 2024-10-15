@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -58,20 +58,34 @@
 <body>
 <header>
     <section id="header">
-        <a href="/"><img alt="Logo Winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
-        <nav>
+        <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
+
+        <div>
             <ul id="navbar">
                 <li><a class="active" href="/">Início</a></li>
-                <li><a class="link-navbar" href="/">Produtos</a></li>
+                <li><a class="link-navbar" href="#produtos1">Produtos</a></li>
                 <li>
-                    <a href="/carrinho/abrirCarrinho">
+                    <a href="/carrinho">
                         <img alt="carrinho" th:src="@{/images/sacola.png}">
                         <span class="quantidade-itens" th:text="${carrinho != null ? carrinho.itens.size() : 0}"></span>
                     </a>
                 </li>
-                <li><a class="icone-navbar" href="/login"><img alt="Login" th:src="@{/images/user.png}"></a></li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <div class="dropdown">
+                        <a class="icone-navbar"><img alt="user" th:src="@{/images/user.png}"></a>
+                        <div class="dropdown-content">
+                            <a href="/perfil">Editar Perfil</a>
+                            <a href="/logout">Sair</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li sec:authorize="!isAuthenticated()">
+                    <a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a>
+                </li>
             </ul>
-        </nav>
+        </div>
     </section>
     <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
             th:src="@{/images/seta.png}"></button>
