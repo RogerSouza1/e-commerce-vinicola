@@ -7,6 +7,15 @@
     <title>Winery</title>
     <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <script>
+        function confirmarLogout() {
+            var confirmacao = confirm("Você deseja fazer logout da loja?");
+            if (!confirmacao) {
+                event.preventDefault();
+            }
+            return confirmacao;
+        }
+    </script>
 </head>
 <body>
 <header>
@@ -28,8 +37,8 @@
                     <div class="dropdown">
                         <a class="icone-navbar"><img alt="user" th:src="@{/images/user.png}"></a>
                         <div class="dropdown-content">
-                            <a href="/perfil">Editar Perfil</a>
-                            <a href="/logout">Sair</a>
+                            <a href="/cliente/perfil">Editar Perfil</a>
+                            <a href="/cliente/logout" onclick="confirmarLogout()">Sair</a>
                         </div>
                     </div>
                 </li>

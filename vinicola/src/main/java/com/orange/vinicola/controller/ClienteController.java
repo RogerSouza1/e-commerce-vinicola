@@ -5,9 +5,12 @@ import com.orange.vinicola.model.Endereco;
 import com.orange.vinicola.service.ClienteService;
 import com.orange.vinicola.service.EnderecoService;
 import com.orange.vinicola.service.UsuarioService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,7 +39,7 @@ public class ClienteController {
     private BCryptPasswordEncoder encoder;
 
     @GetMapping("/cadastro")
-    public String showForm(Model model) {
+    public String showFormCadastro(Model model) {
         Cliente cliente = new Cliente();
         cliente.setEnderecoFaturamento(new Endereco());
         model.addAttribute("cliente", new Cliente());
@@ -91,5 +94,63 @@ public class ClienteController {
         return new ModelAndView("redirect:/login");
     }
 
+    @GetMapping("/perfil")
+    public String showPerfil(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Cliente cliente = clienteService.findByEmail(authentication.getName());
+        model.addAttribute("cliente", cliente);
+        return "editar-cliente";
+    }
 
+    @GetMapping("/editar-dados")
+    public String showEditarDados(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Cliente cliente = clienteService.findByEmail(authentication.getName());
+        model.addAttribute("cliente", cliente);
+        return "editar-dados-cliente";
+    }
+
+    @PostMapping("/editar-dados")
+    public ModelAndView editarCliente(@ModelAttribute("cliente") @Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("cliente", cliente);
+            return new ModelAndView("editar-dados-cliente", "cliente", cliente);
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Cliente clienteAtual = clienteService.findByEmail(authentication.getName());
+
+        cliente.setId(clienteAtual.getId());
+        cliente.setEmail(clienteAtual.getEmail());
+        cliente.setCpf(clienteAtual.getCpf());
+        cliente.setEnderecoFaturamento(clienteAtual.getEnderecoFaturamento());
+        cliente.setEnderecosEntrega(clienteAtual.getEnderecosEntrega());
+        cliente.setCarrinho(clienteAtual.getCarrinho());
+
+        if (!cliente.getSenha().isEmpty()) {
+            String encodedPassword = encoder.encode(cliente.getSenha());
+            clienteAtual.setSenha(encodedPassword);
+        }
+
+        clienteAtual.setNome(cliente.getNome());
+        clienteAtual.setDataNascimento(cliente.getDataNascimento());
+        clienteAtual.setGenero(cliente.getGenero());
+
+        clienteService.save(clienteAtual);
+
+        redirectAttributes.addFlashAttribute("mensagem", "Dados atualizados com sucesso!");
+        redirectAttributes.addFlashAttribute("cliente", clienteAtual);
+
+        return new ModelAndView("redirect:/cliente/perfil");
+    }
+
+    @GetMapping("/logout")
+    public ModelAndView logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        request.getSession().setAttribute("cliente", null);
+        request.getSession().setAttribute("carrinho", null);
+        SecurityContextHolder.clearContext();
+        return new ModelAndView("redirect:/login");
+    }
 }

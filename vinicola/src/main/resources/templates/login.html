@@ -7,6 +7,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Winery</title>
+    <script>
+        function confirmarLogout() {
+            var confirmacao = confirm("Você deseja fazer logout da loja?");
+            if (!confirmacao) {
+                event.preventDefault();
+            }
+            return confirmacao;
+        }
+    </script>
 </head>
 <body>
 
@@ -17,7 +26,7 @@
         <div>
             <ul id="navbar">
                 <li><a class="active" href="/">Início</a></li>
-                <li><a class="link-navbar" href="#produtos1">Produtos</a></li>
+                <li><a class="link-navbar" href="/">Produtos</a></li>
                 <li>
                     <a href="/carrinho">
                         <img alt="carrinho" th:src="@{/images/sacola.png}">
@@ -29,8 +38,8 @@
                     <div class="dropdown">
                         <a class="icone-navbar"><img alt="user" th:src="@{/images/user.png}"></a>
                         <div class="dropdown-content">
-                            <a href="/perfil">Editar Perfil</a>
-                            <a href="/logout">Sair</a>
+                            <a href="/cliente/perfil">Editar Perfil</a>
+                            <a href="/cliente/logout" onclick="confirmarLogout()">Sair</a>
                         </div>
                     </div>
                 </li>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Perfil do Cliente</title>
+    <script>
+        function confirmarLogout() {
+            var confirmacao = confirm("Você deseja fazer logout da loja?");
+            if (!confirmacao) {
+                event.preventDefault();
+            }
+            return confirmacao;
+        }
+    </script>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo-container">
+            <img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}">
+            <div class="dropdown">
+                <button class="dropdown-btn" sec:authorize="isAuthenticated()">
+                    [[${#authentication.name}]] &#9662;
+                </button>
+                <div class="dropdown-content">
+                    <form method="post">
+                        <button onclick="confirmarLogout()" th:action="@{/cliente/logout}">Sair</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="profile-container">
+        <h1>Perfil do Cliente</h1>
+
+        <div id="mensagem" th:text="${mensagem}"></div>
+
+        <div class="profile-details">
+            <p><strong>Nome:</strong> <span th:text="${cliente.nome}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${cliente.email}"></span></p>
+            <p><strong>CPF:</strong> <span th:text="${cliente.cpf}"></span></p>
+            <p><strong>Gênero:</strong> <span th:text="${cliente.genero}"></span></p>
+            <p><strong>Data de Nascimento:</strong> <span
+                    th:text="${#dates.format(cliente.dataNascimento, 'dd/MM/yyyy')}"></span></p>
+        </div>
+
+        <div class="button-container">
+            <button class="btn btn-edit" onclick="window.location.href='/cliente/editar-dados'" type="button">Editar
+                Dados
+            </button>
+            <button class="btn btn-edit" onclick="window.location.href='/cliente/editar-enderecos'" type="button">Editar
+                Endereços
+            </button>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
