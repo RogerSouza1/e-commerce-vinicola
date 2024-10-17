@@ -44,6 +44,12 @@ public class Endereco {
     @NotNull(message = "O estado não pode ser nulo")
     private String estado;
 
+    @Column(name = "is_endereco_faturamento", nullable = false, columnDefinition = "boolean default false")
+    private boolean isEnderecoFaturamento = false;
+
+    @Column(name = "is_entrega_padrao", nullable = false, columnDefinition = "boolean default false")
+    private boolean isEntregaPadrao = false;
+
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;

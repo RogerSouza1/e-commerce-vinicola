@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+
 @Controller
 @RequestMapping("/cliente")
 public class ClienteController {
@@ -41,7 +43,7 @@ public class ClienteController {
     @GetMapping("/cadastro")
     public String showFormCadastro(Model model) {
         Cliente cliente = new Cliente();
-        cliente.setEnderecoFaturamento(new Endereco());
+        cliente.setEnderecos(new ArrayList<>());
         model.addAttribute("cliente", new Cliente());
         return "registrar-cliente";
     }
@@ -73,17 +75,16 @@ public class ClienteController {
             String encodedPassword = encoder.encode(cliente.getSenha());
             cliente.setSenha(encodedPassword);
 
-            if (cliente.getEnderecoFaturamento() != null) {
-                cliente.getEnderecoFaturamento().setCliente(cliente);
-            }
+            if (!cliente.getEnderecos().isEmpty()) {
+                cliente.getEnderecos().get(0).setEnderecoFaturamento(true);
+                cliente.getEnderecos().get(1).setEntregaPadrao(true);
 
-            if (cliente.getEnderecosEntrega().get(0) != null) {
-                cliente.getEnderecosEntrega().get(0).setCliente(cliente);
+               for(Endereco endereco : cliente.getEnderecos()) {
+                   endereco.setCliente(cliente);
+               }
             }
 
             clienteService.save(cliente);
-            enderecoService.save(cliente.getEnderecoFaturamento());
-            enderecoService.save(cliente.getEnderecosEntrega().get(0));
 
             redirectAttributes.addFlashAttribute("cliente", cliente);
 
