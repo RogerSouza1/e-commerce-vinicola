@@ -53,12 +53,8 @@ public class Cliente implements UserDetails {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dataNascimento;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "endereco_faturamento_id", referencedColumnName = "id")
-    private Endereco enderecoFaturamento;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", orphanRemoval = true)
-    private List<Endereco> enderecosEntrega = new ArrayList<>();
+    private List<Endereco> enderecos = new ArrayList<>();
 
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private Carrinho carrinho;

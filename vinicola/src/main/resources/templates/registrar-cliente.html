@@ -17,7 +17,7 @@
             }
 
             var url = `https://viacep.com.br/ws/${cep}/json/`;
-          
+
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -79,7 +79,7 @@
                 alert("Por favor, preencha todos os campos obrigatórios.");
                 return false;
             }
-        }
+
             if (!validarCPF(cpfInput)) {
                 event.preventDefault();
                 alert("CPF inválido. Por favor, insira um CPF válido.");
