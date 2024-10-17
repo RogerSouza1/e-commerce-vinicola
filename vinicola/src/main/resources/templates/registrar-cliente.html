@@ -17,7 +17,7 @@
             }
 
             var url = `https://viacep.com.br/ws/${cep}/json/`;
-
+          
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -74,30 +74,24 @@
             const generoInput = document.getElementById("genero").value;
             const dataNascimentoInput = document.getElementById("dataNascimento").value;
 
-            // Verifica se todos os campos obrigatórios estão preenchidos
             if (!nomeInput || !emailInput || !cpfInput || !senhaInput || !generoInput || !dataNascimentoInput) {
                 event.preventDefault();
                 alert("Por favor, preencha todos os campos obrigatórios.");
                 return false;
             }
-
-            // Valida o CPF
+        }
             if (!validarCPF(cpfInput)) {
-                event.preventDefault(); // Impede o envio do formulário
+                event.preventDefault();
                 alert("CPF inválido. Por favor, insira um CPF válido.");
                 return false;
             }
 
-            return true; // O formulário é válido
+            return true;
         }
 
         function mostrarNovoFormulario() {
             var novoFormulario = document.getElementById("forms-endereco-entrega");
-            if (novoFormulario.style.display === "none") {
-                novoFormulario.style.display = "block";
-            } else {
-                novoFormulario.style.display = "none";
-            }
+            novoFormulario.style.display = novoFormulario.style.display === "none" ? "block" : "none";
         }
 
         function validarFormularioEndereco(event) {
@@ -146,6 +140,15 @@
                     alert("Erro ao buscar o CEP.");
                 });
         }
+
+        function copiarEnderecoFaturamentoParaEntrega() {
+            document.getElementById("cepEntrega").value = document.getElementById("cep").value;
+            document.getElementById("logradouroEntrega").value = document.getElementById("logradouro").value;
+            document.getElementById("numeroEntrega").value = document.getElementById("numero").value;
+            document.getElementById("bairroEntrega").value = document.getElementById("bairro").value;
+            document.getElementById("cidadeEntrega").value = document.getElementById("cidade").value;
+            document.getElementById("estadoEntrega").value = document.getElementById("estado").value;
+        }
     </script>
 </head>
 <body>
@@ -153,215 +156,153 @@
 <header>
     <section id="header">
         <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
-
         <div>
             <ul id="navbar">
                 <li><a class="active" href="/">Início</a></li>
                 <li><a class="link-navbar" href="/">Produtos</a></li>
-                <li>
-                    <a href="/carrinho/abrirCarrinho">
-                        <img alt="carrinho" th:src="@{/images/sacola.png}">
-                        <span class="quantidade-itens" th:text="${carrinho != null ? carrinho.itens.size() : 0}"></span>
-                    </a>
-                </li>
-
+                <li><a href="/carrinho/abrirCarrinho"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
                 <li><a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a></li>
             </ul>
         </div>
     </section>
-    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
-            th:src="@{../images/seta.png}" alt="setas de naveção"></button>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img th:src="@{/images/seta.png}">
+    </button>
 </header>
+<h1>Cadastrar-se</h1>
 
-<main class="main-cadastro-cliente">
-    <section class="form-container">
-        <h2 class="form-title">Cadastrar-se</h2>
-        <div th:if="${mensagem}">
-            <p style="color: red;" th:text="${mensagem}"></p>
+<div th:if="${mensagem}">
+    <p style="color: red;" th:text="${mensagem}"></p>
+</div>
+<form method="post" onsubmit="return validarFormulario(event);" th:action="@{/cliente/cadastro}" th:object="${cliente}">
+    <div>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" th:field="*{nome}" required/>
+        <div th:errors="*{nome}" th:if="${#fields.hasErrors('nome')}"></div>
+    </div>
+
+    <div>
+        <label for="email">Email:</label>
+        <input id="email" required th:field="*{email}" type="email"/>
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+
+    <div>
+        <label for="cpf">CPF:</label>
+        <input id="cpf" required th:field="*{cpf}" type="text"/>
+        <div th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
+    </div>
+
+    <div>
+        <label for="senha">Senha:</label>
+        <input id="senha" required th:field="*{senha}" type="password"/>
+        <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
+    </div>
+
+    <div>
+        <label for="genero">Gênero:</label>
+        <select id="genero" required th:field="*{genero}">
+            <option value="MASCULINO">Masculino</option>
+            <option value="FEMININO">Feminino</option>
+            <option value="OUTRO">Outro</option>
+        </select>
+        <div th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
+    </div>
+
+    <div>
+        <label for="dataNascimento">Data de Nascimento:</label>
+        <input id="dataNascimento" required th:field="*{dataNascimento}" type="date"/>
+        <div th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
+    </div>
+
+    <h3>Endereço de Faturamento</h3>
+
+    <div>
+        <label for="cep">CEP:</label>
+        <input id="cep" required th:field="*{enderecos[0].cep}" type="text"/>
+        <button onclick="buscarCep()" type="button">Buscar CEP</button>
+        <div th:errors="*{enderecos[0].cep}" th:if="${#fields.hasErrors('enderecos[0].cep')}"></div>
+    </div>
+
+    <div>
+        <label for="logradouro">Logradouro:</label>
+        <input id="logradouro" required th:field="*{enderecos[0].logradouro}" type="text"/>
+        <div th:errors="*{enderecos[0].logradouro}" th:if="${#fields.hasErrors('enderecos[0].logradouro')}"></div>
+    </div>
+
+    <div>
+        <label for="numero">Número:</label>
+        <input id="numero" required th:field="*{enderecos[0].numero}" type="text"/>
+        <div th:errors="*{enderecos[0].numero}" th:if="${#fields.hasErrors('enderecos[0].numero')}"></div>
+    </div>
+
+    <div>
+        <label for="bairro">Bairro:</label>
+        <input id="bairro" required th:field="*{enderecos[0].bairro}" type="text"/>
+        <div th:errors="*{enderecos[0].bairro}" th:if="${#fields.hasErrors('enderecos[0].bairro')}"></div>
+    </div>
+
+    <div>
+        <label for="cidade">Cidade:</label>
+        <input id="cidade" required th:field="*{enderecos[0].cidade}" type="text"/>
+        <div th:errors="*{enderecos[0].cidade}" th:if="${#fields.hasErrors('enderecos[0].cidade')}"></div>
+    </div>
+
+    <div>
+        <label for="estado">Estado:</label>
+        <input id="estado" required th:field="*{enderecos[0].estado}" type="text"/>
+        <div th:errors="*{enderecos[0].estado}" th:if="${#fields.hasErrors('enderecos[0].estado')}"></div>
+    </div>
+
+    <div>
+        <input type="checkbox" id="enderecoEntregaDiferente" name="enderecoEntregaDiferente" onchange="mostrarNovoFormulario();">
+        <label for="enderecoEntregaDiferente">Cadastrar endereço de entrega diferente</label>
+    </div>
+
+    <div id="forms-endereco-entrega" style="display:none;">
+        <h3>Endereço de Entrega</h3>
+
+        <button type="button" onclick="copiarEnderecoFaturamentoParaEntrega()">Copiar endereço de faturamento</button>
+
+        <div>
+            <label for="cepEntrega">CEP:</label>
+            <input id="cepEntrega" th:field="*{enderecos[1].cep}" type="text"/>
+            <button onclick="buscarCepEntrega()" type="button">Buscar CEP</button>
+            <div th:errors="*{enderecos[1].cep}" th:if="${#fields.hasErrors('enderecos[1].cep')}"></div>
         </div>
 
-        <form method="post" onsubmit="return validarFormulario(event);" th:action="@{/cliente/cadastro}"
-              th:object="${cliente}">
+        <div>
+            <label for="logradouroEntrega">Logradouro:</label>
+            <input id="logradouroEntrega" th:field="*{enderecos[1].logradouro}" type="text"/>
+            <div th:errors="*{enderecos[1].logradouro}" th:if="${#fields.hasErrors('enderecos[1].logradouro')}"></div>
+        </div>
 
-            <div class="input-group">
-                <label for="nome">Nome:</label>
-                <input type="text" id="nome" th:field="*{nome}" required/>
-                <div th:errors="*{nome}" th:if="${#fields.hasErrors('nome')}"></div>
-            </div>
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input id="email" required th:field="*{email}" type="email"/>
-                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-            </div>
-            <div class="input-group">
-                <label for="cpf">CPF:</label>
-                <input id="cpf" required th:field="*{cpf}" type="text"/>
-                <div th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
-            </div>
-            <div class="input-group">
-                <label for="senha">Senha:</label>
-                <input id="senha" required th:field="*{senha}" type="password"/>
-                <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
-            </div>
-            <div class="input-group">
-                <label for="genero">Gênero:</label>
-                <select id="genero" class="select-field" required th:field="*{genero}">
-                    <option value="MASCULINO" class="option-select">Masculino</option>
-                    <option value="FEMININO" class="option-select">Feminino</option>
-                    <option value="OUTRO" class="option-select">Outro</option>
-                </select>
-                <div th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
-            </div>
-            <div class="input-group">
-                <label for="dataNascimento">Data de Nascimento:</label>
-                <input id="dataNascimento" required th:field="*{dataNascimento}" type="date"/>
-                <div th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
-            </div>
-            <div class="input-group">
-                <label for="cep">CEP:</label>
-                <div class="cep-cliente">
-                    <input type="text" id="cep" th:field="*{enderecoFaturamento.cep}"/>
-                    <button class="btn-buscar-cep" onclick="buscarCep()" type="button">Buscar CEP</button>
-                </div>
-                <div th:if="${#fields.hasErrors('enderecoFaturamento.cep')}"
-                     th:errors="*{enderecoFaturamento.cep}"></div>
-            </div>
-            <div class="input-group">
-                <label for="logradouro">Logradouro:</label>
-                <input id="logradouro" readonly required th:field="*{enderecoFaturamento.logradouro}" type="text"/>
-                <div th:if="${#fields.hasErrors('enderecoFaturamento.logradouro')}"
-                     th:errors="*{enderecoFaturamento.logradouro}"></div>
-            </div>
-            <div class="input-group">
-                <label for="numero">Número:</label>
-                <input id="numero" required th:field="*{enderecoFaturamento.numero}" type="text"/>
-                <div th:if="${#fields.hasErrors('enderecoFaturamento.numero')}"
-                     th:errors="*{enderecoFaturamento.numero}"></div>
-            </div>
-            <div class="input-group">
-                <label for="complemento">Complemento:</label>
-                <input id="complemento" th:field="*{enderecoFaturamento.complemento}" type="text"/>
-                <div th:if="${#fields.hasErrors('enderecoFaturamento.complemento')}"
-                     th:errors="*{enderecoFaturamento.complemento}"></div>
-            </div>
-            <div class="input-group">
-                <label for="bairro">Bairro:</label>
-                <input id="bairro" readonly required th:field="*{enderecoFaturamento.bairro}" type="text"/>
-                <div th:if="${#fields.hasErrors('enderecoFaturamento.bairro')}"
-                     th:errors="*{enderecoFaturamento.bairro}"></div>
-            </div>
-            <div class="input-group">
-                <label for="cidade">Cidade:</label>
-                <input id="cidade" readonly required th:field="*{enderecoFaturamento.cidade}" type="text"/>
-                <div th:if="${#fields.hasErrors('enderecoFaturamento.cidade')}"
-                     th:errors="*{enderecoFaturamento.cidade}"></div>
-            </div>
-            <div class="input-group">
-                <label for="estado">Estado:</label>
-                <input id="estado" readonly required th:field="*{enderecoFaturamento.estado}" type="text"/>
-                <div th:if="${#fields.hasErrors('enderecoFaturamento.estado')}"
-                     th:errors="*{enderecoFaturamento.estado}"></div>
-            </div>
-            <div class="input-group">
-                <button type="button" class="btn-cancel" id="adicionarEndereco" onclick="mostrarNovoFormulario()">Adicionar Endereço de
-                    Entrega
-                </button>
-            </div>
-            <div id="forms-endereco-entrega" style="display: none;">
-                <h2 class="form-title">Endereço de Entrega</h2>
-                <div class="input-group">
-                    <label for="cepEntrega">CEP:</label>
-                    <div class="cep-cliente">
-                        <input class="input-cep" id="cepEntrega" required th:field="*{enderecosEntrega[0].cep}"/>
-                        <button class="btn-buscar-cep"  onclick="buscarCepEntrega()" type="button">Buscar CEP</button>
-                    </div>
-                    <div th:errors="*{enderecosEntrega[0].cep}"
-                         th:if="${#fields.hasErrors('enderecosEntrega[0].cep')}"></div>
-                </div>
-                <div class="input-group">
-                    <label for="logradouroEntrega">Logradouro:</label>
-                    <input id="logradouroEntrega" readonly required th:field="*{enderecosEntrega[0].logradouro}"/>
-                    <div th:errors="*{enderecosEntrega[0].logradouro}"
-                         th:if="${#fields.hasErrors('enderecosEntrega[0].logradouro')}"></div>
-                </div>
-                <div class="input-group">
-                    <label for="numeroEntrega">Número:</label>
-                    <input id="numeroEntrega" required th:field="*{enderecosEntrega[0].numero}"/>
-                    <div th:errors="*{enderecosEntrega[0].numero}"
-                         th:if="${#fields.hasErrors('enderecosEntrega[0].numero')}"></div>
-                </div>
-                <div class="input-group">
-                    <label for="complementoEntrega">Complemento:</label>
-                    <input id="complementoEntrega" th:field="*{enderecosEntrega[0].complemento}"/>
-                    <div th:errors="*{enderecosEntrega[0].complemento}"
-                         th:if="${#fields.hasErrors('enderecosEntrega[0].complemento')}"></div>
-                </div>
-                <div class="input-group">
-                    <label for="bairroEntrega">Bairro:</label>
-                    <input id="bairroEntrega" readonly required th:field="*{enderecosEntrega[0].bairro}"/>
-                    <div th:errors="*{enderecosEntrega[0].bairro}"
-                         th:if="${#fields.hasErrors('enderecosEntrega[0].bairro')}"></div>
-                </div>
-                <div class="input-group">
-                    <label for="cidadeEntrega">Cidade:</label>
-                    <input id="cidadeEntrega" readonly required th:field="*{enderecosEntrega[0].cidade}"/>
-                    <div th:errors="*{enderecosEntrega[0].cidade}"
-                         th:if="${#fields.hasErrors('enderecosEntrega[0].cidade')}"></div>
-                </div>
-                <div class="input-group">
-                    <label for="estadoEntrega">Estado:</label>
-                    <input id="estadoEntrega" readonly required th:field="*{enderecosEntrega[0].estado}"/>
-                    <div th:errors="*{enderecosEntrega[0].estado}"
-                         th:if="${#fields.hasErrors('enderecosEntrega[0].estado')}"></div>
-                </div>
-            </div>
-            <button type="submit" class="btn-padrao">Registrar</button>
-        </form>
-    </section>
-</main>
+        <div>
+            <label for="numeroEntrega">Número:</label>
+            <input id="numeroEntrega" th:field="*{enderecos[1].numero}" type="text"/>
+            <div th:errors="*{enderecos[1].numero}" th:if="${#fields.hasErrors('enderecos[1].numero')}"></div>
+        </div>
 
-<footer>
-    <div class="rodape">
-        <a href="index.html" class="logo-rodape"><img th:src="@{../images/logo_winery.png}" alt="logo_winery"></a>
-        <div class="footer-container">
-            <div class="navegacao">
-                <ul>
-                    <li><a href="#">Início</a></li>
-                    <li><a href="#">Produtos</a></li>
-                </ul>
-            </div>
-            <div class="contatos">
-                <ul>
-                    <li>
-                        <a href="#"><img th:src="@{../images/phone.svg}" alt="telefone"/>(11) 3881-3637</a>
-                    </li>
-                    <li>
-                        <a href="#"><img th:src="@{../images/whatsapp.svg}" alt="whatsapp"/>(11)
-                            98066-7105</a>
-                    </li>
-                    <li>
-                        <a href="#"><img th:src="@{../images/email.svg}" alt="email"/>winery@gmail.com</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="redes-sociais">
-                <ul>
-                    <li>
-                        <a href="#"><img th:src="@{../images/linkedin.svg}" alt="linkedin"/></a>
-                    </li>
-                    <li>
-                        <a href="#"><img th:src="@{../images/facebook.svg}" alt="facebook"/></a>
-                    </li>
-                    <li>
-                        <a href="#"><img th:src="@{../images/instagram.svg}" alt="instagram"/></a>
-                    </li>
-                </ul>
-            </div>
+        <div>
+            <label for="bairroEntrega">Bairro:</label>
+            <input id="bairroEntrega" th:field="*{enderecos[1].bairro}" type="text"/>
+            <div th:errors="*{enderecos[1].bairro}" th:if="${#fields.hasErrors('enderecos[1].bairro')}"></div>
+        </div>
+
+        <div>
+            <label for="cidadeEntrega">Cidade:</label>
+            <input id="cidadeEntrega" th:field="*{enderecos[1].cidade}" type="text"/>
+            <div th:errors="*{enderecos[1].cidade}" th:if="${#fields.hasErrors('enderecos[1].cidade')}"></div>
+        </div>
+
+        <div>
+            <label for="estadoEntrega">Estado:</label>
+            <input id="estadoEntrega" th:field="*{enderecos[1].estado}" type="text"/>
+            <div th:errors="*{enderecos[1].estado}" th:if="${#fields.hasErrors('enderecos[1].estado')}"></div>
         </div>
     </div>
-    <div class="rodape-frase">
-        <p>Winery - Projeto Integrador - 4ª Semestre</p>
-    </div>
-</footer>
+
+    <button type="submit">Cadastrar</button>
+</form>
+
 </body>
 </html>
