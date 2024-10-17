@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Endereços de Entrega</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function confirmChange() {
+            return confirm("Tem certeza que deseja mudar o endereço padrão?");
+        }
+    </script>
+</head>
+<body>
+<div th:fragment="tabela-enderecos(enderecos)">
+    <table border="1" id="tabela-enderecos-entrega">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>CEP</th>
+            <th>Logradouro</th>
+            <th>Número</th>
+            <th>Complemento</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Padrão</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="endereco : ${enderecos}">
+            <td th:text="${endereco.id}"></td>
+            <td th:text="${endereco.cep}"></td>
+            <td th:text="${endereco.logradouro}"></td>
+            <td th:text="${endereco.numero}"></td>
+            <td th:text="${endereco.complemento}"></td>
+            <td th:text="${endereco.cidade}"></td>
+            <td th:text="${endereco.estado}"></td>
+            <td th:text="${endereco.isEntregaPadrao ? 'Sim' : 'Não'}"></td>
+            <td class="text-center">
+                <form method="post" onsubmit="return confirmChange();" th:action="@{/endereco/definir-padrao}">
+                    <input name="id" th:value="${endereco.id}" type="hidden"/>
+                    <button th:disabled="${endereco.isEntregaPadrao}" type="submit">Definir como Padrão</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

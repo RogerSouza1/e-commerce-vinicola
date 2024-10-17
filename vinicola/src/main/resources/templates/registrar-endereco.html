@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">>
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Endereço de Entrega</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <script>
+        function buscarCep() {
+            var cep = document.getElementById("cep").value;
+
+            cep = cep.replace(/\D/g, '');
+
+            if (cep.length !== 8) {
+                alert("Por favor, insira um CEP válido com 8 dígitos.");
+                return;
+            }
+
+            var url = `https://viacep.com.br/ws/${cep}/json/`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) {
+                        alert("CEP não encontrado.");
+                        return;
+                    }
+
+                    document.getElementById("cep").value = cep;
+                    document.getElementById("logradouro").value = data.logradouro;
+                    document.getElementById("bairro").value = data.bairro;
+                    document.getElementById("cidade").value = data.localidade;
+                    document.getElementById("estado").value = data.uf;
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar o CEP:", error);
+                    alert("Erro ao buscar o CEP.");
+                });
+        }
+
+        function validarFormulario(event) {
+            const cepInput = document.getElementById("cep").value;
+            const logradouroInput = document.getElementById("logradouro").value;
+            const numeroInput = document.getElementById("numero").value;
+            const bairroInput = document.getElementById("bairro").value;
+            const cidadeInput = document.getElementById("cidade").value;
+            const estadoInput = document.getElementById("estado").value;
+
+            if (!cepInput || !logradouroInput || !numeroInput || !bairroInput || !cidadeInput || !estadoInput) {
+                event.preventDefault();
+                alert("Por favor, preencha todos os campos obrigatórios.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <section id="header">
+        <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="/">Início</a></li>
+                <li><a class="link-navbar" href="/">Produtos</a></li>
+                <li><a href="/carrinho/abrirCarrinho"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
+                <li><a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a></li>
+            </ul>
+        </div>
+    </section>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img th:src="@{/images/seta.png}">
+    </button>
+</header>
+
+<h1>Cadastrar Endereço de Entrega</h1>
+
+<div th:if="${mensagem}">
+    <p style="color: red;" th:text="${mensagem}"></p>
+</div>
+
+<form method="post" onsubmit="return validarFormulario(event);" th:action="@{/endereco/cadastrar}"
+      th:object="${endereco}">
+    <div>
+        <label for="cep">CEP:</label>
+        <input id="cep" required th:field="*{cep}" type="text"/>
+        <button onclick="buscarCep()" type="button">Buscar CEP</button>
+        <div th:errors="*{cep}" th:if="${#fields.hasErrors('cep')}"></div>
+    </div>
+
+    <div>
+        <label for="logradouro">Logradouro:</label>
+        <input id="logradouro" required th:field="*{logradouro}" type="text"/>
+        <div th:errors="*{logradouro}" th:if="${#fields.hasErrors('logradouro')}"></div>
+    </div>
+
+    <div>
+        <label for="numero">Número:</label>
+        <input id="numero" required th:field="*{numero}" type="text"/>
+        <div th:errors="*{numero}" th:if="${#fields.hasErrors('numero')}"></div>
+    </div>
+
+    <div>
+        <label for="bairro">Bairro:</label>
+        <input id="bairro" required th:field="*{bairro}" type="text"/>
+        <div th:errors="*{bairro}" th:if="${#fields.hasErrors('bairro')}"></div>
+    </div>
+
+    <div>
+        <label for="cidade">Cidade:</label>
+        <input id="cidade" required th:field="*{cidade}" type="text"/>
+        <div th:errors="*{cidade}" th:if="${#fields.hasErrors('cidade')}"></div>
+    </div>
+
+    <div>
+        <label for="estado">Estado:</label>
+        <input id="estado" required th:field="*{estado}" type="text"/>
+        <div th:errors="*{estado}" th:if="${#fields.hasErrors('estado')}"></div>
+    </div>
+
+    <button type="submit">Cadastrar Endereço</button>
+</form>
+
+</body>
+</html>

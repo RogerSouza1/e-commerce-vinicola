@@ -125,8 +125,7 @@ public class ClienteController {
         cliente.setId(clienteAtual.getId());
         cliente.setEmail(clienteAtual.getEmail());
         cliente.setCpf(clienteAtual.getCpf());
-        cliente.setEnderecoFaturamento(clienteAtual.getEnderecoFaturamento());
-        cliente.setEnderecosEntrega(clienteAtual.getEnderecosEntrega());
+        cliente.setEnderecos(clienteAtual.getEnderecos());
         cliente.setCarrinho(clienteAtual.getCarrinho());
 
         if (!cliente.getSenha().isEmpty()) {

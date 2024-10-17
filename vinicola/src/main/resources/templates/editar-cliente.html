@@ -37,6 +37,7 @@
 
 <main>
     <div class="profile-container">
+        <a href="/">Voltar</a>
         <h1>Perfil do Cliente</h1>
 
         <div id="mensagem" th:text="${mensagem}"></div>
@@ -54,7 +55,7 @@
             <button class="btn btn-edit" onclick="window.location.href='/cliente/editar-dados'" type="button">Editar
                 Dados
             </button>
-            <button class="btn btn-edit" onclick="window.location.href='/cliente/editar-enderecos'" type="button">Editar
+            <button class="btn btn-edit" onclick="window.location.href='/endereco/lista-enderecos'" type="button">Editar
                 Endereços
             </button>
         </div>

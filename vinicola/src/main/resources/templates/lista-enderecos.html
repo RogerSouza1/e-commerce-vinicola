@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Endereços</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script>
+        $(document).ready(function () {
+            $('#adicionar-novo-endereco').on('click', function () {
+                window.location.href = '/endereco/adicionar';
+            });
+        });
+    </script>
+</head>
+<body>
+
+<header>
+    <a href="/cliente/perfil">Voltar</a>
+    <h1>Gerenciar Endereços</h1>
+</header>
+
+<main>
+
+    <div id="mensagem" th:text="${mensagem}"></div>
+
+    <section>
+        <h2>Endereço de Faturamento</h2>
+        <div th:if="${enderecoFaturamento != null}">
+            <p><strong>Logradouro:</strong> <span th:text="${enderecoFaturamento.logradouro}"></span></p>
+            <p><strong>CEP:</strong> <span th:text="${enderecoFaturamento.cep}"></span></p>
+            <p><strong>Número:</strong> <span th:text="${enderecoFaturamento.numero}"></span></p>
+            <p><strong>Complemento:</strong> <span th:text="${enderecoFaturamento.complemento}"></span></p>
+            <p><strong>Cidade:</strong> <span th:text="${enderecoFaturamento.cidade}"></span></p>
+            <p><strong>Estado:</strong> <span th:text="${enderecoFaturamento.estado}"></span></p>
+        </div>
+        <div th:unless="${enderecoFaturamento != null}">
+            <p>Nenhum endereço de faturamento cadastrado.</p>
+        </div>
+    </section>
+
+
+    <section>
+        <h2>Endereços de Entrega</h2>
+        <div th:replace="~{fragments/tabela-enderecos :: tabela-enderecos(enderecos=${enderecos})}"></div>
+        <form method="post" th:action="@{/endereco/cadastrar}">
+            <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}"/>
+            <button type="submit">Adicionar Novo Endereço</button>
+        </form>
+
+    </section>
+</main>
+
+</body>
+</html>
