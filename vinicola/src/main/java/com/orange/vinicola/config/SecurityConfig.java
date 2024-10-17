@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/**","/detalhes-produto-cliente", "/index", "/h2-console/**", "/css/**", "/images/**", "/js/**", "imagem/**", "/carrinho/**").permitAll()
+                        .requestMatchers("/**","/detalhes-produto-cliente", "/index", "/h2-console/**", "/css/**", "/images/**", "/js/**", "imagem/**", "/carrinho/**", "/cliente/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -31,11 +30,15 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("senha")
-                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
                         .failureHandler(new CustomAuthenticationFailureHandler())
+                        .successHandler(new CustomAuthenticationSuccessHandler())
                 )
-                .logout(LogoutConfigurer::permitAll)
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .permitAll()
+                )
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/h2-console/**")
                 )

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const calcularBtn = document.querySelector('.calcular-btn');
             const cepInput = document.querySelector('.cep-input');
             const optionsSelect = document.querySelector('.options-select');
@@ -16,7 +16,7 @@
             const valorCalculo = document.querySelector('.valor-calculo');
             const calcularContainer = document.querySelector('.calcular');
 
-            calcularBtn.addEventListener('click', function() {
+            calcularBtn.addEventListener('click', function () {
                 const cep = cepInput.value;
 
                 if (!/^\d{5}-?\d{3}$/.test(cep)) {
@@ -37,7 +37,7 @@
                 }
             });
 
-            optionsSelect.addEventListener('change', function() {
+            optionsSelect.addEventListener('change', function () {
                 const selectedValue = this.options[this.selectedIndex].value;
                 valorFrete.innerText = `R$ ${selectedValue}`;
 
@@ -52,61 +52,95 @@
                 return false;
             }
         }
+
+        function confirmarLogout() {
+            var confirmacao = confirm("Você deseja fazer logout da loja?");
+            if (!confirmacao) {
+                event.preventDefault();
+            }
+            return confirmacao;
+        }
     </script>
 </head>
 
 <body>
 <header>
     <section id="header">
-        <a href="/"><img alt="Logo Winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
-        <nav>
+        <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
+
+        <div>
             <ul id="navbar">
                 <li><a class="active" href="/">Início</a></li>
                 <li><a class="link-navbar" href="/">Produtos</a></li>
-                <li><a href="/carrinho/abrirCarrinho"><img alt="Carrinho" th:src="@{/images/sacola.png}"></a></li>
-                <li><a class="icone-navbar" href="/login"><img alt="Login" th:src="@{/images/user.png}"></a></li>
+                <li>
+                    <a href="/carrinho">
+                        <img alt="carrinho" th:src="@{/images/sacola.png}">
+                        <span class="quantidade-itens" th:text="${carrinho != null ? carrinho.itens.size() : 0}"></span>
+                    </a>
+                </li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <div class="dropdown">
+                        <a class="icone-navbar"><img alt="user" th:src="@{/images/user.png}"></a>
+                        <div class="dropdown-content">
+                            <a href="/cliente/perfil">Editar Perfil</a>
+                            <a href="/cliente/logout" onclick="confirmarLogout()">Sair</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li sec:authorize="!isAuthenticated()">
+                    <a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a>
+                </li>
             </ul>
-        </nav>
+        </div>
     </section>
-    <button class="btn-voltar" onclick="window.history.back()" type="button"><img
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
             th:src="@{/images/seta.png}"></button>
 </header>
 
-<main class="container">
+<main class="container" role="main">
     <h2 class="meu-carrinho">Meu Carrinho</h2>
     <div class="conteudo">
+        <div th:if="${#lists.isEmpty(carrinho.itens)}">
+            <h3 class="carrinho-vazio">Seu carrinho de compras está vazio.</h3>
+        </div>
         <div class="card-row">
             <div th:each="item : ${carrinho.itens}">
                 <div class="desc-produto-row">
                     <div th:each="imagem : ${item.produto.imagens}">
-                        <img alt="Imagem do Produto" style="width: 150px; height: 150px;" th:src="@{/imagem/{id}(id=${imagem.id})}"/>
+                        <img alt="Imagem do Produto - ${item.produto.nome}" class="imagem-produto-carrinho"
+                             th:src="@{/imagem/{id}(id=${imagem.id})}"/>
                     </div>
-                    <p class="info-produto">
-                        <strong>Produto:</strong> <span th:text="${item.produto.nome}"></span>
-                    </p>
-                    <p class="info-produto">
-                        <strong>Quantidade:</strong>
-                    <div class="botao-row">
-                        <form th:action="@{/carrinho/diminuirQuantidade}" method="post">
-                            <input type="hidden" name="produtoId" th:value="${item.produto.id}">
-                            <button type="submit" class="decrement" style="width: 20px; height: 20px; cursor: pointer;">-</button>
-                        </form>
-                        <span th:text="${item.quantidade}"></span>
-                        <form th:action="@{/carrinho/aumentarQuantidade}" method="post">
-                            <input type="hidden" name="produtoId" th:value="${item.produto.id}">
-                            <button type="submit" class="decrement" style="width: 20px; height: 20px; cursor: pointer;">+</button>
-                        </form>
-                    </div>
-                    </p>
 
-                    <p class="info-produto">
-                        <strong>Preço:</strong>
+                    <div class="produto-carrinho">
+                        <p class="info-produto"><strong>Produto:</strong></p>
+                        <span th:text="${item.produto.nome}"></span>
+                    </div>
+
+                    <div class="quantidade-carrinho">
+                        <p class="info-produto"><strong>Quantidade:</strong></p>
+                        <div class="botao-row">
+                            <form th:action="@{/carrinho/diminuirQuantidade}" method="post">
+                                <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                                <button type="submit" class="btn-decrementar" onclick="alterarQuantidade(-1)">-</button>
+                            </form>
+                            <span class="span-carrinho" th:text="${item.quantidade}"></span>
+                            <form th:action="@{/carrinho/aumentarQuantidade}" method="post">
+                                <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                                <button type="submit" class="btn-incrementar" onclick="alterarQuantidade(1)">+</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="preco-carrinho">
+                        <p class="info-produto"><strong>Preço:</strong></p>
                         <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
-                    </p>
+                    </div>
 
-                    <form th:action="@{/carrinho/removerProduto}" method="post" onsubmit="return confirmChange()">
+                    <form th:action="@{/carrinho/removerProduto}" method="post" onsubmit="return confirmChange()" class="botao-remover-carrinho-container">
                         <input type="hidden" name="produtoId" th:value="${item.produto.id}">
-                        <button type="submit">Remover Produto</button>
+                        <button type="submit" class="botao-remover-carrinho" aria-label="Remover produto do carrinho"><img th:src="@{../images/lixeira.png}" alt="Remover produto"></button>
                     </form>
                 </div>
             </div>
@@ -116,17 +150,19 @@
             <div class="calcular">
                 <strong class="titulo-entrega">Entrega</strong>
                 <p class="desc-entrega">Confira as opções de entrega para seus itens.</p>
-                <strong>CEP:</strong>
+                <label for="cep" aria-hidden="true"><strong>CEP:</strong></label>
                 <div class="cep-calc">
-                    <input type="text" class="cep-input" name="cep" placeholder="XXXXX-XXX" style="border: 1px solid #ddd; border-radius: 4px; width: 18em; height: 3em;" required>
-                    <button class="calcular-btn" style="cursor: pointer; border: 1px solid #ddd; border-radius: 8px; background-color: black; color: white; margin-left: 2em; width: 12em; height: 3em;">Calcular</button>
+                    <input type="text" class="cep-input" id="cep" name="cep" placeholder="XXXXX-XXX" required aria-describedby="cepHelp" style="border: 1px solid #ddd; border-radius: 4px; width: 18em; height: 3em; padding: 10px">
+                    <button class="calcular-btn" style="cursor: pointer; border: 1px solid #ddd; border-radius: 8px; background-color: black; color: white; margin-left: 2em; width: 12em; height: 3em;">
+                        Calcular
+                    </button>
                 </div>
             </div>
 
             <div class="valor-calculo" style="margin-top: 2em; display: none;">
                 <strong class="titulo-entrega">Opções de Entrega</strong>
-                <select class="options-select" name="options" style="border: 1px solid #ddd; border-radius: 4px; width: 27em; height: 3em;">
-                    <option value="option1"></option>
+                <select class="options-select" name="options" aria-label="Selecionar opção de entrega" style="border: 1px solid #ddd; border-radius: 4px; width: 27em; height: 3em;">
+                    <option value="option1" disabled selected>Selecione uma opção</option>
                     <option value="option2"></option>
                     <option value="option3"></option>
                 </select>
@@ -146,7 +182,7 @@
                     <strong>Total:</strong>
                     <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
                 </div>
-                <button style="background-color: #5C0A0A; border-radius: 2em; height: 4em; width: 33em; margin-top: 2em;">
+                <button style="background-color: #5C0A0A; border-radius: 1em; height: 4em; width: 33em; margin-top: 2em;" aria-label="Finalizar Compra">
                     <p class="finalizar-compra" style="font-size: 1.5em; color: white;">Finalizar Compra</p>
                 </button>
             </div>

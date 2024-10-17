@@ -1,20 +1,57 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Winery</title>
+    <script>
+        function confirmarLogout() {
+            var confirmacao = confirm("Você deseja fazer logout da loja?");
+            if (!confirmacao) {
+                event.preventDefault();
+            }
+            return confirmacao;
+        }
+    </script>
 </head>
 <body>
 
 <header>
-    <nav>
-        <div class="logo-container">
-            <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+    <section id="header">
+        <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
+
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="/">Início</a></li>
+                <li><a class="link-navbar" href="/">Produtos</a></li>
+                <li>
+                    <a href="/carrinho">
+                        <img alt="carrinho" th:src="@{/images/sacola.png}">
+                        <span class="quantidade-itens" th:text="${carrinho != null ? carrinho.itens.size() : 0}"></span>
+                    </a>
+                </li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <div class="dropdown">
+                        <a class="icone-navbar"><img alt="user" th:src="@{/images/user.png}"></a>
+                        <div class="dropdown-content">
+                            <a href="/cliente/perfil">Editar Perfil</a>
+                            <a href="/cliente/logout" onclick="confirmarLogout()">Sair</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li sec:authorize="!isAuthenticated()">
+                    <a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </section>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+            th:src="@{/images/seta.png}"></button>
 </header>
 
 <main class="main-login">
@@ -38,9 +75,12 @@
 
             <div class="button-group">
                 <button type="submit" class="btn-padrao">Entrar</button>
-                <a href="/" class="btn-cancel">Cancelar</a>
             </div>
         </form>
+        <div class="button-group">
+            <a class="btn-cancel" href="/cliente/cadastro">Ainda não possui cadastro? <strong>Cadastre-se</strong> </a>
+        </div>
+
     </section>
 </main>
 

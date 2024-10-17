@@ -20,4 +20,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     @Query("SELECT u.id FROM Usuario u WHERE u.email = :email")
     long findIdByEmail(String email);
+
+    @Query("SELECT u FROM Usuario u WHERE u.cpf = :cpf")
+    Usuario findByCpf(String cpf);
 }

@@ -1,23 +1,26 @@
 package com.orange.vinicola.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
-public class Cliente {
+public class Cliente implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +28,8 @@ public class Cliente {
 
     @Column(nullable = false)
     @NotNull(message = "O nome não pode ser nulo")
-    @Pattern(regexp = "^[a-zA-Z]{3,}\\s[a-zA-Z]{3,}$", message = "O nome deve conter duas palavras, cada uma com no mínimo 3 letras")
-    private String name;
+    @Pattern(regexp = "^(?=.*\\b\\w{3,}\\b.*\\b\\w{3,}\\b).*$", message = "O nome deve conter ao menos duas palavras, cada uma com no mínimo 3 letras")
+    private String nome;
 
     @Column(nullable = false, unique = true, updatable = false)
     @Email(message = "O email deve ser válido")
@@ -34,7 +37,7 @@ public class Cliente {
     private String email;
 
     @Column(nullable = false)
-    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos.")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter somente números com 11 dígitos.")
     private String cpf;
 
     @Column(nullable = false)
@@ -46,13 +49,50 @@ public class Cliente {
     private String genero;
 
     @Column(nullable = false)
-    @FutureOrPresent(message = "A data de nascimento não pode ser anterior a hoje")
+    @NotNull(message = "A data de nascimento não pode ser nula")
+    @PastOrPresent(message = "A data de nascimento não pode ser posterior a hoje")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dataNascimento;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "endereco_faturamento_id", referencedColumnName = "id")
-    private Endereco enderecoFaturamento;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", orphanRemoval = true)
-    private List<Endereco> enderecosEntrega = new ArrayList<>();
+    @Valid
+    private List<Endereco> enderecos = new ArrayList<>();
+
+    @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Carrinho carrinho;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
