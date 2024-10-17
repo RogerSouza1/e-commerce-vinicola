@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <title>Editar Dados do Cliente</title>
     <script>
         function validarFormulario(event) {
@@ -18,57 +21,93 @@
     </script>
 </head>
 <body>
-<h1>Editar Dados do Cliente</h1>
+<header>
+    <section id="header">
+        <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
 
-<form action="/cliente/editar-dados" method="post" onsubmit="validarFormulario(event)" th:object="${cliente}">
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="/">Início</a></li>
+                <li><a class="link-navbar" href="/">Produtos</a></li>
+                <li>
+                    <a href="/carrinho">
+                        <img alt="carrinho" th:src="@{/images/sacola.png}">
+                        <span class="quantidade-itens" th:text="${carrinho != null ? carrinho.itens.size() : 0}"></span>
+                    </a>
+                </li>
 
-    <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden">
-    <input id="id" name="id" th:field="*{id}" type="hidden">
+                <li sec:authorize="isAuthenticated()">
+                    <div class="dropdown">
+                        <a class="icone-navbar"><img alt="user" th:src="@{/images/user.png}"></a>
+                        <div class="dropdown-content">
+                            <a href="/cliente/perfil">Editar Perfil</a>
+                            <a href="/cliente/logout" onclick="confirmarLogout()">Sair</a>
+                        </div>
+                    </div>
+                </li>
 
-    <div>
-        <label>Email:</label>
-        <input id="email" name="email" readonly th:field="*{email}" type="text">
-        <div th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Email inválido</div>
-    </div>
+                <li sec:authorize="!isAuthenticated()">
+                    <a class="icone-navbar" href="/"><img alt="login" th:src="@{/images/user.png}"></a>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+            th:src="@{/images/seta.png}"></button>
+</header>
 
-    <div>
-        <label>CPF:</label>
-        <input id="cpf" name="cpf" readonly th:field="*{cpf}" type="text">
-        <div th:errors="*{cpf}" th:if="${#fields.hasErrors('cpf')}">CPF inválido</div>
-    </div>
+<main class="main-editar-dados-cliente">
+    <section class="form-container">
+        <h2 class="form-title">Editar Dados do Cliente</h2>
 
-    <div>
-        <label for="nome">Nome Completo:</label>
-        <input id="nome" name="nome" required th:field="*{nome}" type="text">
-        <div th:errors="*{nome}" th:if="${#fields.hasErrors('nome')}">Nome inválido</div>
-    </div>
+        <form action="/cliente/editar-dados" method="post" onsubmit="validarFormulario(event)" th:object="${cliente}">
 
-    <div>
-        <label for="dataNascimento">Data de Nascimento:</label>
-        <input id="dataNascimento" name="dataNascimento" required th:field="*{dataNascimento}" type="date">
-        <div th:errors="*{dataNascimento}" th:if="${#fields.hasErrors('dataNascimento')}">Data inválida</div>
-    </div>
+            <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden">
+            <input id="id" name="id" th:field="*{id}" type="hidden">
 
-    <div>
-        <label for="genero">Gênero:</label>
-        <select id="genero" name="genero" required th:field="*{genero}">
-            <option value="MASCULINO">Masculino</option>
-            <option value="FEMININO">Feminino</option>
-            <option value="OUTRO">Outro</option>
-        </select>
-        <div th:errors="*{genero}" th:if="${#fields.hasErrors('genero')}">Seleção de gênero inválida</div>
-    </div>
+            <div class="input-group">
+                <label>Email:</label>
+                <input id="email" name="email" readonly th:field="*{email}" type="text">
+                <div th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Email inválido</div>
+            </div>
 
-    <div>
-        <label for="senha">Senha (deixe em branco para manter a senha atual):</label>
-        <input id="senha" name="senha" th:field="*{senha}" type="password">
-        <div th:errors="*{senha}" th:if="${#fields.hasErrors('senha')}">Senha inválida</div>
-    </div>
+            <div class="input-group">
+                <label>CPF:</label>
+                <input id="cpf" name="cpf" readonly th:field="*{cpf}" type="text">
+                <div th:errors="*{cpf}" th:if="${#fields.hasErrors('cpf')}">CPF inválido</div>
+            </div>
 
-    <button type="submit">Salvar Alterações</button>
-</form>
+            <div class="input-group">
+                <label for="nome">Nome Completo:</label>
+                <input id="nome" name="nome" required th:field="*{nome}" type="text">
+                <div th:errors="*{nome}" th:if="${#fields.hasErrors('nome')}">Nome inválido</div>
+            </div>
 
-<a href="/cliente/perfil">Voltar</a>
+            <div class="input-group">
+                <label for="dataNascimento">Data de Nascimento:</label>
+                <input id="dataNascimento" name="dataNascimento" required th:field="*{dataNascimento}" type="date">
+                <div th:errors="*{dataNascimento}" th:if="${#fields.hasErrors('dataNascimento')}">Data inválida</div>
+            </div>
 
+            <div class="input-group">
+                <label for="genero">Gênero:</label>
+                <select id="genero" name="genero" class="select-field" required th:field="*{genero}">
+                    <option value="MASCULINO" class="option-select">Masculino</option>
+                    <option value="FEMININO"  class="option-select">Feminino</option>
+                    <option value="OUTRO"  class="option-select">Outro</option>
+                </select>
+                <div th:errors="*{genero}" th:if="${#fields.hasErrors('genero')}">Seleção de gênero inválida</div>
+            </div>
+
+            <div class="input-group">
+                <label for="senha">Senha (deixe em branco para manter a senha atual):</label>
+                <input id="senha" name="senha" th:field="*{senha}" type="password">
+                <div th:errors="*{senha}" th:if="${#fields.hasErrors('senha')}">Senha inválida</div>
+            </div>
+
+            <button type="submit" class="btn-padrao">Salvar Alterações</button>
+        </form>
+    </section>
+</main>
 </body>
 </html>

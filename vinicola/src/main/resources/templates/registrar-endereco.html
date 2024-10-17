@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">>
+<html lang="pt-BR" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Cadastrar Endereço de Entrega</title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <script>
@@ -57,70 +58,96 @@
     </script>
 </head>
 <body>
-
 <header>
     <section id="header">
         <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
+
         <div>
             <ul id="navbar">
                 <li><a class="active" href="/">Início</a></li>
                 <li><a class="link-navbar" href="/">Produtos</a></li>
-                <li><a href="/carrinho/abrirCarrinho"><img alt="carrinho" th:src="@{/images/sacola.png}"></a></li>
-                <li><a class="icone-navbar" href="login"><img alt="login" th:src="@{/images/user.png}"></a></li>
+                <li>
+                    <a href="/carrinho">
+                        <img alt="carrinho" th:src="@{/images/sacola.png}">
+                        <span class="quantidade-itens" th:text="${carrinho != null ? carrinho.itens.size() : 0}"></span>
+                    </a>
+                </li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <div class="dropdown">
+                        <a class="icone-navbar"><img alt="user" th:src="@{/images/user.png}"></a>
+                        <div class="dropdown-content">
+                            <a href="/cliente/perfil">Editar Perfil</a>
+                            <a href="/cliente/logout" onclick="confirmarLogout()">Sair</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li sec:authorize="!isAuthenticated()">
+                    <a class="icone-navbar" href="/"><img alt="login" th:src="@{/images/user.png}"></a>
+                </li>
             </ul>
         </div>
     </section>
-    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img th:src="@{/images/seta.png}">
-    </button>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+            th:src="@{/images/seta.png}"></button>
 </header>
 
-<h1>Cadastrar Endereço de Entrega</h1>
+<main class="main-adicionar-novo-endereco">
+    <section class="form-container">
+        <h2 class="form-title">Cadastrar Endereço de Entrega</h2>
 
-<div th:if="${mensagem}">
-    <p style="color: red;" th:text="${mensagem}"></p>
-</div>
+        <div th:if="${mensagem}">
+            <p style="color: red;" th:text="${mensagem}"></p>
+        </div>
 
-<form method="post" onsubmit="return validarFormulario(event);" th:action="@{/endereco/cadastrar}"
-      th:object="${endereco}">
-    <div>
-        <label for="cep">CEP:</label>
-        <input id="cep" required th:field="*{cep}" type="text"/>
-        <button onclick="buscarCep()" type="button">Buscar CEP</button>
-        <div th:errors="*{cep}" th:if="${#fields.hasErrors('cep')}"></div>
-    </div>
+        <form method="post" onsubmit="return validarFormulario(event);" th:action="@{/endereco/cadastrar}"
+              th:object="${endereco}">
+            <div class="input-group">
+                <label for="cep">CEP:</label>
+                <div class="campo-cep">
+                    <input id="cep" required th:field="*{cep}" type="text"/>
+                    <button onclick="buscarCep()" type="button" class="btn-limpar">Buscar CEP</button>
+                    <div th:errors="*{cep}" th:if="${#fields.hasErrors('cep')}"></div>
+                </div>
+            </div>
 
-    <div>
-        <label for="logradouro">Logradouro:</label>
-        <input id="logradouro" required th:field="*{logradouro}" type="text"/>
-        <div th:errors="*{logradouro}" th:if="${#fields.hasErrors('logradouro')}"></div>
-    </div>
+            <div class="input-group">
+                <label for="logradouro">Logradouro:</label>
+                <input id="logradouro" required th:field="*{logradouro}" type="text"/>
+                <div th:errors="*{logradouro}" th:if="${#fields.hasErrors('logradouro')}"></div>
+            </div>
 
-    <div>
-        <label for="numero">Número:</label>
-        <input id="numero" required th:field="*{numero}" type="text"/>
-        <div th:errors="*{numero}" th:if="${#fields.hasErrors('numero')}"></div>
-    </div>
+            <div class="input-group">
+                <label for="numero">Número:</label>
+                <input id="numero" required th:field="*{numero}" type="text"/>
+                <div th:errors="*{numero}" th:if="${#fields.hasErrors('numero')}"></div>
+            </div>
 
-    <div>
-        <label for="bairro">Bairro:</label>
-        <input id="bairro" required th:field="*{bairro}" type="text"/>
-        <div th:errors="*{bairro}" th:if="${#fields.hasErrors('bairro')}"></div>
-    </div>
+            <div class="input-group">
+                <label for="bairro">Bairro:</label>
+                <input id="bairro" required th:field="*{bairro}" type="text"/>
+                <div th:errors="*{bairro}" th:if="${#fields.hasErrors('bairro')}"></div>
+            </div>
 
-    <div>
-        <label for="cidade">Cidade:</label>
-        <input id="cidade" required th:field="*{cidade}" type="text"/>
-        <div th:errors="*{cidade}" th:if="${#fields.hasErrors('cidade')}"></div>
-    </div>
+            <div class="input-group">
+                <label for="cidade">Cidade:</label>
+                <input id="cidade" required th:field="*{cidade}" type="text"/>
+                <div th:errors="*{cidade}" th:if="${#fields.hasErrors('cidade')}"></div>
+            </div>
 
-    <div>
-        <label for="estado">Estado:</label>
-        <input id="estado" required th:field="*{estado}" type="text"/>
-        <div th:errors="*{estado}" th:if="${#fields.hasErrors('estado')}"></div>
-    </div>
+            <div class="input-group">
+                <label for="estado">Estado:</label>
+                <input id="estado" required th:field="*{estado}" type="text"/>
+                <div th:errors="*{estado}" th:if="${#fields.hasErrors('estado')}"></div>
+            </div>
 
-    <button type="submit">Cadastrar Endereço</button>
-</form>
+            <button type="submit" class="btn-padrao">Cadastrar Endereço</button>
+        </form>
+    </section>
+</main>
+
+
 
 </body>
 </html>
