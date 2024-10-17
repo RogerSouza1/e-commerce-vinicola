@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Registrar Cliente</title>
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         function buscarCep() {
             var cep = document.getElementById("cep").value;
@@ -72,21 +74,19 @@
             const generoInput = document.getElementById("genero").value;
             const dataNascimentoInput = document.getElementById("dataNascimento").value;
 
-            // Verifica se todos os campos obrigatórios estão preenchidos
             if (!nomeInput || !emailInput || !cpfInput || !senhaInput || !generoInput || !dataNascimentoInput) {
                 event.preventDefault();
                 alert("Por favor, preencha todos os campos obrigatórios.");
                 return false;
             }
 
-            // Valida o CPF
             if (!validarCPF(cpfInput)) {
-                event.preventDefault(); // Impede o envio do formulário
+                event.preventDefault();
                 alert("CPF inválido. Por favor, insira um CPF válido.");
                 return false;
             }
 
-            return true; // O formulário é válido
+            return true;
         }
 
         function mostrarNovoFormulario() {
@@ -140,6 +140,15 @@
                     alert("Erro ao buscar o CEP.");
                 });
         }
+
+        function copiarEnderecoFaturamentoParaEntrega() {
+            document.getElementById("cepEntrega").value = document.getElementById("cep").value;
+            document.getElementById("logradouroEntrega").value = document.getElementById("logradouro").value;
+            document.getElementById("numeroEntrega").value = document.getElementById("numero").value;
+            document.getElementById("bairroEntrega").value = document.getElementById("bairro").value;
+            document.getElementById("cidadeEntrega").value = document.getElementById("cidade").value;
+            document.getElementById("estadoEntrega").value = document.getElementById("estado").value;
+        }
     </script>
 </head>
 <body>
@@ -156,130 +165,139 @@
             </ul>
         </div>
     </section>
-    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img th:src="@{/images/seta.png}"></button>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img th:src="@{/images/seta.png}">
+    </button>
 </header>
 <h1>Cadastrar-se</h1>
 
 <div th:if="${mensagem}">
     <p style="color: red;" th:text="${mensagem}"></p>
 </div>
-<form method="post" onsubmit="return validarFormulario(event);" th:action="@{/cliente/cadastro}">
+<form method="post" onsubmit="return validarFormulario(event);" th:action="@{/cliente/cadastro}" th:object="${cliente}">
     <div>
         <label for="nome">Nome:</label>
-        <input type="text" id="nome" th:field="*{cliente.nome}" required/>
-        <div th:errors="*{cliente.nome}" th:if="${#fields.hasErrors('nome')}"></div>
+        <input type="text" id="nome" th:field="*{nome}" required/>
+        <div th:errors="*{nome}" th:if="${#fields.hasErrors('nome')}"></div>
     </div>
 
     <div>
         <label for="email">Email:</label>
-        <input id="email" required th:field="*{cliente.email}" type="email"/>
-        <div th:if="${#fields.hasErrors('email')}" th:errors="*{cliente.email}"></div>
+        <input id="email" required th:field="*{email}" type="email"/>
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
     </div>
 
     <div>
         <label for="cpf">CPF:</label>
-        <input id="cpf" required th:field="*{cliente.cpf}" type="text"/>
-        <div th:if="${#fields.hasErrors('cpf')}" th:errors="*{cliente.cpf}"></div>
+        <input id="cpf" required th:field="*{cpf}" type="text"/>
+        <div th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
     </div>
 
     <div>
         <label for="senha">Senha:</label>
-        <input id="senha" required th:field="*{cliente.senha}" type="password"/>
-        <div th:if="${#fields.hasErrors('senha')}" th:errors="*{cliente.senha}"></div>
+        <input id="senha" required th:field="*{senha}" type="password"/>
+        <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
     </div>
 
     <div>
         <label for="genero">Gênero:</label>
-        <select id="genero" required th:field="*{cliente.genero}">
+        <select id="genero" required th:field="*{genero}">
             <option value="MASCULINO">Masculino</option>
             <option value="FEMININO">Feminino</option>
             <option value="OUTRO">Outro</option>
         </select>
-        <div th:if="${#fields.hasErrors('genero')}" th:errors="*{cliente.genero}"></div>
+        <div th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
     </div>
 
     <div>
         <label for="dataNascimento">Data de Nascimento:</label>
-        <input id="dataNascimento" required th:field="*{cliente.dataNascimento}" type="date"/>
-        <div th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{cliente.dataNascimento}"></div>
+        <input id="dataNascimento" required th:field="*{dataNascimento}" type="date"/>
+        <div th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
     </div>
 
     <h3>Endereço de Faturamento</h3>
+
     <div>
         <label for="cep">CEP:</label>
-        <input type="text" id="cep" placeholder="Insira seu CEP" required />
-        <button type="button" onclick="buscarCep()">Buscar</button>
-        <div th:if="${#fields.hasErrors('cep')}" th:errors="*{cliente.endereco.cep}"></div>
+        <input id="cep" required th:field="*{enderecos[0].cep}" type="text"/>
+        <button onclick="buscarCep()" type="button">Buscar CEP</button>
+        <div th:errors="*{enderecos[0].cep}" th:if="${#fields.hasErrors('enderecos[0].cep')}"></div>
     </div>
 
     <div>
         <label for="logradouro">Logradouro:</label>
-        <input type="text" id="logradouro" th:field="*{cliente.endereco.logradouro}" required />
-        <div th:if="${#fields.hasErrors('logradouro')}" th:errors="*{cliente.endereco.logradouro}"></div>
+        <input id="logradouro" required th:field="*{enderecos[0].logradouro}" type="text"/>
+        <div th:errors="*{enderecos[0].logradouro}" th:if="${#fields.hasErrors('enderecos[0].logradouro')}"></div>
     </div>
 
     <div>
         <label for="numero">Número:</label>
-        <input type="text" id="numero" th:field="*{cliente.endereco.numero}" required />
-        <div th:if="${#fields.hasErrors('numero')}" th:errors="*{cliente.endereco.numero}"></div>
+        <input id="numero" required th:field="*{enderecos[0].numero}" type="text"/>
+        <div th:errors="*{enderecos[0].numero}" th:if="${#fields.hasErrors('enderecos[0].numero')}"></div>
     </div>
 
     <div>
         <label for="bairro">Bairro:</label>
-        <input type="text" id="bairro" th:field="*{cliente.endereco.bairro}" required />
-        <div th:if="${#fields.hasErrors('bairro')}" th:errors="*{cliente.endereco.bairro}"></div>
+        <input id="bairro" required th:field="*{enderecos[0].bairro}" type="text"/>
+        <div th:errors="*{enderecos[0].bairro}" th:if="${#fields.hasErrors('enderecos[0].bairro')}"></div>
     </div>
 
     <div>
         <label for="cidade">Cidade:</label>
-        <input type="text" id="cidade" th:field="*{cliente.endereco.cidade}" required />
-        <div th:if="${#fields.hasErrors('cidade')}" th:errors="*{cliente.endereco.cidade}"></div>
+        <input id="cidade" required th:field="*{enderecos[0].cidade}" type="text"/>
+        <div th:errors="*{enderecos[0].cidade}" th:if="${#fields.hasErrors('enderecos[0].cidade')}"></div>
     </div>
 
     <div>
         <label for="estado">Estado:</label>
-        <input type="text" id="estado" th:field="*{cliente.endereco.estado}" required />
-        <div th:if="${#fields.hasErrors('estado')}" th:errors="*{cliente.endereco.estado}"></div>
+        <input id="estado" required th:field="*{enderecos[0].estado}" type="text"/>
+        <div th:errors="*{enderecos[0].estado}" th:if="${#fields.hasErrors('enderecos[0].estado')}"></div>
     </div>
 
-    <h3>Endereço de Entrega</h3>
-    <button type="button" onclick="mostrarNovoFormulario()">Adicionar Endereço de Entrega</button>
-    <div id="forms-endereco-entrega" style="display: none;">
+    <div>
+        <input type="checkbox" id="enderecoEntregaDiferente" name="enderecoEntregaDiferente" onchange="mostrarNovoFormulario();">
+        <label for="enderecoEntregaDiferente">Cadastrar endereço de entrega diferente</label>
+    </div>
+
+    <div id="forms-endereco-entrega" style="display:none;">
+        <h3>Endereço de Entrega</h3>
+
+        <button type="button" onclick="copiarEnderecoFaturamentoParaEntrega()">Copiar endereço de faturamento</button>
+
         <div>
             <label for="cepEntrega">CEP:</label>
-            <input type="text" id="cepEntrega" placeholder="Insira o CEP" required />
-            <button type="button" onclick="buscarCepEntrega()">Buscar</button>
-            <div th:if="${#fields.hasErrors('cepEntrega')}" th:errors="*{cliente.enderecoEntrega.cep}"></div>
+            <input id="cepEntrega" th:field="*{enderecos[1].cep}" type="text"/>
+            <button onclick="buscarCepEntrega()" type="button">Buscar CEP</button>
+            <div th:errors="*{enderecos[1].cep}" th:if="${#fields.hasErrors('enderecos[1].cep')}"></div>
         </div>
 
         <div>
             <label for="logradouroEntrega">Logradouro:</label>
-            <input type="text" id="logradouroEntrega" th:field="*{cliente.enderecoEntrega.logradouro}" required />
-            <div th:if="${#fields.hasErrors('logradouroEntrega')}" th:errors="*{cliente.enderecoEntrega.logradouro}"></div>
+            <input id="logradouroEntrega" th:field="*{enderecos[1].logradouro}" type="text"/>
+            <div th:errors="*{enderecos[1].logradouro}" th:if="${#fields.hasErrors('enderecos[1].logradouro')}"></div>
         </div>
 
         <div>
             <label for="numeroEntrega">Número:</label>
-            <input type="text" id="numeroEntrega" th:field="*{cliente.enderecoEntrega.numero}" required />
-            <div th:if="${#fields.hasErrors('numeroEntrega')}" th:errors="*{cliente.enderecoEntrega.numero}"></div>
+            <input id="numeroEntrega" th:field="*{enderecos[1].numero}" type="text"/>
+            <div th:errors="*{enderecos[1].numero}" th:if="${#fields.hasErrors('enderecos[1].numero')}"></div>
         </div>
 
         <div>
             <label for="bairroEntrega">Bairro:</label>
-            <input type="text" id="bairroEntrega" th:field="*{cliente.enderecoEntrega.bairro}" required />
-            <div th:if="${#fields.hasErrors('bairroEntrega')}" th:errors="*{cliente.enderecoEntrega.bairro}"></div>
+            <input id="bairroEntrega" th:field="*{enderecos[1].bairro}" type="text"/>
+            <div th:errors="*{enderecos[1].bairro}" th:if="${#fields.hasErrors('enderecos[1].bairro')}"></div>
         </div>
 
         <div>
             <label for="cidadeEntrega">Cidade:</label>
-            <input type="text" id="cidadeEntrega" th:field="*{cliente.enderecoEntrega.cidade}" required />
-            <div th:if="${#fields.hasErrors('cidadeEntrega')}" th:errors="*{cliente.enderecoEntrega.cidade}"></div>
+            <input id="cidadeEntrega" th:field="*{enderecos[1].cidade}" type="text"/>
+            <div th:errors="*{enderecos[1].cidade}" th:if="${#fields.hasErrors('enderecos[1].cidade')}"></div>
         </div>
 
         <div>
             <label for="estadoEntrega">Estado:</label>
-            <input type="text" id="estadoEntrega" th:field="*{cliente.enderecoEntrega.estado}" required />
-            <div th:if="${#fields.hasErrors('estadoEntrega')}" th:errors="*{cliente.enderecoEntrega.estado}"></div>
+            <input id="estadoEntrega" th:field="*{enderecos[1].estado}" type="text"/>
+            <div th:errors="*{enderecos[1].estado}" th:if="${#fields.hasErrors('enderecos[1].estado')}"></div>
         </div>
     </div>
 
