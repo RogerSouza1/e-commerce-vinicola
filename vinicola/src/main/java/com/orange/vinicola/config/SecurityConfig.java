@@ -31,9 +31,9 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("senha")
-                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
                         .failureHandler(new CustomAuthenticationFailureHandler())
+                        .successHandler(new CustomAuthenticationSuccessHandler())
                 )
                 .logout(LogoutConfigurer::permitAll)
                 .csrf(csrf -> csrf

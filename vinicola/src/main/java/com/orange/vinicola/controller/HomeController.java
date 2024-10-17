@@ -51,19 +51,20 @@ public class HomeController {
 
         if (authentication.isAuthenticated()) {
             cliente = clienteService.findByEmail(authentication.getName());
+            if (cliente != null) {
+                request.getSession().setAttribute("cliente", cliente);
+            }
         }
 
-        model.addAttribute("cliente", cliente); // Adiciona cliente ao modelo
-
-        // Inicializa o carrinho se ele não existir na sessão
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
         if (carrinho == null) {
             carrinho = new Carrinho();
+            carrinho.setCliente(cliente);
             carrinho.setItens(new ArrayList<>());
             request.getSession().setAttribute("carrinho", carrinho);
         }
 
-        model.addAttribute("carrinho", carrinho); // Adiciona o carrinho ao modelo
+        model.addAttribute("carrinho", carrinho);
 
         return "index";
     }

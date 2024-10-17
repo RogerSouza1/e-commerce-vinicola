@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Registrar Cliente</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         function buscarCep() {
             var cep = document.getElementById("cep").value;
+
             cep = cep.replace(/\D/g, '');
 
             if (cep.length !== 8) {
@@ -17,7 +17,7 @@
             }
 
             var url = `https://viacep.com.br/ws/${cep}/json/`;
-
+          
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -79,7 +79,7 @@
                 alert("Por favor, preencha todos os campos obrigatórios.");
                 return false;
             }
-
+        }
             if (!validarCPF(cpfInput)) {
                 event.preventDefault();
                 alert("CPF inválido. Por favor, insira um CPF válido.");
@@ -152,10 +152,10 @@
     </script>
 </head>
 <body>
+
 <header>
     <section id="header">
         <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
-
         <div>
             <ul id="navbar">
                 <li><a class="active" href="/">Início</a></li>
@@ -303,5 +303,6 @@
 
     <button type="submit">Cadastrar</button>
 </form>
+
 </body>
 </html>
