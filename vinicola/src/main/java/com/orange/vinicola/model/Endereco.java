@@ -18,7 +18,7 @@ public class Endereco {
     private Long id;
 
     @Column(nullable = false)
-    @Pattern(regexp = "\\d{8}", message = "O cep deve conter somente números com máximo de 8 dígitos.")
+    @Pattern(regexp = "\\d{8}", message = "O cep deve conter somente 8 dígitos númericos.")
     private String cep;
 
     @Column(nullable = false)
@@ -27,9 +27,10 @@ public class Endereco {
 
     @Column(nullable = false)
     @NotNull(message = "O numero não pode ser nulo")
+    @Pattern(regexp = "\\d+", message = "O numero deve conter apenas números.")
     private String numero;
 
-    @Column()
+    @Column(columnDefinition = "default ''")
     private String complemento;
 
     @Column(nullable = false)

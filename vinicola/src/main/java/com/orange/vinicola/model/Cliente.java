@@ -1,6 +1,7 @@
 package com.orange.vinicola.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -54,6 +55,7 @@ public class Cliente implements UserDetails {
     private Date dataNascimento;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", orphanRemoval = true)
+    @Valid
     private List<Endereco> enderecos = new ArrayList<>();
 
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)

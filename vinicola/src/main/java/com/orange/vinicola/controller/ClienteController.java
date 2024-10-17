@@ -49,7 +49,7 @@ public class ClienteController {
     }
 
     @PostMapping("/cadastro")
-    public ModelAndView registerCliente(@ModelAttribute("cliente") @Valid Cliente cliente,
+    public ModelAndView registerCliente(@Valid @ModelAttribute("cliente") Cliente cliente,
                                         BindingResult result, Model model,
                                         RedirectAttributes redirectAttributes) {
 
