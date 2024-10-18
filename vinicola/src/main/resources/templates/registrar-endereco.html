@@ -7,36 +7,32 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <script>
-        function buscarCep() {
-            var cep = document.getElementById("cep").value;
-
+        function buscarCep(cep) {
+            // Remove qualquer traço ou espaço
             cep = cep.replace(/\D/g, '');
 
-            if (cep.length !== 8) {
-                alert("Por favor, insira um CEP válido com 8 dígitos.");
-                return;
+            // Verifica se o CEP tem 8 dígitos
+            if (cep.length === 8) {
+                // URL da API de CEP
+                const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                                document.getElementById('logradouro').value = data.logradouro;
+                                document.getElementById('bairro').value = data.bairro;
+                                document.getElementById('cidade').value = data.localidade;
+                                document.getElementById('estado').value = data.uf;
+                        } else {
+                            alert("CEP não encontrado.");
+                        }
+                    })
+                    .catch(error => {
+                        alert("Erro ao buscar o CEP.");
+                        console.error(error);
+                    });
             }
-
-            var url = `https://viacep.com.br/ws/${cep}/json/`;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.erro) {
-                        alert("CEP não encontrado.");
-                        return;
-                    }
-
-                    document.getElementById("cep").value = cep;
-                    document.getElementById("logradouro").value = data.logradouro;
-                    document.getElementById("bairro").value = data.bairro;
-                    document.getElementById("cidade").value = data.localidade;
-                    document.getElementById("estado").value = data.uf;
-                })
-                .catch(error => {
-                    console.error("Erro ao buscar o CEP:", error);
-                    alert("Erro ao buscar o CEP.");
-                });
         }
 
         function validarFormulario(event) {
@@ -106,15 +102,14 @@
             <div class="input-group">
                 <label for="cep">CEP:</label>
                 <div class="campo-cep">
-                    <input id="cep" required th:field="*{cep}" type="text"/>
-                    <button onclick="buscarCep()" type="button" class="btn-limpar">Buscar CEP</button>
+                    <input id="cep" required th:field="*{cep}" type="text" maxlength="8" oninput="buscarCep(this.value)"/>
                     <div th:errors="*{cep}" th:if="${#fields.hasErrors('cep')}"></div>
                 </div>
             </div>
 
             <div class="input-group">
                 <label for="logradouro">Logradouro:</label>
-                <input id="logradouro" required th:field="*{logradouro}" type="text"/>
+                <input id="logradouro" required th:field="*{logradouro}" type="text" readonly/>
                 <div th:errors="*{logradouro}" th:if="${#fields.hasErrors('logradouro')}"></div>
             </div>
 
@@ -125,20 +120,26 @@
             </div>
 
             <div class="input-group">
+                <label for="complemento">Complemento</label>
+                <input id="complemento" required th:field="*{complemento}" type="text">
+                <div th:erros="*{complemento}" th:if="${#field      s.hasErrors('complemento')}"></div>
+            </div>
+
+            <div class="input-group">
                 <label for="bairro">Bairro:</label>
-                <input id="bairro" required th:field="*{bairro}" type="text"/>
+                <input id="bairro" required th:field="*{bairro}" type="text" readonly/>
                 <div th:errors="*{bairro}" th:if="${#fields.hasErrors('bairro')}"></div>
             </div>
 
             <div class="input-group">
                 <label for="cidade">Cidade:</label>
-                <input id="cidade" required th:field="*{cidade}" type="text"/>
+                <input id="cidade" required th:field="*{cidade}" type="text" readonly>
                 <div th:errors="*{cidade}" th:if="${#fields.hasErrors('cidade')}"></div>
             </div>
 
             <div class="input-group">
                 <label for="estado">Estado:</label>
-                <input id="estado" required th:field="*{estado}" type="text"/>
+                <input id="estado" required th:field="*{estado}" type="text" readonly/>
                 <div th:errors="*{estado}" th:if="${#fields.hasErrors('estado')}"></div>
             </div>
 
