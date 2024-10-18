@@ -80,7 +80,7 @@ body {
 }
 
 /* CONTAINER DE LOGIN */
-.main-login, .main-index, .main-cadastro-usuario, .main-editar-usuario, .main-editar-produto, .main-cadastro-produto, .main-cadastro-cliente{
+.main-login, .main-index, .main-cadastro-usuario, .main-editar-usuario, .main-editar-produto, .main-cadastro-produto, .main-cadastro-cliente, .main-perfil-cliente, .main-editar-dados-cliente, .main-adicionar-novo-endereco  {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -498,3 +498,92 @@ td a {
     text-decoration: none;
     cursor: pointer;
 }
+
+.tittle-endereco-entrega {
+    margin-bottom: 2vw;
+    margin-top: 3vw;
+    color: #5C0A0A;
+    font-size: 1.8vw;
+    font-weight: bold;
+}
+
+.btn-copiar-endereco {
+    font-weight: normal;
+    font-size: 1vw;
+    color: black;
+}
+
+.profile-container {
+    width: 40vw;
+    padding: 3vw;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-details p {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #555;
+}
+
+.profile-details p strong {
+    color: #000;
+}
+
+.button-container-cliente {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3vw;
+    gap: 2vw;
+}
+
+.main-lista-enderecos {
+    padding: 3vw;
+}
+
+.endereco-faturamento {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1vw;
+    border-radius: 1vw;
+    margin-bottom: 1vw;
+}
+
+.endereco-faturamento-container {
+    width: 40%;
+    padding: 3vw;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: center;
+}
+
+.lista-enderecos {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3vw;
+}
+
+.btn-novo-endereco {
+    background-color: #6b1d1d;
+    color: #fff;
+    border: none;
+    padding: 1vw 2vw;
+    font-size: 1.2vw;
+    border-radius: 1vw;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.6vw;
+}
+
+.campo-cep {
+    display: flex;
+    gap: 1vw;
+}
+
