@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Gerenciar Endereços</title>
-    <link href="/css/style.css" rel="stylesheet">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <script>
         $(document).ready(function () {
             $('#adicionar-novo-endereco').on('click', function () {
@@ -15,23 +17,56 @@
 <body>
 
 <header>
-    <a href="/cliente/perfil">Voltar</a>
-    <h1>Gerenciar Endereços</h1>
+    <section id="header">
+        <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
+
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="/">Início</a></li>
+                <li><a class="link-navbar" href="/">Produtos</a></li>
+                <li>
+                    <a href="/carrinho">
+                        <img alt="carrinho" th:src="@{/images/sacola.png}">
+                        <span class="quantidade-itens" th:text="${carrinho != null ? carrinho.itens.size() : 0}"></span>
+                    </a>
+                </li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <div class="dropdown">
+                        <a class="icone-navbar"><img alt="user" th:src="@{/images/user.png}"></a>
+                        <div class="dropdown-content">
+                            <a href="/cliente/perfil">Editar Perfil</a>
+                            <a href="/cliente/logout" onclick="confirmarLogout()">Sair</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li sec:authorize="!isAuthenticated()">
+                    <a class="icone-navbar" href="/"><img alt="login" th:src="@{/images/user.png}"></a>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+            th:src="@{/images/seta.png}"></button>
 </header>
 
-<main>
-
+<main class="main-lista-enderecos">
+<section class="lista-endercos">
     <div id="mensagem" th:text="${mensagem}"></div>
-
-    <section>
-        <h2>Endereço de Faturamento</h2>
-        <div th:if="${enderecoFaturamento != null}">
-            <p><strong>Logradouro:</strong> <span th:text="${enderecoFaturamento.logradouro}"></span></p>
-            <p><strong>CEP:</strong> <span th:text="${enderecoFaturamento.cep}"></span></p>
-            <p><strong>Número:</strong> <span th:text="${enderecoFaturamento.numero}"></span></p>
-            <p><strong>Complemento:</strong> <span th:text="${enderecoFaturamento.complemento}"></span></p>
-            <p><strong>Cidade:</strong> <span th:text="${enderecoFaturamento.cidade}"></span></p>
-            <p><strong>Estado:</strong> <span th:text="${enderecoFaturamento.estado}"></span></p>
+    <section class="endereco-faturamento-container">
+        <h2 class="form-title">Endereço de Faturamento</h2>
+        <div class="endereco-faturamento" th:if="${enderecoFaturamento != null}">
+            <div>
+                <p><strong>Logradouro:</strong> <span th:text="${enderecoFaturamento.logradouro}"></span></p>
+                <p><strong>CEP:</strong> <span th:text="${enderecoFaturamento.cep}"></span></p>
+                <p><strong>Número:</strong> <span th:text="${enderecoFaturamento.numero}"></span></p>
+            </div>
+            <div>
+                <p><strong>Complemento:</strong> <span th:text="${enderecoFaturamento.complemento}"></span></p>
+                <p><strong>Cidade:</strong> <span th:text="${enderecoFaturamento.cidade}"></span></p>
+                <p><strong>Estado:</strong> <span th:text="${enderecoFaturamento.estado}"></span></p>
+            </div>
         </div>
         <div th:unless="${enderecoFaturamento != null}">
             <p>Nenhum endereço de faturamento cadastrado.</p>
@@ -40,14 +75,19 @@
 
 
     <section>
-        <h2>Endereços de Entrega</h2>
+        <div class="lista-enderecos">
+            <h2 class="form-title">Endereços de Entrega</h2>
+            <form method="post" th:action="@{/endereco/cadastrar}">
+                <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}"/>
+                <button type="submit" class="btn-novo-endereco">Adicionar Novo Endereço</button>
+            </form>
+        </div>
         <div th:replace="~{fragments/tabela-enderecos :: tabela-enderecos(enderecos=${enderecos})}"></div>
-        <form method="post" th:action="@{/endereco/cadastrar}">
-            <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}"/>
-            <button type="submit">Adicionar Novo Endereço</button>
-        </form>
-
     </section>
+</section>
+
+
+
 </main>
 
 </body>

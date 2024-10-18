@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalhes do Produto</title>
-    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <script>
         function alterarQuantidade(valor) {
@@ -100,6 +100,8 @@
             </ul>
         </div>
     </section>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+            th:src="@{/images/seta.png}"></button>
 </header>
 
 <main class="main-detalhe-produto-cliente">
