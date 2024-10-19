@@ -26,6 +26,11 @@ public class EnderecoService {
         return enderecoRepository.findById(id).get();
     }
 
+    public Endereco findEnderecoPadrao(Long clienteId) {
+        return enderecoRepository.findByClienteIdAndIsEntregaPadraoTrue(clienteId);
+    }
+
+
     @Transactional
     public void save(Endereco endereco){
         enderecoRepository.save(endereco);

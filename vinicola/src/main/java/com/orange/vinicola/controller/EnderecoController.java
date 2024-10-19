@@ -99,4 +99,24 @@ public class EnderecoController {
         return new ModelAndView("redirect:/endereco/lista-enderecos");
 
     }
+
+    @GetMapping("/selecionar-endereco")
+    public String selecionarEndereco(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Cliente cliente = clienteService.findByEmail(authentication.getName());
+
+        if (cliente == null) {
+            model.addAttribute("mensagem", "Cliente não encontrado.");
+            return "checkout";
+        }
+
+        List<Endereco> enderecos = enderecoService.findByClienteId(cliente.getId());
+        Endereco enderecoPadrao = enderecoService.findEnderecoPadrao(cliente.getId());
+
+        model.addAttribute("enderecos", enderecos);
+        model.addAttribute("enderecoPadrao", enderecoPadrao);
+
+        return "checkout";
+    }
+
 }

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+</head>
+<body>
+<header>
+    <div th:replace="fragments/header :: header"></div>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+            th:src="@{/images/seta.png}"></button>
+</header>
+
+<main>
+    <section class="checkout-container">
+        <div class="left-group">
+            <div class="endereco-checkout">
+                <label for="endereco">Endereço de entrega:</label>
+                <select id="endereco" class="select-field" required th:field="*{endereco}">
+                    <option th:each="endereco : ${enderecos}"
+                            th:value="${endereco.id}"
+                            th:text="${endereco.logradouro + ', ' + endereco.numero + ' - ' + endereco.bairro}"
+                            th:selected="${endereco.id == enderecoPadrao.id}">
+                    </option>
+                </select>
+            </div>
+            <div class="pagamento-checkout">
+                <label for="formaPagamento">Forma de Pagamento:</label>
+                <select id="formaPagamento" class="select-field" required th:field="*{formaPagamento}">
+                    <option value="CREDITO" class="option-select">Cartão de Crédito</option>
+                    <option value="DEBITO" class="option-select">Cartão de Débito</option>
+                    <option value="BOLETO" class="option-select">Boleto</option>
+                </select>
+            </div>
+            <div class="revisao-itens">
+                <div class="card-row">
+                    <div th:each="item : ${carrinho.itens}">
+                        <div class="desc-produto-row">
+                            <div th:each="imagem : ${item.produto.imagens}">
+                                <img alt="Imagem do Produto - ${item.produto.nome}" class="imagem-produto-carrinho"
+                                     th:src="@{/imagem/{id}(id=${imagem.id})}"/>
+                            </div>
+
+                            <div class="produto-carrinho">
+                                <p class="info-produto"><strong>Produto:</strong></p>
+                                <span th:text="${item.produto.nome}"></span>
+                            </div>
+
+                            <div class="quantidade-carrinho">
+                                <p class="info-produto"><strong>Quantidade:</strong></p>
+                                <div class="botao-row">
+                                    <form th:action="@{/carrinho/diminuirQuantidade}" method="post">
+                                        <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                                        <button type="submit" class="btn-decrementar" onclick="alterarQuantidade(-1)">-</button>
+                                    </form>
+                                    <span class="span-carrinho" th:text="${item.quantidade}"></span>
+                                    <form th:action="@{/carrinho/aumentarQuantidade}" method="post">
+                                        <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                                        <button type="submit" class="btn-incrementar" onclick="alterarQuantidade(1)">+</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="preco-carrinho">
+                                <p class="info-produto"><strong>Preço:</strong></p>
+                                <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
+                            </div>
+
+                            <form th:action="@{/carrinho/removerProduto}" method="post" onsubmit="return confirmChange()" class="botao-remover-carrinho-container">
+                                <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                                <button type="submit" class="botao-remover-carrinho" aria-label="Remover produto do carrinho"><img th:src="@{../images/lixeira.png}" alt="Remover produto"></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right-group">
+            <div class="finalizar">
+                <h2 class="form-title">Resumo do Pedido</h2>
+                <div class="finalizar-row">
+                    <p class="valor-produto">Subtotal</p>
+                    <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorTotal, 1, 2)}"></span>
+                </div>
+                <div class="finalizar-row">
+                    <p class="valor-frete">Frete:</p>
+                    <span class="valor-frete" th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.frete, 1, 2)}"></span>
+                </div>
+                <div class="finalizar-row">
+                    <strong>Total:</strong>
+                    <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
+                </div>
+                <button style="background-color: #5C0A0A; border-radius: 1em; height: 4em; width: 33em; margin-top: 2em;" aria-label="Finalizar Compra">
+                    <p class="finalizar-compra" style="font-size: 1.5em; color: white;">Finalizar Compra</p>
+                </button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div th:replace="fragments/footer :: footer"></div>
+</footer>
+
+</body>
+</html>
