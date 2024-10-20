@@ -2,6 +2,7 @@ package com.orange.vinicola.controller;
 
 import com.orange.vinicola.model.Carrinho;
 import com.orange.vinicola.model.Cliente;
+import com.orange.vinicola.repository.CarrinhoRepository;
 import com.orange.vinicola.service.CarrinhoService;
 import com.orange.vinicola.service.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,8 @@ public class CarrinhoController {
 
     @Autowired
     private ProdutoService produtoService;
+    @Autowired
+    private CarrinhoRepository carrinhoRepository;
 
     @RequestMapping
     public ModelAndView abrirCarrinho(HttpServletRequest request) {
@@ -29,7 +32,7 @@ public class CarrinhoController {
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
 
         if (cliente != null && cliente.getCarrinho() != null) {
-            carrinho = cliente.getCarrinho();
+            carrinho = carrinhoRepository.findCarrinhoByClienteId(cliente.getId());
         }
 
         if (carrinho == null) {

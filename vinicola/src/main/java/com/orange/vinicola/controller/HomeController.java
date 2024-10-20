@@ -3,6 +3,8 @@ package com.orange.vinicola.controller;
 import com.orange.vinicola.model.Carrinho;
 import com.orange.vinicola.model.Cliente;
 import com.orange.vinicola.model.Produto;
+import com.orange.vinicola.repository.CarrinhoRepository;
+import com.orange.vinicola.service.CarrinhoService;
 import com.orange.vinicola.service.ClienteService;
 import com.orange.vinicola.service.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +27,10 @@ public class HomeController {
 
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private CarrinhoService carrinhoService;
+    @Autowired
+    private CarrinhoRepository carrinhoRepository;
 
     @GetMapping("/dashboard")
     public String index() {
@@ -53,6 +59,19 @@ public class HomeController {
             cliente = clienteService.findByEmail(authentication.getName());
             if (cliente != null) {
                 request.getSession().setAttribute("cliente", cliente);
+                Carrinho carrinhoSessao = (Carrinho) request.getSession().getAttribute("carrinho");
+
+                if (carrinhoSessao != null) {
+                    Carrinho carrinho = carrinhoRepository.findCarrinhoByClienteId(cliente.getId());
+                    if (carrinho != null) {
+                        request.getSession().setAttribute("carrinho", carrinho);
+                    }
+                }
+
+                Carrinho carrinho = carrinhoRepository.findCarrinhoByClienteId(cliente.getId());
+                if (carrinho != null) {
+                    request.getSession().setAttribute("carrinho", carrinho);
+                }
             }
         }
 
@@ -63,8 +82,6 @@ public class HomeController {
             carrinho.setItens(new ArrayList<>());
             request.getSession().setAttribute("carrinho", carrinho);
         }
-
-        model.addAttribute("carrinho", carrinho);
 
         return "index";
     }
