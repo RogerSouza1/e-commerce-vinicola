@@ -51,6 +51,7 @@ public class EnderecoController {
         model.addAttribute("cliente", cliente);
         model.addAttribute("enderecoFaturamento", enderecoFaturamento);
         model.addAttribute("enderecos", enderecos);
+        model.addAttribute("carrinho", cliente.getCarrinho());
 
         return "lista-enderecos";
     }
@@ -113,6 +114,7 @@ public class EnderecoController {
         List<Endereco> enderecos = enderecoService.findAllByClienteId(cliente.getId());
         Endereco enderecoPadrao = enderecoService.findEnderecoPadrao(cliente.getId());
 
+        model.addAttribute("carrinho", cliente.getCarrinho());
         model.addAttribute("enderecos", enderecos);
         model.addAttribute("enderecoPadrao", enderecoPadrao);
 

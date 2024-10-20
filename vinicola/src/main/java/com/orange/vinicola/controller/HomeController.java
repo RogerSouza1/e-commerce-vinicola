@@ -94,6 +94,8 @@ public class HomeController {
             request.getSession().setAttribute("carrinho", carrinho);
         }
 
+        model.addAttribute("carrinho", carrinho);
+
         return "index";
     }
 }
