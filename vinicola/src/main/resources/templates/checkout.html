@@ -18,9 +18,19 @@
     <section class="checkout-container">
         <div class="left-group">
             <div class="endereco-checkout">
-                <label for="endereco">Endereço de entrega:</label>
-                <select id="endereco" class="select-field" required th:field="*{endereco}">
-                    <option th:each="endereco : ${enderecos}"
+                <label for="endereco-faturamento">Endereço de faturamento:</label>
+                <select class="select-field" id="endereco-faturamento" required th:field="*{enderecoFaturamento}">
+                    <option th:each="endereco : ${enderecoFaturamento}"
+                            th:selected="${endereco.id == endereco.id}"
+                            th:text="${endereco.logradouro + ', ' + endereco.numero + ' - ' + endereco.bairro}"
+                            th:value="${endereco.id}">
+                    </option>
+                </select>
+            </div>
+            <div class="endereco-checkout">
+                <label for="endereco-entrega">Endereço de entrega:</label>
+                <select class="select-field" id="endereco-entrega" required th:field="*{enderecoEntrega}">
+                    <option th:each="endereco : ${enderecoEntrega}"
                             th:value="${endereco.id}"
                             th:text="${endereco.logradouro + ', ' + endereco.numero + ' - ' + endereco.bairro}"
                             th:selected="${endereco.id == enderecoPadrao.id}">
@@ -29,7 +39,7 @@
             </div>
             <div class="pagamento-checkout">
                 <label for="formaPagamento">Forma de Pagamento:</label>
-                <select id="formaPagamento" class="select-field" required th:field="*{formaPagamento}">
+                <select class="select-field" id="formaPagamento" required th:field="*{carrinho.formaPagamento}">
                     <option value="CREDITO" class="option-select">Cartão de Crédito</option>
                     <option value="DEBITO" class="option-select">Cartão de Débito</option>
                     <option value="BOLETO" class="option-select">Boleto</option>

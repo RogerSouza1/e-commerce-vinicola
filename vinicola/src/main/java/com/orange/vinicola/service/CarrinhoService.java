@@ -98,7 +98,6 @@ public class CarrinhoService {
 
                 double valorAnteriorItem = item.getValorItem();
                 item.setValorItem(produto.getPreco() * item.getQuantidade());
-
                 carrinho.setValorTotal(carrinho.getValorTotal() + (item.getValorItem() - valorAnteriorItem));
                 carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
                 break;
@@ -109,6 +108,7 @@ public class CarrinhoService {
             carrinho.setCliente(cliente);
             cliente.setCarrinho(carrinho);
             self.save(carrinho);
+
         }
 
         return carrinho;
@@ -233,6 +233,10 @@ public class CarrinhoService {
     public Carrinho mesclarCarrinho(Carrinho carrinhoSessao, Carrinho carrinhoBanco, Cliente cliente) {
         if (carrinhoSessao == null || carrinhoBanco == null) {
             return null;
+        }
+
+        if (carrinhoBanco.getId().equals(carrinhoSessao.getId())) {
+            return carrinhoBanco;
         }
 
         for (Item itemSessao : carrinhoSessao.getItens()) {

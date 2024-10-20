@@ -41,7 +41,7 @@ public class EnderecoController {
             return "lista-enderecos";
         }
 
-        List<Endereco> enderecos = enderecoService.findByClienteId(cliente.getId());
+        List<Endereco> enderecos = enderecoService.findAllByClienteId(cliente.getId());
         Endereco enderecoFaturamento = enderecoService.findEnderecoFaturamento(cliente.getId());
 
         if (enderecoFaturamento != null) {
@@ -110,7 +110,7 @@ public class EnderecoController {
             return "checkout";
         }
 
-        List<Endereco> enderecos = enderecoService.findByClienteId(cliente.getId());
+        List<Endereco> enderecos = enderecoService.findAllByClienteId(cliente.getId());
         Endereco enderecoPadrao = enderecoService.findEnderecoPadrao(cliente.getId());
 
         model.addAttribute("enderecos", enderecos);

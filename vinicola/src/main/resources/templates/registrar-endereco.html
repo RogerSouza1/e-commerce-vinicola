@@ -92,7 +92,7 @@
 
             <div class="input-group">
                 <label for="complemento">Complemento</label>
-                <input id="complemento" required th:field="*{complemento}" type="text">
+                <input id="complemento" th:field="*{complemento}" type="text">
                 <div th:erros="*{complemento}" th:if="${#fields.hasErrors('complemento')}"></div>
             </div>
 

@@ -14,8 +14,12 @@ public class EnderecoService {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
-    public ArrayList<Endereco> findByClienteId(Long clienteId) {
+    public ArrayList<Endereco> findAllByClienteId(Long clienteId) {
         return enderecoRepository.findByClienteId(clienteId);
+    }
+
+    public ArrayList<Endereco> findALlEnderecoEntregaByClienteId(Long clienteId) {
+        return enderecoRepository.findByClienteIdAndIsEnderecoFaturamentoFalse(clienteId);
     }
 
     public Endereco findEnderecoFaturamento(Long clienteId) {
