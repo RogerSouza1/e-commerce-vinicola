@@ -56,26 +56,37 @@ public class HomeController {
         Cliente cliente = null;
 
         if (authentication.isAuthenticated()) {
+
             cliente = clienteService.findByEmail(authentication.getName());
+
             if (cliente != null) {
+
                 request.getSession().setAttribute("cliente", cliente);
+
                 Carrinho carrinhoSessao = (Carrinho) request.getSession().getAttribute("carrinho");
 
                 if (carrinhoSessao != null) {
-                    Carrinho carrinho = carrinhoRepository.findCarrinhoByClienteId(cliente.getId());
-                    if (carrinho != null) {
-                        request.getSession().setAttribute("carrinho", carrinho);
+                    Carrinho carrinhoBanco = carrinhoRepository.findCarrinhoByClienteId(cliente.getId());
+                    Carrinho carrinhoMesclado = carrinhoService.mesclarCarrinho(carrinhoSessao, carrinhoBanco, cliente);
+                    if (carrinhoMesclado == null) {
+                        request.getSession().setAttribute("carrinho", carrinhoBanco);
+                    } else {
+                        carrinhoService.save(carrinhoMesclado);
+                        request.getSession().setAttribute("carrinho", carrinhoMesclado);
                     }
+
                 }
 
                 Carrinho carrinho = carrinhoRepository.findCarrinhoByClienteId(cliente.getId());
                 if (carrinho != null) {
                     request.getSession().setAttribute("carrinho", carrinho);
                 }
+
             }
         }
 
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
+
         if (carrinho == null) {
             carrinho = new Carrinho();
             carrinho.setCliente(cliente);

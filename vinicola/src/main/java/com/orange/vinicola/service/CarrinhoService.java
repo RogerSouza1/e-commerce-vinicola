@@ -232,7 +232,7 @@ public class CarrinhoService {
 
     public Carrinho mesclarCarrinho(Carrinho carrinhoSessao, Carrinho carrinhoBanco, Cliente cliente) {
         if (carrinhoSessao == null || carrinhoBanco == null) {
-            throw new RuntimeException("Carrinho não encontrado");
+            return null;
         }
 
         for (Item itemSessao : carrinhoSessao.getItens()) {
@@ -250,8 +250,14 @@ public class CarrinhoService {
             }
 
             if (!itemJaExiste) {
-                carrinhoBanco.getItens().add(itemSessao);
-                carrinhoBanco.setValorTotal(carrinhoBanco.getValorTotal() + itemSessao.getValorItem());
+                Item novoItem = new Item();
+                novoItem.setProduto(itemSessao.getProduto());
+                novoItem.setQuantidade(itemSessao.getQuantidade());
+                novoItem.setValorItem(itemSessao.getProduto().getPreco() * novoItem.getQuantidade());
+                novoItem.setCarrinho(carrinhoBanco);
+
+                carrinhoBanco.getItens().add(novoItem);
+                carrinhoBanco.setValorTotal(carrinhoBanco.getValorTotal() + novoItem.getValorItem());
                 carrinhoBanco.setValorComFrete(carrinhoBanco.getValorTotal() + carrinhoBanco.getFrete());
             }
         }
@@ -260,6 +266,7 @@ public class CarrinhoService {
 
         return carrinhoBanco;
     }
+
 
     @Transactional
     public void save(Carrinho carrinho) {

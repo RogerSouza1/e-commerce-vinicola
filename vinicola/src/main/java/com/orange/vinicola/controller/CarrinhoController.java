@@ -32,7 +32,10 @@ public class CarrinhoController {
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
 
         if (cliente != null && cliente.getCarrinho() != null) {
-            carrinho = carrinhoRepository.findCarrinhoByClienteId(cliente.getId());
+            if (cliente.getCarrinho().getId() == null)
+                carrinho = carrinhoRepository.findCarrinhoByClienteId(cliente.getId());
+            else
+                carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
         }
 
         if (carrinho == null) {
