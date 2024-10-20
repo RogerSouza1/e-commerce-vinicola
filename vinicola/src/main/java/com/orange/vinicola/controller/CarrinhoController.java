@@ -8,6 +8,7 @@ import com.orange.vinicola.service.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -101,4 +102,25 @@ public class CarrinhoController {
         request.getSession().setAttribute("carrinho", carrinho);
         return mv;
     }
+
+    @GetMapping("/checkout")
+    public ModelAndView checkout(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("checkout");
+//        Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
+//        Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
+//        carrinho = carrinhoService.calcularTotal(carrinho, cliente);
+//        request.getSession().setAttribute("carrinho", carrinho);
+        return mv;
+    }
+
+    @RequestMapping("/finalizar-pedido")
+    public ModelAndView finalizarPedido(HttpServletRequest request) {
+        if (request.getSession().getAttribute("cliente") == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        return new ModelAndView("redirect:/carrinho/checkout");
+
+    }
+
 }

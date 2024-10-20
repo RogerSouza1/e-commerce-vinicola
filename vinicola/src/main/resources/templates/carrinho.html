@@ -60,6 +60,14 @@
             }
             return confirmacao;
         }
+
+        function confirmarFinalizarCompra() {
+            var confirmacao = confirm("Deseja finalizar a compra?");
+            if (!confirmacao) {
+                event.preventDefault();
+            }
+            return confirmacao;
+        }
     </script>
 </head>
 
@@ -153,9 +161,11 @@
                     <strong>Total:</strong>
                     <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
                 </div>
-                <button style="background-color: #5C0A0A; border-radius: 1em; height: 4em; width: 33em; margin-top: 2em;" aria-label="Finalizar Compra">
-                    <p class="finalizar-compra" style="font-size: 1.5em; color: white;">Finalizar Compra</p>
-                </button>
+                <form action="/carrinho/finalizar-pedido" method="post" onsubmit="">
+                    <button class="btn-finalizar" onclick="confirmarFinalizarCompra()" th:disabled="${#lists.isEmpty(carrinho.itens)}"
+                            type="submit">Finalizar Compra
+                    </button>
+                </form>
             </div>
         </div>
     </div>
