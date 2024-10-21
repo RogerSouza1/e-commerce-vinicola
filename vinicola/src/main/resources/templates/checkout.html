@@ -46,161 +46,210 @@
             }
         }
 
+        function validarCamposCartao() {
+            var formaPagamento = document.getElementById("formaPagamento").value;
+            if (formaPagamento === "CREDITO" || formaPagamento === "DEBITO") {
+                var numeroCartao = document.getElementById("numeroCartao").value.trim();
+                var codigoVerificador = document.getElementById("codigoVerificador").value.trim();
+                var nomeCompleto = document.getElementById("nomeCompleto").value.trim();
+                var dataVencimento = document.getElementById("dataVencimento").value.trim();
+
+                if (numeroCartao === "" || codigoVerificador === "" || nomeCompleto === "" || dataVencimento === "") {
+                    alert("Preencha todos os campos do cartão de crédito.");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function mostrarEtapa(ocultar, mostrar) {
+            document.getElementById(ocultar).style.display = "none";
+            document.getElementById(mostrar).style.display = "block";
+        }
+
+        function proximaEtapa(atual, proxima) {
+            if (atual === 'etapa-pagamento') {
+                if (!validarCamposCartao()) {
+                    return;
+                }
+            }
+            mostrarEtapa(atual, proxima);
+        }
+
         window.onload = function () {
             toggleCartaoCampos();
+            var etapaAtual = /*[[${etapaAtual}]]*/ 'null';
+            if (etapaAtual !== 'null') {
+                mostrarEtapa('etapa-endereco', etapaAtual);
+            }
         };
     </script>
-
 </head>
 <body>
 <header>
     <div th:replace="fragments/header :: header"></div>
-    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
-            th:src="@{/images/seta.png}"></button>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img th:src="@{/images/seta.png}">
+    </button>
 </header>
 
 <main>
     <section class="checkout-container">
         <div class="left-group">
-            <div class="endereco-checkout">
-                <label for="endereco-faturamento">Endereço de faturamento:</label>
-                <select class="select-field" id="endereco-faturamento" required th:field="*{enderecoFaturamento}">
-                    <option th:each="endereco : ${enderecoFaturamento}"
-                            th:selected="${endereco.id == endereco.id}"
-                            th:text="${endereco.logradouro + ', ' + endereco.numero + ' - ' + endereco.bairro}"
-                            th:value="${endereco.id}">
-                    </option>
-                </select>
-            </div>
-            <div class="endereco-checkout">
-                <label for="endereco-entrega">Endereço de entrega:</label>
-                <select class="select-field" id="endereco-entrega" required th:field="*{enderecoEntrega}">
-                    <option th:each="endereco : ${enderecoEntrega}"
-                            th:value="${endereco.id}"
-                            th:text="${endereco.logradouro + ', ' + endereco.numero + ' - ' + endereco.bairro}"
-                            th:selected="${endereco.id == enderecoPadrao.id}">
-                    </option>
-                </select>
-            </div>
-            <div>
-                <button class="btn-adicionar-novo-endereco" onclick="window.location.href='/endereco/cadastrar'"
-                        type="button">Adicionar novo endereço
-                </button>
-            </div>
-            <div class="pagamento-checkout">
-                <label for="formaPagamento">Forma de Pagamento:</label>
-                <select class="select-field" id="formaPagamento" onchange="toggleCartaoCampos()" required
-                        th:field="*{carrinho.formaPagamento}">
-                    <option class="option-select" value="BOLETO">Boleto Bancário</option>
-                    <option value="CREDITO" class="option-select">Cartão de Crédito</option>
-                    <option value="DEBITO" class="option-select">Cartão de Débito</option>
-                </select>
-            </div>
-
-            <div id="cartaoCampos" style="display: none;">
-                <div>
-                    <label for="numeroCartao">Número do Cartão:</label>
-                    <input id="numeroCartao" maxlength="19" oninput="formatarNumeroCartao()" placeholder="0000 0000 0000 0000"
-                           required type="text">
-                </div>
-                <div>
-                    <label for="codigoVerificador">Código Verificador (CVV):</label>
-                    <input id="codigoVerificador" maxlength="3" pattern="\d{3}" placeholder="123" required type="text">
-                </div>
-                <div>
-                    <label for="nomeCompleto">Nome Completo:</label>
-                    <input id="nomeCompleto" maxlength="40" placeholder="Nome Completo" required type="text">
-                </div>
-                <div>
-                    <label for="dataVencimento">Data de Vencimento:</label>
-                    <input id="dataVencimento" required type="month">
-                </div>
-                <div id="parcelasDiv" style="display: none;">
-                    <label for="parcelas">Quantidade de Parcelas:</label>
-                    <select id="parcelas">
-                        <option value="1">1x</option>
-                        <option value="2">2x</option>
-                        <option value="3">3x</option>
-                        <option value="4">4x</option>
-                        <option value="5">5x</option>
-                        <option value="6">6x</option>
-                        <option value="7">7x</option>
-                        <option value="8">8x</option>
-                        <option value="9">9x</option>
-                        <option value="10">10x</option>
+            <!-- Seção de Endereço -->
+            <div id="etapa-endereco">
+                <div class="endereco-checkout">
+                    <label for="endereco-faturamento">Endereço de faturamento:</label>
+                    <!-- TODO: Como só tem um endereço necessário colocar ele como texto ao inves de dropdown -->
+                    <select class="select-field" id="endereco-faturamento" required th:field="*{enderecoFaturamento}">
+                        <option th:each="endereco : ${enderecoFaturamento}"
+                                th:selected="${endereco.id == endereco.id}"
+                                th:text="${endereco.logradouro + ', ' + endereco.numero + ' - ' + endereco.bairro}"
+                                th:value="${endereco.id}">
+                        </option>
                     </select>
                 </div>
+                <div class="endereco-checkout">
+                    <label for="endereco-entrega">Endereço de entrega:</label>
+                    <select class="select-field" id="endereco-entrega" required th:field="*{enderecoEntrega}">
+                        <!-- TODO: Endereço padrão não está sendo automaticamente escolhido pelo dropdown, necessário verificar-->
+                        <option th:each="endereco : ${enderecoEntrega}"
+                                th:selected="${endereco.cep == enderecoPadrao.cep}"
+                                th:text="${endereco.logradouro + ', ' + endereco.numero + ' - ' + endereco.bairro}"
+                                th:value="${endereco.id}">
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <!-- TODO: Realizar redirectionamento correto após adição do endereço (pode criar um forms de adicionar de endereço aqui mesmo e chamar o post) -->
+                    <button class="btn-adicionar-novo-endereco"
+                            onclick="window.location.href='/endereco/cadastrar?redirect=/carrinho/checkout'"
+                            type="button">Adicionar novo endereço
+                    </button>
+
+                </div>
+                <button class="btn-proxima-etapa" onclick="proximaEtapa('etapa-endereco', 'etapa-pagamento')">Próxima
+                    Etapa
+                </button>
             </div>
 
-            <div class="revisao-itens">
-                <div class="card-row">
-                    <div th:each="item : ${carrinho.itens}">
-                        <div class="desc-produto-row">
-                            <div th:each="imagem : ${item.produto.imagens}">
-                                <img alt="Imagem do Produto - ${item.produto.nome}" class="imagem-produto-carrinho"
-                                     th:src="@{/imagem/{id}(id=${imagem.id})}"/>
-                            </div>
+            <!-- Seção de Pagamento -->
+            <div id="etapa-pagamento" style="display: none;">
+                <div class="pagamento-checkout">
+                    <label for="formaPagamento">Forma de Pagamento:</label>
+                    <select class="select-field" id="formaPagamento" onchange="toggleCartaoCampos()" required
+                            th:field="*{carrinho.formaPagamento}">
+                        <option class="option-select" value="BOLETO">Boleto Bancário</option>
+                        <option class="option-select" value="CREDITO">Cartão de Crédito</option>
+                        <option class="option-select" value="DEBITO">Cartão de Débito</option>
+                    </select>
+                </div>
 
-                            <div class="produto-carrinho">
-                                <p class="info-produto"><strong>Produto:</strong></p>
-                                <span th:text="${item.produto.nome}"></span>
-                            </div>
+                <div id="cartaoCampos" style="display: none;">
+                    <div>
+                        <label for="numeroCartao">Número do Cartão:</label>
+                        <input id="numeroCartao" maxlength="19" oninput="formatarNumeroCartao()"
+                               placeholder="0000 0000 0000 0000" required type="text">
+                    </div>
+                    <div>
+                        <label for="codigoVerificador">Código Verificador (CVV):</label>
+                        <input id="codigoVerificador" maxlength="3" pattern="\d{3}" placeholder="123" required
+                               type="text">
+                    </div>
+                    <div>
+                        <label for="nomeCompleto">Nome Completo:</label>
+                        <input id="nomeCompleto" maxlength="40" placeholder="Nome Completo" required type="text">
+                    </div>
+                    <div>
+                        <label for="dataVencimento">Data de Vencimento:</label>
+                        <input id="dataVencimento" required type="month">
+                    </div>
+                    <div id="parcelasDiv" style="display: none;">
+                        <label for="parcelas">Quantidade de Parcelas:</label>
+                        <select id="parcelas">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                            <option value="5">5x</option>
+                            <option value="6">6x</option>
+                            <option value="7">7x</option>
+                            <option value="8">8x</option>
+                            <option value="9">9x</option>
+                            <option value="10">10x</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-voltar-etapa" onclick="mostrarEtapa('etapa-pagamento', 'etapa-endereco')">Voltar
+                </button>
+                <button class="btn-proxima-etapa" onclick="proximaEtapa('etapa-pagamento', 'etapa-revisao')">Próxima
+                    Etapa
+                </button>
+            </div>
 
-                            <div class="quantidade-carrinho">
-                                <p class="info-produto"><strong>Quantidade:</strong></p>
-                                <div class="botao-row">
-                                    <form th:action="@{/carrinho/diminuirQuantidade}" method="post">
-                                        <input type="hidden" name="produtoId" th:value="${item.produto.id}">
-                                        <button type="submit" class="btn-decrementar" onclick="alterarQuantidade(-1)">-</button>
-                                    </form>
-                                    <span class="span-carrinho" th:text="${item.quantidade}"></span>
-                                    <form th:action="@{/carrinho/aumentarQuantidade}" method="post">
-                                        <input type="hidden" name="produtoId" th:value="${item.produto.id}">
-                                        <button type="submit" class="btn-incrementar" onclick="alterarQuantidade(1)">+</button>
-                                    </form>
+            <!-- Seção de Revisão dos Itens -->
+            <div id="etapa-revisao" style="display: none;">
+                <div class="revisao-itens">
+                    <div class="card-row">
+                        <div th:each="item : ${carrinho.itens}">
+                            <div class="desc-produto-row">
+                                <div th:each="imagem : ${item.produto.imagens}">
+                                    <img alt="Imagem do Produto - ${item.produto.nome}" class="imagem-produto-carrinho"
+                                         th:src="@{/imagem/{id}(id=${imagem.id})}"/>
                                 </div>
-                            </div>
 
-                            <div class="preco-carrinho">
-                                <p class="info-produto"><strong>Preço:</strong></p>
-                                <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
-                            </div>
+                                <div class="produto-carrinho">
+                                    <p class="info-produto"><strong>Produto:</strong></p>
+                                    <span th:text="${item.produto.nome}"></span>
+                                </div>
 
-                            <form th:action="@{/carrinho/removerProduto}" method="post" onsubmit="return confirmChange()" class="botao-remover-carrinho-container">
-                                <input type="hidden" name="produtoId" th:value="${item.produto.id}">
-                                <button type="submit" class="botao-remover-carrinho" aria-label="Remover produto do carrinho"><img th:src="@{../images/lixeira.png}" alt="Remover produto"></button>
-                            </form>
+                                <div class="quantidade-carrinho">
+                                    <p class="info-produto"><strong>Quantidade:</strong></p>
+                                    <div class="botao-row">
+                                        <form method="post"
+                                              th:action="@{/carrinho/diminuirQuantidade(redirect='/carrinho/checkout')}">
+                                            <input name="produtoId" th:value="${item.produto.id}" type="hidden">
+                                            <!-- TODO: Necessário ajustar que, ao recarregar a página o usuário deve ser redrecionado a sessão que ele já estava (JavaScript onscreanload algo assim) -->
+                                            <input name="etapaAtual" type="hidden" value="etapa-revisao">
+                                            <button class="btn-decrementar" onclick="alterarQuantidade(-1)"
+                                                    type="submit">-
+                                            </button>
+                                        </form>
+                                        <span class="span-carrinho" th:text="${item.quantidade}"></span>
+                                        <form method="post"
+                                              th:action="@{/carrinho/aumentarQuantidade(redirect='/carrinho/checkout')}">
+                                            <input name="produtoId" th:value="${item.produto.id}" type="hidden">
+                                            <input name="etapaAtual" type="hidden" value="etapa-revisao">
+                                            <button class="btn-incrementar" onclick="alterarQuantidade(1)"
+                                                    type="submit">+
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="preco-carrinho">
+                                    <p class="info-produto"><strong>Preço:</strong></p>
+                                    <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
+                                </div>
+
+                                <form class="botao-remover-carrinho-container"
+                                      method="post" onsubmit="return confirmChange()"
+                                      th:action="@{/carrinho/removerProduto(redirect='/carrinho/checkout')}">
+                                    <input name="produtoId" th:value="${item.produto.id}" type="hidden">
+                                    <input name="etapaAtual" type="hidden" value="etapa-revisao">
+                                    <button aria-label="Remover produto do carrinho" class="botao-remover-carrinho"
+                                            type="submit"><img
+                                            alt="Remover produto" th:src="@{../images/lixeira.png}"></button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="right-group">
-            <div class="finalizar">
-                <h2 class="form-title">Resumo do Pedido</h2>
-                <div class="finalizar-row">
-                    <p class="valor-produto">Subtotal</p>
-                    <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorTotal, 1, 2)}"></span>
-                </div>
-                <div class="finalizar-row">
-                    <p class="valor-frete">Frete:</p>
-                    <span class="valor-frete" th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.frete, 1, 2)}"></span>
-                </div>
-                <div class="finalizar-row">
-                    <strong>Total:</strong>
-                    <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
-                </div>
-                <button style="background-color: #5C0A0A; border-radius: 1em; height: 4em; width: 33em; margin-top: 2em;" aria-label="Finalizar Compra">
-                    <p class="finalizar-compra" style="font-size: 1.5em; color: white;">Finalizar Compra</p>
+                <button class="btn-voltar-etapa" onclick="mostrarEtapa('etapa-revisao', 'etapa-pagamento')">Voltar
                 </button>
-            </div>
+                <button class="btn-finalizar-compra">Finalizar Compra</button>
+                </div>
         </div>
     </section>
 </main>
-
-<footer>
-    <div th:replace="fragments/footer :: footer"></div>
-</footer>
-
 </body>
 </html>

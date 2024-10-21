@@ -4,6 +4,7 @@ import com.orange.vinicola.model.Imagem;
 import com.orange.vinicola.model.Produto;
 import com.orange.vinicola.service.ImagemService;
 import com.orange.vinicola.service.ProdutoService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
@@ -203,7 +204,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/detalhes-produto")
-    public String detalhesProduto(@RequestParam("id") Long id, Model model) {
+    public String detalhesProduto(@RequestParam("id") Long id, Model model, HttpServletRequest request) {
         Optional<Produto> produtoOpt = produtoService.findById(id);
         if (produtoOpt.isPresent()) {
             Produto produto = produtoOpt.get();
@@ -213,6 +214,7 @@ public class ProdutoController {
             imagensProduto.removeIf(imagem -> imagem.getId().equals(imagemPrincipal.getId()));
             imagensProduto.add(0, imagemPrincipal);
 
+            model.addAttribute("carrinho", request.getSession().getAttribute("carrinho"));
             model.addAttribute("produtoImagens", imagensProduto);
             model.addAttribute("produto", produto);
             return "detalhes-produto";

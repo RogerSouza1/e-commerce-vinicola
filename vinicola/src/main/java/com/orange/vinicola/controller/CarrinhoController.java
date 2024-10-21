@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 
@@ -77,7 +78,7 @@ public class CarrinhoController {
     }
 
     @RequestMapping("/removerProduto")
-    public ModelAndView removerProduto(@RequestParam Long produtoId, HttpServletRequest request) {
+    public ModelAndView removerProduto(@RequestParam Long produtoId, @RequestParam(required = false) String redirect, @RequestParam(required = false) String etapaAtual, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
         if (cliente != null) {
@@ -85,11 +86,17 @@ public class CarrinhoController {
         }
         carrinho = carrinhoService.removerProduto(carrinho, produtoId, cliente);
         request.getSession().setAttribute("carrinho", carrinho);
+        if (etapaAtual != null) {
+            redirectAttributes.addFlashAttribute("etapaAtual", etapaAtual);
+        }
+        if (redirect != null && !redirect.isEmpty()) {
+            return new ModelAndView("redirect:" + redirect);
+        }
         return new ModelAndView("redirect:/carrinho");
     }
 
     @RequestMapping("/diminuirQuantidade")
-    public ModelAndView diminuirQuantidade(@RequestParam("produtoId")Long produtoId, HttpServletRequest request) {
+    public ModelAndView diminuirQuantidade(@RequestParam("produtoId") Long produtoId, @RequestParam(required = false) String redirect, @RequestParam(required = false) String etapaAtual, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView("redirect:/carrinho");
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
@@ -98,11 +105,17 @@ public class CarrinhoController {
         }
         carrinho = carrinhoService.decrementarQuantidade(carrinho, produtoId, cliente);
         request.getSession().setAttribute("carrinho", carrinho);
+        if (etapaAtual != null) {
+            redirectAttributes.addFlashAttribute("etapaAtual", etapaAtual);
+        }
+        if (redirect != null && !redirect.isEmpty()) {
+            return new ModelAndView("redirect:" + redirect);
+        }
         return mv;
     }
 
     @RequestMapping("/aumentarQuantidade")
-    public ModelAndView aumentarQuantidade(@RequestParam("produtoId")Long produtoId, HttpServletRequest request) {
+    public ModelAndView aumentarQuantidade(@RequestParam("produtoId") Long produtoId, @RequestParam(required = false) String redirect, @RequestParam(required = false) String etapaAtual, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView("redirect:/carrinho");
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
@@ -111,6 +124,12 @@ public class CarrinhoController {
         }
         carrinho = carrinhoService.incrementarQuantidade(carrinho, produtoId, cliente);
         request.getSession().setAttribute("carrinho", carrinho);
+        if (etapaAtual != null) {
+            redirectAttributes.addFlashAttribute("etapaAtual", etapaAtual);
+        }
+        if (redirect != null && !redirect.isEmpty()) {
+            return new ModelAndView("redirect:" + redirect);
+        }
         return mv;
     }
 
