@@ -189,64 +189,75 @@
             <!-- Seção de Revisão dos Itens -->
             <div id="etapa-revisao" style="display: none;">
                 <div class="revisao-itens">
-                    <div class="card-row">
-                        <div th:each="item : ${carrinho.itens}">
-                            <div class="desc-produto-row">
-                                <div th:each="imagem : ${item.produto.imagens}">
-                                    <img alt="Imagem do Produto - ${item.produto.nome}" class="imagem-produto-carrinho"
-                                         th:src="@{/imagem/{id}(id=${imagem.id})}"/>
-                                </div>
-
-                                <div class="produto-carrinho">
-                                    <p class="info-produto"><strong>Produto:</strong></p>
-                                    <span th:text="${item.produto.nome}"></span>
-                                </div>
-
-                                <div class="quantidade-carrinho">
-                                    <p class="info-produto"><strong>Quantidade:</strong></p>
-                                    <div class="botao-row">
-                                        <form method="post"
-                                              th:action="@{/carrinho/diminuirQuantidade(redirect='/carrinho/checkout')}">
-                                            <input name="produtoId" th:value="${item.produto.id}" type="hidden">
-                                            <!-- TODO: Necessário ajustar que, ao recarregar a página o usuário deve ser redrecionado a sessão que ele já estava (JavaScript onscreanload algo assim) -->
-                                            <input name="etapaAtual" type="hidden" value="etapa-revisao">
-                                            <button class="btn-decrementar" onclick="alterarQuantidade(-1)"
-                                                    type="submit">-
-                                            </button>
-                                        </form>
-                                        <span class="span-carrinho" th:text="${item.quantidade}"></span>
-                                        <form method="post"
-                                              th:action="@{/carrinho/aumentarQuantidade(redirect='/carrinho/checkout')}">
-                                            <input name="produtoId" th:value="${item.produto.id}" type="hidden">
-                                            <input name="etapaAtual" type="hidden" value="etapa-revisao">
-                                            <button class="btn-incrementar" onclick="alterarQuantidade(1)"
-                                                    type="submit">+
-                                            </button>
-                                        </form>
+                    <form th:action="@{/checkout/finalizar}" method="post" th:object="${pedido}">
+                        <div class="card-row">
+                            <div th:each="item : ${carrinho.itens}">
+                                <div class="desc-produto-row">
+                                    <div th:each="imagem : ${item.produto.imagens}">
+                                        <img alt="Imagem do Produto - ${item.produto.nome}" class="imagem-produto-carrinho"
+                                             th:src="@{/imagem/{id}(id=${imagem.id})}"/>
                                     </div>
-                                </div>
 
-                                <div class="preco-carrinho">
-                                    <p class="info-produto"><strong>Preço:</strong></p>
-                                    <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
-                                </div>
+                                    <div class="produto-carrinho">
+                                        <p class="info-produto"><strong>Produto:</strong></p>
+                                        <span th:text="${item.produto.nome}"></span>
+                                    </div>
 
-                                <form class="botao-remover-carrinho-container"
-                                      method="post" onsubmit="return confirmChange()"
-                                      th:action="@{/carrinho/removerProduto(redirect='/carrinho/checkout')}">
-                                    <input name="produtoId" th:value="${item.produto.id}" type="hidden">
-                                    <input name="etapaAtual" type="hidden" value="etapa-revisao">
-                                    <button aria-label="Remover produto do carrinho" class="botao-remover-carrinho"
-                                            type="submit"><img
-                                            alt="Remover produto" th:src="@{../images/lixeira.png}"></button>
-                                </form>
+                                    <div class="quantidade-carrinho">
+                                        <p class="info-produto"><strong>Quantidade:</strong></p>
+                                        <div class="botao-row">
+                                            <form method="post"
+                                                  th:action="@{/carrinho/diminuirQuantidade(redirect='/carrinho/checkout')}">
+                                                <input name="produtoId" th:value="${item.produto.id}" type="hidden">
+                                                <!-- TODO: Necessário ajustar que, ao recarregar a página o usuário deve ser redrecionado a sessão que ele já estava (JavaScript onscreanload algo assim) -->
+                                                <input name="etapaAtual" type="hidden" value="etapa-revisao">
+                                                <button class="btn-decrementar" onclick="alterarQuantidade(-1)"
+                                                        type="submit">-
+                                                </button>
+                                            </form>
+                                            <span class="span-carrinho" th:text="${item.quantidade}"></span>
+                                            <form method="post"
+                                                  th:action="@{/carrinho/aumentarQuantidade(redirect='/carrinho/checkout')}">
+                                                <input name="produtoId" th:value="${item.produto.id}" type="hidden">
+                                                <input name="etapaAtual" type="hidden" value="etapa-revisao">
+                                                <button class="btn-incrementar" onclick="alterarQuantidade(1)"
+                                                        type="submit">+
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="preco-carrinho">
+                                        <p class="info-produto"><strong>Preço:</strong></p>
+                                        <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
+                                    </div>
+
+                                    <form class="botao-remover-carrinho-container"
+                                          method="post" onsubmit="return confirmChange()"
+                                          th:action="@{/carrinho/removerProduto(redirect='/carrinho/checkout')}">
+                                        <input name="produtoId" th:value="${item.produto.id}" type="hidden">
+                                        <input name="etapaAtual" type="hidden" value="etapa-revisao">
+                                        <button aria-label="Remover produto do carrinho" class="botao-remover-carrinho"
+                                                type="submit"><img
+                                                alt="Remover produto" th:src="@{../images/lixeira.png}"></button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <input type="hidden" name="endereco" th:value="">
+                        <input type="hidden" name="enderecoEntrega" th:value="">
+                        <input type="hidden" name="formaPagamento" th:value="">
+
+                        <!-- Caso seja pagamento com cartão -->
+                        <input type="hidden" name="numeroCartao" id="numeroCartaoPedido" th:value="">
+                        <input type="hidden" name="codigoVerificador" id="codigoVerificadorPedido" th:value="">
+                        <input type="hidden" name="nomeCompleto" id="nomeCompletoPedido" th:value="">
+                        <input type="hidden" name="dataVencimento" id="dataVencimentoPedido" th:value="">
+                        <button class="btn-voltar-etapa" onclick="mostrarEtapa('etapa-revisao', 'etapa-pagamento')">Voltar
+                        </button>
+                        <button type="submit" class="btn-finalizar-compra">Finalizar Compra</button>
+                    </form>
                 </div>
-                <button class="btn-voltar-etapa" onclick="mostrarEtapa('etapa-revisao', 'etapa-pagamento')">Voltar
-                </button>
-                <button class="btn-finalizar-compra">Finalizar Compra</button>
             </div>
         </div>
     </section>

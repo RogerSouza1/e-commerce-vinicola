@@ -4,10 +4,7 @@ import com.orange.vinicola.model.Carrinho;
 import com.orange.vinicola.model.Cliente;
 import com.orange.vinicola.model.Endereco;
 import com.orange.vinicola.repository.CarrinhoRepository;
-import com.orange.vinicola.service.CarrinhoService;
-import com.orange.vinicola.service.ClienteService;
-import com.orange.vinicola.service.EnderecoService;
-import com.orange.vinicola.service.ProdutoService;
+import com.orange.vinicola.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -37,6 +34,9 @@ public class CarrinhoController {
     private EnderecoService enderecoService;
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private PedidoService pedidoService;
 
     @RequestMapping
     public ModelAndView abrirCarrinho(HttpServletRequest request) {
@@ -156,6 +156,7 @@ public class CarrinhoController {
 
         Endereco enderecoFaturamento = enderecoService.findEnderecoFaturamento(cliente.getId());
         ArrayList<Endereco> enderecosEntrega = enderecoService.findALlEnderecoEntregaByClienteId(cliente.getId());
+        Pedido pedido = pedidoService.buscarPedidoPorClienteId(cliente.getId());
         Endereco enderecoEntregaPadrao = null;
 
         for (Endereco endereco : enderecosEntrega) {
@@ -170,6 +171,7 @@ public class CarrinhoController {
         model.addAttribute("enderecoPadrao", enderecoEntregaPadrao);
         model.addAttribute("enderecoFaturamento", enderecoFaturamento);
         model.addAttribute("enderecoEntrega", enderecosEntrega);
+        model.addAttribute("pedido", pedido);
         return mv;
     }
 

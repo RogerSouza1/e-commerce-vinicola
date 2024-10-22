@@ -1,5 +1,6 @@
 package com.orange.vinicola.model;
 
+import com.orange.vinicola.controller.Pedido;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -60,6 +61,9 @@ public class Cliente implements UserDetails {
 
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private Carrinho carrinho;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pedido> pedidos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

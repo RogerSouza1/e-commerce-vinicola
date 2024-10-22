@@ -5406,3 +5406,19 @@ Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:522)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 97 more
+2024-10-22 19:02:05.711916-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "Alter table carrinho\000d\000adrop column ENDERECO_COBRANCA_ID  \0009[*]ENDERECO_ENTREGA_ID"; SQL statement:
+Alter table carrinho
+drop column ENDERECO_COBRANCA_ID  	ENDERECO_ENTREGA_ID [42000-224]
+2024-10-22 19:02:21.921882-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "Alter table CARRINHO\000d\000adrop column ENDERECO_COBRANCA_ID  \0009[*]ENDERECO_ENTREGA_ID"; SQL statement:
+Alter table CARRINHO
+drop column ENDERECO_COBRANCA_ID  	ENDERECO_ENTREGA_ID [42000-224]
+2024-10-22 19:02:22.538546-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "Alter table CARRINHO\000d\000adrop column ENDERECO_COBRANCA_ID  \0009[*]ENDERECO_ENTREGA_ID"; SQL statement:
+Alter table CARRINHO
+drop column ENDERECO_COBRANCA_ID  	ENDERECO_ENTREGA_ID [42000-224]
+2024-10-22 19:02:22.692368-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "Alter table CARRINHO\000d\000adrop column ENDERECO_COBRANCA_ID  \0009[*]ENDERECO_ENTREGA_ID"; SQL statement:
+Alter table CARRINHO
+drop column ENDERECO_COBRANCA_ID  	ENDERECO_ENTREGA_ID [42000-224]
