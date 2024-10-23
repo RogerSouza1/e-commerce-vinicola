@@ -1,6 +1,5 @@
 package com.orange.vinicola.model;
 
-import com.orange.vinicola.controller.Pedido;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;

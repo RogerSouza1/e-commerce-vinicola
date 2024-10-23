@@ -1,6 +1,6 @@
 package com.orange.vinicola.repository;
 
-import com.orange.vinicola.controller.Pedido;
+import com.orange.vinicola.model.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

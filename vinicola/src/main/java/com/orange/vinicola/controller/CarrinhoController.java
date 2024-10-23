@@ -1,8 +1,6 @@
 package com.orange.vinicola.controller;
 
-import com.orange.vinicola.model.Carrinho;
-import com.orange.vinicola.model.Cliente;
-import com.orange.vinicola.model.Endereco;
+import com.orange.vinicola.model.*;
 import com.orange.vinicola.repository.CarrinhoRepository;
 import com.orange.vinicola.service.*;
 import jakarta.servlet.http.HttpServletRequest;
