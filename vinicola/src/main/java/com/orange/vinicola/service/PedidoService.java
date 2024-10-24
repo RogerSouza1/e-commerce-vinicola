@@ -15,4 +15,15 @@ public class PedidoService {
         return pedidoRepository.findPedidoByClienteId(clienteId);
     }
 
+    public Pedido finalizarPedido(Pedido pedido) {
+        pedido.setStatus("Aguardando pagamento");
+        pedido.setNumeroPedido(gerarNumeroPedido());
+        return pedidoRepository.save(pedido);
+    }
+
+
+    private int gerarNumeroPedido() {
+        Integer maxNumeroPedido = pedidoRepository.findMaxNumeroPedido();
+        return (maxNumeroPedido != null ? maxNumeroPedido : 0) + 1;
+    }
 }

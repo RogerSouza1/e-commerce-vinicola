@@ -44,7 +44,7 @@ public class Pedido {
     @JoinColumn(name = "itens_id", referencedColumnName = "id")
     private List<Item> itens;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private Endereco endereco;
 

@@ -144,6 +144,16 @@ public class CarrinhoController {
         return mv;
     }
 
+    @RequestMapping("/finalizar")
+    public ModelAndView finalizar(HttpServletRequest request) {
+        if (request.getSession().getAttribute("cliente") == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        return new ModelAndView("redirect:/carrinho/checkout");
+
+    }
+
     @GetMapping("/checkout")
     public ModelAndView checkout(Model model, HttpServletRequest request) {
 
@@ -154,7 +164,7 @@ public class CarrinhoController {
 
         Endereco enderecoFaturamento = enderecoService.findEnderecoFaturamento(cliente.getId());
         ArrayList<Endereco> enderecosEntrega = enderecoService.findALlEnderecoEntregaByClienteId(cliente.getId());
-        Pedido pedido = pedidoService.buscarPedidoPorClienteId(cliente.getId());
+        Pedido pedido = new Pedido();  //Revisar lógica
         Endereco enderecoEntregaPadrao = null;
 
         for (Endereco endereco : enderecosEntrega) {
@@ -171,16 +181,6 @@ public class CarrinhoController {
         model.addAttribute("enderecoEntrega", enderecosEntrega);
         model.addAttribute("pedido", pedido);
         return mv;
-    }
-
-    @RequestMapping("/finalizar-pedido")
-    public ModelAndView finalizarPedido(HttpServletRequest request) {
-        if (request.getSession().getAttribute("cliente") == null) {
-            return new ModelAndView("redirect:/login");
-        }
-
-        return new ModelAndView("redirect:/carrinho/checkout");
-
     }
 
 }

@@ -31,8 +31,6 @@ public class Carrinho {
     @Column(nullable = false)
     private double valorComFrete;
 
-    private String formaPagamento;
-
     @OneToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private Cliente cliente;

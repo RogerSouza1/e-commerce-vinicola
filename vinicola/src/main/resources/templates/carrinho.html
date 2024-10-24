@@ -161,7 +161,7 @@
                     <strong>Total:</strong>
                     <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
                 </div>
-                <form action="/carrinho/finalizar-pedido" method="post" onsubmit="">
+                <form action="/carrinho/finalizar" method="post" onsubmit="">
                     <button class="btn-finalizar" onclick="confirmarFinalizarCompra()" th:disabled="${#lists.isEmpty(carrinho.itens)}"
                             type="submit">Finalizar Compra
                     </button>

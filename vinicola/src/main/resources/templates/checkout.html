@@ -62,10 +62,21 @@
             return true;
         }
 
+        <!-- Botões etapas -->
         function mostrarEtapa(ocultar, mostrar) {
             document.getElementById(ocultar).style.display = "none";
             document.getElementById(mostrar).style.display = "block";
+
+            if (ocultar === 'etapa-endereco') {
+                document.getElementById('hidden-endereco').value = document.getElementById('endereco-entrega').value;
+            }
+
+            if (ocultar === 'etapa-pagamento') {
+                document.getElementById('hidden-forma-pagamento').value = document.getElementById('formaPagamento').value;
+
+            }
         }
+
 
         function proximaEtapa(atual, proxima) {
             if (atual === 'etapa-pagamento') {
@@ -83,6 +94,22 @@
                 mostrarEtapa('etapa-endereco', etapaAtual);
             }
         };
+
+        document.querySelector('.btn-finalizar-compra').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const itensCarrinho = /*[[${carrinho.itens}]]*/ [];
+
+            const hiddenItens = document.getElementById('hidden-itens');
+            hiddenItens.value = JSON.stringify(itensCarrinho);
+
+            if (!hiddenItens.value || hiddenItens.value.trim() === '[]') {
+                alert('O pedido precisa conter pelo menos um item.');
+                return false;
+            }
+
+            event.target.closest('form').submit();
+    });
     </script>
 </head>
 <body>
@@ -136,8 +163,7 @@
             <div id="etapa-pagamento" style="display: none;">
                 <div class="pagamento-checkout">
                     <label for="formaPagamento">Forma de Pagamento:</label>
-                    <select class="select-field" id="formaPagamento" onchange="toggleCartaoCampos()" required
-                            th:field="*{carrinho.formaPagamento}">
+                    <select class="select-field" id="formaPagamento" onchange="toggleCartaoCampos()" required>
                         <option class="option-select" value="BOLETO">Boleto Bancário</option>
                         <option class="option-select" value="CREDITO">Cartão de Crédito</option>
                         <option class="option-select" value="DEBITO">Cartão de Débito</option>
@@ -189,7 +215,6 @@
             <!-- Seção de Revisão dos Itens -->
             <div id="etapa-revisao" style="display: none;">
                 <div class="revisao-itens">
-                    <form th:action="@{/checkout/finalizar}" method="post" th:object="${pedido}">
                         <div class="card-row">
                             <div id="itens-carrinho" th:each="item : ${carrinho.itens}">
                                 <div class="desc-produto-row">
@@ -221,7 +246,7 @@
                                                 <input name="produtoId" th:value="${item.produto.id}" type="hidden">
                                                 <input name="etapaAtual" type="hidden" value="etapa-revisao">
                                                 <button class="btn-incrementar" onclick="alterarQuantidade(1)"
-                                                        type="submit">+
+                                                        type="submit">
                                                 </button>
                                             </form>
                                         </div>
@@ -244,12 +269,16 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Inputs ocultos para enviar os dados do pedido -->
-                        <input type="hidden" id="endereco-checkout" name="endereco" th:value="${pedido.endereco}">
-                        <input type="hidden" id="formaPagamento-checkout" name="formaPagamento" th:value="${pedido.formaPagamento}">
 
-                        <button class="btn-voltar-etapa" onclick="mostrarEtapa('etapa-revisao', 'etapa-pagamento')">Voltar
-                        </button>
+                    <form th:action="@{/pedido/finalizar}" method="post" th:object="${pedido}">
+<!--                        <input type="hidden" th:field="*{frete}" id="frete-checkout" name="frete">-->
+<!--                        <input type="hidden" th:field="*{valorTotal}" id="valor-total-checkout" name="valor-total">-->
+<!--                        <input type="hidden" th:field="*{valorComFrete}" id="valor-com-frete-checkout" name="valor-com-frete">-->
+                        <input type="hidden" th:field="*{endereco}" id="hidden-endereco" name="endereco">
+                        <input type="hidden" th:field="*{formaPagamento}" id="hidden-forma-pagamento">
+                        <input type="hidden" th:field="*{itens}" id="hidden-itens" name="itens">
+
+                        <button class="btn-voltar-etapa" onclick="mostrarEtapa('etapa-revisao', 'etapa-pagamento')">Voltar</button>
                         <button type="submit" class="btn-finalizar-compra">Finalizar Compra</button>
                     </form>
                 </div>
