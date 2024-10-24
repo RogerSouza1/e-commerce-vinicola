@@ -38,11 +38,10 @@ public class Pedido {
     private String formaPagamento;
 
     @Column(nullable = false)
-    private boolean finalizado;
+    private boolean isEntregue;
 
-    @OneToMany
-    @JoinColumn(name = "itens_id", referencedColumnName = "id")
-    private List<Item> itens;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ItemPedido> itens;
 
     @ManyToOne
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")

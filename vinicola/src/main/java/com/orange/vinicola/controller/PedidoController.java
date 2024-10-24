@@ -2,20 +2,23 @@ package com.orange.vinicola.controller;
 
 import com.orange.vinicola.model.Carrinho;
 import com.orange.vinicola.model.Cliente;
+import com.orange.vinicola.model.Endereco;
 import com.orange.vinicola.model.Pedido;
 import com.orange.vinicola.service.CarrinhoService;
 import com.orange.vinicola.service.ClienteService;
 import com.orange.vinicola.service.PedidoService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/pedido")
@@ -31,20 +34,48 @@ public class PedidoController {
     private CarrinhoService carrinhoService;
 
     @PostMapping("/finalizar")
-    public ModelAndView finalizarPedido(@Valid @ModelAttribute("pedido")Pedido pedido, HttpServletRequest request) {
+    public ModelAndView finalizarPedido(@RequestParam("forma-pagamento") String formaPagamento, @RequestParam("endereco") Endereco endereco, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
+        Cliente cliente = clienteService.findByEmail(authentication.getName());
+
+        if (cliente != null) {
+            carrinho = carrinhoService.buscarCarrinhoPorClienteId(cliente.getId());
+        } else {
+            System.out.println("Cliente não encontrado");
+        }
+
+        Pedido pedido = pedidoService.finalizarCarrinho(carrinho, endereco, formaPagamento);
+
+        redirectAttributes.addFlashAttribute("mensagem", "Pedido registrado com Sucesso");
+
+        return new ModelAndView("redirect:/pedido");
+    }
+
+    @GetMapping
+    public String listarPedidos(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Cliente cliente = clienteService.findByEmail(authentication.getName());
 
-        if (cliente != null) {
-           pedido.setCliente(cliente);
-           pedido = pedidoService.finalizarPedido(pedido);
-           Carrinho carrinho = carrinhoService.buscarCarrinhoPorClienteId(cliente.getId());
-           carrinhoService.limparCarrinho(carrinho);
-        }else{
-            return new ModelAndView("redirect:/login");
+        List<Pedido> pedidos = pedidoService.buscarPedidosPorClienteId(cliente.getId());
+
+        model.addAttribute("pedidos", pedidos);
+
+        return "lista-pedidos";
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public String detalhesPedido(@PathVariable Long id, Model model) {
+        Optional<Pedido> pedido = pedidoService.findById(id);
+
+        if (pedido.isPresent()) {
+            model.addAttribute("pedido", pedido.get());
+            return "detalhe-pedido";
         }
-        return new ModelAndView("pedidos");
+
+        return null;
     }
 }

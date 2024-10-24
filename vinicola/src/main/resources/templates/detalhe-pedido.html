@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Pedido</title>
+</head>
+<body>
+<h2>Detalhes do Pedido</h2>
+<div>
+    <p>Número do Pedido: <span th:text="${pedido.numeroPedido}"></span></p>
+    <p>Status: <span th:text="${pedido.status}"></span></p>
+    <p>Valor Total: <span th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal,1,2)}"></span></p>
+    <p>Frete: <span th:text="${'R$ ' + #numbers.formatDecimal(pedido.frete,1,2)}"></span></p>
+    <p>Forma de Pagamento: <span th:text="${pedido.formaPagamento}"></span></p>
+    <p>Endereço de Entrega:
+        <span th:text="${pedido.endereco.logradouro} + ', ' + ${pedido.endereco.numero} +
+    (${pedido.endereco.complemento} != null ? ' - ' + ${pedido.endereco.complemento} : '') +
+    ', ' + ${pedido.endereco.bairro} + ', ' + ${pedido.endereco.cidade} + ' - ' + ${pedido.endereco.estado}"></span>
+    </p>
+
+
+    <h3>Itens do Pedido</h3>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Valor Unitário</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${pedido.itens}">
+            <td th:text="${item.produto.nome}"></td>
+            <td th:text="${item.quantidade}"></td>
+            <td th:text="${'R$ ' + #numbers.formatDecimal(item.valorItem, 1, 2)}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<a href="/pedido">Voltar</a>
+
+</body>
+</html>
