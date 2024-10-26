@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Gerenciar Pedidos</title>
@@ -8,6 +8,7 @@
 <body>
 <div th:fragment="tabela-pedidos(pedidos)">
     <h2>Lista de Pedidos</h2>
+    <br>
     <table border="1" id="tabela-pedidos">
         <thead>
         <tr>
@@ -24,7 +25,7 @@
             <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorComFrete, 1, 2)}"></td>
             <td>
                 <form method="get" th:action="@{/pedido/detalhes/{id}(id=${pedido.id})}">
-                    <button type="submit">Visualizar Detalhes</button>
+                    <button type="submit" class="btn-voltar-checkout">Visualizar Detalhes</button>
                 </form>
             </td>
         </tr>
