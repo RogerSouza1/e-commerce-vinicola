@@ -83,22 +83,6 @@
             }
         }
 
-        function validarCamposCartao() {
-            var formaPagamento = document.getElementById("formaPagamento").value;
-            if (formaPagamento === "CREDITO" || formaPagamento === "DEBITO") {
-                var numeroCartao = document.getElementById("numeroCartao").value.trim();
-                var codigoVerificador = document.getElementById("codigoVerificador").value.trim();
-                var nomeCompleto = document.getElementById("nomeCompleto").value.trim();
-                var dataVencimento = document.getElementById("dataVencimento").value.trim();
-
-                if (numeroCartao === "" || codigoVerificador === "" || nomeCompleto === "" || dataVencimento === "") {
-                    alert("Preencha todos os campos do cartão de crédito.");
-                    return false;
-                }
-            }
-            return true;
-        }
-
         function mostrarEtapa(ocultar, mostrar) {
             document.getElementById(ocultar).style.display = "none";
             document.getElementById(mostrar).style.display = "block";
@@ -140,6 +124,8 @@
 
         function fecharModal() {
             document.getElementById("modal").style.display = "none";
+            var inputs = document.querySelectorAll("#form-endereco-modal input");
+            inputs.forEach(input => input.value = "");
         }
 
         window.onclick = function(event) {
@@ -162,6 +148,39 @@
                 return false;
             }
 
+            return true;
+        }
+
+        function validarCamposCartao() {
+            var formaPagamento = document.getElementById("formaPagamento").value;
+            if (formaPagamento === "CREDITO" || formaPagamento === "DEBITO") {
+                var numeroCartao = document.getElementById("numeroCartao").value.trim();
+                var codigoVerificador = document.getElementById("codigoVerificador").value.trim();
+                var nomeCompleto = document.getElementById("nomeCompleto").value.trim();
+                var dataVencimento = document.getElementById("dataVencimento").value.trim();
+                var parcelas = document.getElementById("parcelas").value.trim();
+
+                if (numeroCartao.length !== 19) {
+                    alert("Preencha o número do cartão corretamente.");
+                    return false;
+                }
+                if (codigoVerificador.length !== 3) {
+                    alert("Preencha o código verificador corretamente.");
+                    return false;
+                }
+                if (nomeCompleto.split(" ").length < 2 || nomeCompleto.split(" ").some(word => word.length < 3) || nomeCompleto.length > 40) {
+                    alert("Preencha o nome completo corretamente.");
+                    return false;
+                }
+                if (dataVencimento === "") {
+                    alert("Preencha a data de vencimento.");
+                    return false;
+                }
+                if (formaPagamento === "CREDITO" && parcelas === "") {
+                    alert("Selecione a quantidade de parcelas.");
+                    return false;
+                }
+            }
             return true;
         }
     </script>
@@ -271,7 +290,7 @@
                     <div>
                         <label for="numeroCartao">Número do Cartão:</label>
                         <input id="numeroCartao" maxlength="19" oninput="formatarNumeroCartao()"
-                               placeholder="0000 0000 0000 0000" required type="text">
+                               pattern="\d{19}" placeholder="0000 0000 0000 0000" required type="text">
                     </div>
                     <div>
                         <label for="codigoVerificador">Código Verificador (CVV):</label>
