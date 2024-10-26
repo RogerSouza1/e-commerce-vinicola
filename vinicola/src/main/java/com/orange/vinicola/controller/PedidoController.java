@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -34,10 +36,9 @@ public class PedidoController {
     private CarrinhoService carrinhoService;
 
     @PostMapping("/finalizar")
-    public ModelAndView finalizarPedido(@RequestParam("forma-pagamento") String formaPagamento, @RequestParam("endereco") Endereco endereco, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-
+    @ResponseBody
+    public Map<String, Object> finalizarPedido(@RequestParam("forma-pagamento") String formaPagamento, @RequestParam("endereco") Endereco endereco, HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
         Cliente cliente = clienteService.findByEmail(authentication.getName());
 
@@ -49,9 +50,11 @@ public class PedidoController {
 
         Pedido pedido = pedidoService.finalizarCarrinho(carrinho, endereco, formaPagamento);
 
-        redirectAttributes.addFlashAttribute("mensagem", "Pedido registrado com Sucesso");
+        Map<String, Object> response = new HashMap<>();
+        response.put("numeroPedido", pedido.getNumeroPedido());
+        response.put("valorTotal", pedido.getValorComFrete());
 
-        return new ModelAndView("redirect:/pedido");
+        return response;
     }
 
     @GetMapping

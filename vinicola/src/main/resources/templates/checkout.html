@@ -147,6 +147,24 @@
             }
             return true;
         }
+        function finalizarPedido() {
+            var form = document.getElementById('finalizar-pedido-form');
+            var formData = new FormData(form);
+
+            fetch('/pedido/finalizar', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Pedido finalizado com sucesso!\nNúmero do Pedido: ' + data.numeroPedido + '\nValor Total: R$ ' + data.valorTotal.toFixed(2));
+                    window.location.href = '/pedido';
+                })
+                .catch(error => {
+                    console.error('Erro ao finalizar o pedido:', error);
+                    alert('Ocorreu um erro ao finalizar o pedido. Por favor, tente novamente.');
+                });
+        }
     </script>
 </head>
 <body>
@@ -345,12 +363,12 @@
                                 <span id="formaPagamento-text"></span>
                             </div>
                             <div id="finalizar-pedido">
-                                <form method="post" th:action="@{/pedido/finalizar}">
+                                <form id="finalizar-pedido-form" method="post">
                                     <input id="hidden-endereco" name="endereco" type="hidden">
                                     <input id="hidden-forma-pagamento" name="forma-pagamento" type="hidden">
                                     <div class="btn-checkout-container">
                                         <button class="btn-voltar-checkout" onclick="mostrarEtapa('etapa-revisao', 'etapa-pagamento')">Voltar</button>
-                                        <button type="submit" class="btn-proxima-etapa">Finalizar Compra</button>
+                                        <button type="button" class="btn-proxima-etapa" onclick="finalizarPedido()">Finalizar Compra</button>
                                     </div>
                                 </form>
                             </div>
