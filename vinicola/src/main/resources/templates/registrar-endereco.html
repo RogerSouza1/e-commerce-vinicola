@@ -6,34 +6,8 @@
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <script th:src="@{/js/buscarCep.js}"></script>
     <script>
-        function buscarCep(cep) {
-            // Remove qualquer traço ou espaço
-            cep = cep.replace(/\D/g, '');
-
-            // Verifica se o CEP tem 8 dígitos
-            if (cep.length === 8) {
-                // URL da API de CEP
-                const url = `https://viacep.com.br/ws/${cep}/json/`;
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (!data.erro) {
-                                document.getElementById('logradouro').value = data.logradouro;
-                                document.getElementById('bairro').value = data.bairro;
-                                document.getElementById('cidade').value = data.localidade;
-                                document.getElementById('estado').value = data.uf;
-                        } else {
-                            alert("CEP não encontrado.");
-                        }
-                    })
-                    .catch(error => {
-                        alert("Erro ao buscar o CEP.");
-                        console.error(error);
-                    });
-            }
-        }
 
         function validarFormulario(event) {
             const cepInput = document.getElementById("cep").value;
@@ -68,7 +42,7 @@
             <p style="color: red;" th:text="${mensagem}"></p>
         </div>
 
-        <form method="post" onsubmit="return validarFormulario(event);" th:action="@{/endereco/cadastrar}"
+            <form method="post" onsubmit="return validarFormulario(event);" th:action="@{/endereco/cadastrar}"
               th:object="${endereco}">
             <div class="input-group">
                 <label for="cep">CEP:</label>

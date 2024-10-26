@@ -6,7 +6,44 @@
     <title>Checkout</title>
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <script th:src="@{/js/buscarCep.js}"></script>
+    <!--Carlita favor passar para o css-->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
 
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
     <script>
         function toggleCartaoCampos() {
             var formaPagamento = document.getElementById("formaPagamento").value;
@@ -96,21 +133,37 @@
             }
         };
 
-        document.querySelector('.btn-finalizar-compra').addEventListener('click', function (event) {
-            event.preventDefault();
 
-            const itensCarrinho = /*[[${carrinho.itens}]]*/ [];
+        function abrirModal() {
+            document.getElementById("modal").style.display = "block";
+        }
 
-            const hiddenItens = document.getElementById('hidden-itens');
-            hiddenItens.value = JSON.stringify(itensCarrinho);
+        function fecharModal() {
+            document.getElementById("modal").style.display = "none";
+        }
 
-            if (!hiddenItens.value || hiddenItens.value.trim() === '[]') {
-                alert('O pedido precisa conter pelo menos um item.');
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("modal")) {
+                fecharModal();
+            }
+        }
+
+        function validarFormulario(event) {
+            const cepInput = document.getElementById("cep").value;
+            const logradouroInput = document.getElementById("logradouro").value;
+            const numeroInput = document.getElementById("numero").value;
+            const bairroInput = document.getElementById("bairro").value;
+            const cidadeInput = document.getElementById("cidade").value;
+            const estadoInput = document.getElementById("estado").value;
+
+            if (!cepInput || !logradouroInput || !numeroInput || !bairroInput || !cidadeInput || !estadoInput) {
+                event.preventDefault();
+                alert("Por favor, preencha todos os campos obrigatórios.");
                 return false;
             }
 
-            event.target.closest('form').submit();
-        });
+            return true;
+        }
     </script>
 </head>
 <body>
@@ -127,33 +180,76 @@
             <div id="etapa-endereco">
                 <div class="endereco-checkout">
                     <label for="endereco-faturamento">Endereço de faturamento:</label>
-                    <!-- TODO: Como só tem um endereço necessário colocar ele como texto ao inves de dropdown -->
-                    <select class="select-field" id="endereco-faturamento" required th:field="*{enderecoFaturamento}">
-                        <option th:each="endereco : ${enderecoFaturamento}"
-                                th:selected="${endereco.id == endereco.id}"
-                                th:text="${endereco.logradouro + ', ' + endereco.numero + ' - ' + endereco.bairro}"
-                                th:value="${endereco.id}">
-                        </option>
-                    </select>
+                    <div class="select-field" id="endereco-faturamento" th:text="${enderecoFaturamento.logradouro + ', ' + enderecoFaturamento.numero + ' - ' + enderecoFaturamento.bairro}"></div>
                 </div>
                 <div class="endereco-checkout">
                     <label for="endereco-entrega">Endereço de entrega:</label>
                     <select class="select-field" id="endereco-entrega" required th:field="*{enderecoEntrega}">
                         <!-- TODO: Endereço padrão não está sendo automaticamente escolhido pelo dropdown, necessário verificar-->
-                        <option th:each="endereco : ${enderecoEntrega}"
-                                th:selected="${endereco.cep == enderecoPadrao.cep}"
-                                th:text="${endereco.logradouro + ', ' + endereco.numero + ' - ' + endereco.bairro}"
-                                th:value="${endereco.id}">
+                        <option th:each="enderecos : ${enderecoEntrega}"
+                                th:selected="${enderecos.id == enderecoPadrao.id}"
+                                th:text="${enderecos.logradouro + ', ' + enderecos.numero + ' - ' + enderecos.bairro}"
+                                th:value="${enderecos.id}">
                         </option>
                     </select>
                 </div>
                 <div>
-                    <!-- TODO: Realizar redirectionamento correto após adição do endereço (pode criar um forms de adicionar de endereço aqui mesmo e chamar o post) -->
-                    <button class="btn-adicionar-novo-endereco"
-                            onclick="window.location.href='/endereco/cadastrar?redirect=/carrinho/checkout'"
-                            type="button">Adicionar novo endereço
-                    </button>
+                    <!-- Modal de Cadastro de Endereço -->
+                    <button id="button-modal-endereco" onclick="abrirModal()">Cadastrar Endereço</button>
+                    <div id="modal" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="fecharModal()">&times;</span>
+                            <form method="post" id="form-endereco-modal" onsubmit="return validarFormulario(event);"
+                                  th:action="@{/endereco/cadastrar}" th:object="${endereco}">
+                                <div class="input-group">
+                                    <label for="cep">CEP:</label>
+                                    <div class="campo-cep">
+                                        <input id="cep" required th:field="*{cep}" type="text" maxlength="8" oninput="buscarCep(this.value)"/>
+                                        <div th:errors="*{cep}" th:if="${#fields.hasErrors('cep')}"></div>
+                                    </div>
+                                </div>
 
+                                <div class="input-group">
+                                    <label for="logradouro">Logradouro:</label>
+                                    <input id="logradouro" required th:field="*{logradouro}" type="text" readonly/>
+                                    <div th:errors="*{logradouro}" th:if="${#fields.hasErrors('logradouro')}"></div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="numero">Número:</label>
+                                    <input id="numero" required th:field="*{numero}" type="text"/>
+                                    <div th:errors="*{numero}" th:if="${#fields.hasErrors('numero')}"></div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="complemento">Complemento</label>
+                                    <input id="complemento" th:field="*{complemento}" type="text">
+                                    <div th:erros="*{complemento}" th:if="${#fields.hasErrors('complemento')}"></div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="bairro">Bairro:</label>
+                                    <input id="bairro" required th:field="*{bairro}" type="text" readonly/>
+                                    <div th:errors="*{bairro}" th:if="${#fields.hasErrors('bairro')}"></div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="cidade">Cidade:</label>
+                                    <input id="cidade" required th:field="*{cidade}" type="text" readonly>
+                                    <div th:errors="*{cidade}" th:if="${#fields.hasErrors('cidade')}"></div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="estado">Estado:</label>
+                                    <input id="estado" required th:field="*{estado}" type="text" readonly/>
+                                    <div th:errors="*{estado}" th:if="${#fields.hasErrors('estado')}"></div>
+                                </div>
+
+                                <input type="hidden" name="redirect" value="/carrinho/checkout"/>
+                                <button type="submit" class="btn-padrao">Cadastrar Endereço</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <button class="btn-proxima-etapa" onclick="proximaEtapa('etapa-endereco', 'etapa-pagamento')">Próxima
                     Etapa

@@ -6,43 +6,9 @@
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <script th:src="@{/js/buscarCep.js}"></script>
     <script>
-        function buscarCep(cep, tipo) {
-            // Remove qualquer traço ou espaço
-            cep = cep.replace(/\D/g, '');
 
-            // Verifica se o CEP tem 8 dígitos
-            if (cep.length === 8) {
-                // URL da API de CEP
-                const url = `https://viacep.com.br/ws/${cep}/json/`;
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (!data.erro) {
-                            if (tipo === 'faturamento') {
-                                // Preenche os campos de faturamento
-                                document.getElementById('logradouro').value = data.logradouro;
-                                document.getElementById('bairro').value = data.bairro;
-                                document.getElementById('cidade').value = data.localidade;
-                                document.getElementById('estado').value = data.uf;
-                            } else if (tipo === 'entrega') {
-                                // Preenche os campos de entrega
-                                document.getElementById('logradouroEntrega').value = data.logradouro;
-                                document.getElementById('bairroEntrega').value = data.bairro;
-                                document.getElementById('cidadeEntrega').value = data.localidade;
-                                document.getElementById('estadoEntrega').value = data.uf;
-                            }
-                        } else {
-                            alert("CEP não encontrado.");
-                        }
-                    })
-                    .catch(error => {
-                        alert("Erro ao buscar o CEP.");
-                        console.error(error);
-                    });
-            }
-        }
 
 
         function validarCPF(cpf) {
@@ -177,7 +143,7 @@
 
             <div class="input-group">
                 <label for="cep">CEP:</label>
-                <input id="cep" required th:field="*{enderecos[0].cep}" type="text" maxlength="8" oninput="buscarCep(this.value, 'faturamento')"/>
+                <input id="cep" required th:field="*{enderecos[0].cep}" type="text" maxlength="8" oninput="buscarCepCadastrar(this.value, 'faturamento')"/>
                 <div th:errors="*{enderecos[0].cep}" th:if="${#fields.hasErrors('enderecos[0].cep')}"></div>
             </div>
 
@@ -230,7 +196,7 @@
 
                 <div class="input-group">
                     <label for="cepEntrega">CEP:</label>
-                    <input id="cepEntrega" th:field="*{enderecos[1].cep}" type="text" maxlength="8" oninput="buscarCep(this.value, 'entrega')"/>
+                    <input id="cepEntrega" th:field="*{enderecos[1].cep}" type="text" maxlength="8" oninput="buscarCepCadastrar(this.value, 'entrega')"/>
                     <div th:errors="*{enderecos[1].cep}" th:if="${#fields.hasErrors('enderecos[1].cep')}"></div>
                 </div>
 

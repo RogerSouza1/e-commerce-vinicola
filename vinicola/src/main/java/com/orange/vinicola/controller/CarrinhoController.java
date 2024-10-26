@@ -57,7 +57,9 @@ public class CarrinhoController {
     }
 
     @RequestMapping("/adicionarProduto")
-    public ModelAndView adicionarProduto(@RequestParam("produtoId") Long produtoId, @RequestParam("quantidade") int quantidade, HttpServletRequest request) {
+    public ModelAndView adicionarProduto(@RequestParam("produtoId") Long produtoId,
+                                         @RequestParam("quantidade") int quantidade,
+                                         HttpServletRequest request) {
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
 
         if (carrinho == null) {
@@ -76,7 +78,11 @@ public class CarrinhoController {
     }
 
     @RequestMapping("/removerProduto")
-    public ModelAndView removerProduto(@RequestParam Long produtoId, @RequestParam(required = false) String redirect, @RequestParam(required = false) String etapaAtual, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ModelAndView removerProduto(@RequestParam Long produtoId,
+                                       @RequestParam(required = false)
+                                       String redirect, @RequestParam(required = false) String etapaAtual,
+                                       HttpServletRequest request,
+                                       RedirectAttributes redirectAttributes) {
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
         if (cliente != null) {
@@ -94,7 +100,11 @@ public class CarrinhoController {
     }
 
     @RequestMapping("/diminuirQuantidade")
-    public ModelAndView diminuirQuantidade(@RequestParam("produtoId") Long produtoId, @RequestParam(required = false) String redirect, @RequestParam(required = false) String etapaAtual, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ModelAndView diminuirQuantidade(@RequestParam("produtoId") Long produtoId,
+                                           @RequestParam(required = false) String redirect,
+                                           @RequestParam(required = false) String etapaAtual,
+                                           HttpServletRequest request,
+                                           RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView("redirect:/carrinho");
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
@@ -113,7 +123,11 @@ public class CarrinhoController {
     }
 
     @RequestMapping("/aumentarQuantidade")
-    public ModelAndView aumentarQuantidade(@RequestParam("produtoId") Long produtoId, @RequestParam(required = false) String redirect, @RequestParam(required = false) String etapaAtual, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ModelAndView aumentarQuantidade(@RequestParam("produtoId") Long produtoId,
+                                           @RequestParam(required = false) String redirect,
+                                           @RequestParam(required = false) String etapaAtual,
+                                           HttpServletRequest request,
+                                           RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView("redirect:/carrinho");
         Carrinho carrinho = (Carrinho) request.getSession().getAttribute("carrinho");
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
@@ -155,17 +169,18 @@ public class CarrinhoController {
     }
 
     @GetMapping("/checkout")
-    public ModelAndView checkout(Model model, HttpServletRequest request) {
+    public ModelAndView checkout(Model model) {
 
         ModelAndView mv = new ModelAndView("checkout");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Cliente cliente = clienteService.findByEmail(authentication.getName());
 
         Endereco enderecoFaturamento = enderecoService.findEnderecoFaturamento(cliente.getId());
         ArrayList<Endereco> enderecosEntrega = enderecoService.findALlEnderecoEntregaByClienteId(cliente.getId());
-        Pedido pedido = new Pedido();  //Revisar lógica
         Endereco enderecoEntregaPadrao = null;
+        Carrinho carrinho = carrinhoService.buscarCarrinhoPorClienteId(cliente.getId());
+        Endereco enderecoModal = new Endereco();
 
         for (Endereco endereco : enderecosEntrega) {
             if (endereco.isEntregaPadrao()) {
@@ -173,13 +188,11 @@ public class CarrinhoController {
             }
         }
 
-        Carrinho carrinho = carrinhoService.buscarCarrinhoPorClienteId(cliente.getId());
-
         model.addAttribute("carrinho", carrinho);
         model.addAttribute("enderecoPadrao", enderecoEntregaPadrao);
         model.addAttribute("enderecoFaturamento", enderecoFaturamento);
         model.addAttribute("enderecoEntrega", enderecosEntrega);
-        model.addAttribute("pedido", pedido);
+        model.addAttribute("endereco", enderecoModal);
         return mv;
     }
 

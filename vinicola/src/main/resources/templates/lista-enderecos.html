@@ -48,7 +48,7 @@
     <section>
         <div class="lista-enderecos">
             <h2 class="form-title">Endereços de Entrega</h2>
-            <form method="post" th:action="@{/endereco/cadastrar}">
+            <form method="get" th:action="@{/endereco/cadastrar}">
                 <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}"/>
                 <button type="submit" class="btn-novo-endereco">Adicionar Novo Endereço</button>
             </form>

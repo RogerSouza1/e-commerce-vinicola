@@ -76,16 +76,15 @@ public class EnderecoController {
     }
 
     @GetMapping("/cadastrar")
-    public String cadastrarEndereco(@RequestParam(required = false) String redirect, Model model) {
+    public String cadastrarEndereco(Model model) {
         model.addAttribute("endereco", new Endereco());
-        model.addAttribute("redirect", redirect);
         return "registrar-endereco";
     }
 
     @PostMapping("/cadastrar")
     public ModelAndView cadastrarEndereco(@Valid @ModelAttribute("endereco") Endereco endereco,
-                                          BindingResult result, Model model,
                                           @RequestParam(value = "redirect", required = false) String redirect,
+                                          BindingResult result,
                                           RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return new ModelAndView("registrar-endereco", "endereco", endereco);
@@ -94,16 +93,14 @@ public class EnderecoController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Cliente cliente = clienteService.findByEmail(authentication.getName());
 
-        redirect = (String) model.getAttribute("redirect");
-
         endereco.setCliente(cliente);
         enderecoRepository.save(endereco);
-
-        redirectAttributes.addFlashAttribute("mensagem", "Endereço cadastrado com sucesso!");
 
         if (redirect != null && !redirect.isEmpty()) {
             return new ModelAndView("redirect:" + redirect);
         }
+
+        redirectAttributes.addFlashAttribute("mensagem", "Endereço cadastrado com sucesso!");
         return new ModelAndView("redirect:/endereco/lista-enderecos");
 
     }
