@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
+                        .ignoringRequestMatchers("/h2-console/**", "/**")
                 )
                 .headers(headers -> headers
                         .xssProtection(xss -> xss.disable())

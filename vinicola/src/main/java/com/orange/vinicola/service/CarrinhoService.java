@@ -30,10 +30,7 @@ public class CarrinhoService {
     private TransationalService self;
 
     public Carrinho adicionarProduto(Carrinho carrinho, Long produtoId, int quantidade, Cliente cliente) {
-
-        if (cliente != null && cliente.getCarrinho() != null) {
-            carrinho = cliente.getCarrinho();
-        } else if (carrinho == null) {
+        if (carrinho == null) {
             carrinho = new Carrinho();
             carrinho.setItens(new ArrayList<>());
             carrinho.setValorTotal(0);
@@ -43,7 +40,6 @@ public class CarrinhoService {
         }
 
         Optional<Produto> optionalProduto = produtoRepository.findById(produtoId);
-
         if (optionalProduto.isEmpty()) {
             throw new RuntimeException("Produto não encontrado");
         }
@@ -55,27 +51,20 @@ public class CarrinhoService {
         }
 
         boolean itemJaExiste = false;
-        if (carrinho.getItens() == null) {
-            adicionarItem(carrinho, produto, quantidade);
-        } else {
-            for (Item item : carrinho.getItens()) {
-                if (item.getProduto().getId().equals(produtoId)) {
-                    item.setQuantidade(item.getQuantidade() + quantidade);
-                    double valorAnteriorItem = item.getValorItem();
-                    item.setValorItem(produto.getPreco() * item.getQuantidade());
-
-                    carrinho.setValorTotal(carrinho.getValorTotal() + (item.getValorItem() - valorAnteriorItem));
-                    carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
-                    itemJaExiste = true;
-                    break;
-                }
-            }
-
-            if (!itemJaExiste) {
-                adicionarItem(carrinho, produto, quantidade);
+        for (Item item : carrinho.getItens()) {
+            if (item.getProduto().getId().equals(produtoId)) {
+                item.setQuantidade(item.getQuantidade() + quantidade);
+                double valorAnteriorItem = item.getValorItem();
+                item.setValorItem(produto.getPreco() * item.getQuantidade());
+                carrinho.setValorTotal(carrinho.getValorTotal() + (item.getValorItem() - valorAnteriorItem));
+                itemJaExiste = true;
+                break;
             }
         }
 
+        if (!itemJaExiste) {
+            adicionarItem(carrinho, produto, quantidade);
+        }
 
         if (cliente != null) {
             carrinho.setCliente(cliente);
@@ -85,6 +74,7 @@ public class CarrinhoService {
 
         return carrinho;
     }
+
 
     public Carrinho incrementarQuantidade(Carrinho carrinho, Long produtoId, Cliente cliente) {
         if (carrinho == null) {
@@ -108,7 +98,6 @@ public class CarrinhoService {
 
                 double valorAnteriorItem = item.getValorItem();
                 item.setValorItem(produto.getPreco() * item.getQuantidade());
-
                 carrinho.setValorTotal(carrinho.getValorTotal() + (item.getValorItem() - valorAnteriorItem));
                 carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
                 break;
@@ -119,6 +108,7 @@ public class CarrinhoService {
             carrinho.setCliente(cliente);
             cliente.setCarrinho(carrinho);
             self.save(carrinho);
+
         }
 
         return carrinho;
@@ -137,6 +127,8 @@ public class CarrinhoService {
 
         Produto produto = optionalProduto.get();
 
+        boolean produtoRemovido = false;
+
         for (Item item : carrinho.getItens()) {
             if (item.getProduto().getId().equals(produtoId)) {
                 if (item.getQuantidade() > 1) {
@@ -147,12 +139,13 @@ public class CarrinhoService {
                     carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
                 } else if (item.getQuantidade() == 1) {
                     this.removerProduto(carrinho, produtoId, cliente);
+                    produtoRemovido = true;
                 }
                 break;
             }
         }
 
-        if (cliente != null) {
+        if (cliente != null && !produtoRemovido) {
             carrinho.setCliente(cliente);
             cliente.setCarrinho(carrinho);
             self.save(carrinho);
@@ -198,6 +191,7 @@ public class CarrinhoService {
 
         carrinho.setValorTotal(carrinho.getValorTotal() - itemRemovido.getValorItem());
         carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
+        itemRepository.delete(itemRemovido);
         carrinho.getItens().remove(itemRemovido);
 
         if (carrinho.getItens().isEmpty()) {
@@ -236,8 +230,57 @@ public class CarrinhoService {
         carrinho.setValorComFrete(carrinho.getValorTotal() + carrinho.getFrete());
     }
 
+    public Carrinho mesclarCarrinho(Carrinho carrinhoSessao, Carrinho carrinhoBanco, Cliente cliente) {
+        if (carrinhoSessao == null || carrinhoBanco == null) {
+            return null;
+        }
+
+        if (carrinhoBanco.getId().equals(carrinhoSessao.getId())) {
+            return carrinhoBanco;
+        }
+
+        for (Item itemSessao : carrinhoSessao.getItens()) {
+            boolean itemJaExiste = false;
+            for (Item itemBanco : carrinhoBanco.getItens()) {
+                if (itemBanco.getProduto().getId().equals(itemSessao.getProduto().getId())) {
+                    itemBanco.setQuantidade(itemBanco.getQuantidade() + itemSessao.getQuantidade());
+                    double valorAnteriorItem = itemBanco.getValorItem();
+                    itemBanco.setValorItem(itemBanco.getProduto().getPreco() * itemBanco.getQuantidade());
+                    carrinhoBanco.setValorTotal(carrinhoBanco.getValorTotal() + (itemBanco.getValorItem() - valorAnteriorItem));
+                    carrinhoBanco.setValorComFrete(carrinhoBanco.getValorTotal() + carrinhoBanco.getFrete());
+                    itemJaExiste = true;
+                    break;
+                }
+            }
+
+            if (!itemJaExiste) {
+                Item novoItem = new Item();
+                novoItem.setProduto(itemSessao.getProduto());
+                novoItem.setQuantidade(itemSessao.getQuantidade());
+                novoItem.setValorItem(itemSessao.getProduto().getPreco() * novoItem.getQuantidade());
+                novoItem.setCarrinho(carrinhoBanco);
+
+                carrinhoBanco.getItens().add(novoItem);
+                carrinhoBanco.setValorTotal(carrinhoBanco.getValorTotal() + novoItem.getValorItem());
+                carrinhoBanco.setValorComFrete(carrinhoBanco.getValorTotal() + carrinhoBanco.getFrete());
+            }
+        }
+
+        carrinhoBanco.setCliente(cliente);
+
+        return carrinhoBanco;
+    }
+
     @Transactional
     public void save(Carrinho carrinho) {
+        carrinhoRepository.save(carrinho);
+    }
+
+    public void limparCarrinho(Carrinho carrinho) {
+        carrinho.getItens().clear();
+        carrinho.setValorTotal(0);
+        carrinho.setFrete(0);
+        carrinho.setValorComFrete(0);
         carrinhoRepository.save(carrinho);
     }
 }

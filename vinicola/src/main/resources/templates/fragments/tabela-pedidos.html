@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Pedidos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:fragment="tabela-pedidos(pedidos)">
+    <h2>Lista de Pedidos</h2>
+    <br>
+    <table border="1" id="tabela-pedidos">
+        <thead>
+        <tr>
+            <th>Número do Pedido</th>
+            <th>Status</th>
+            <th>Valor Total</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pedido : ${pedidos}">
+            <td th:text="*{pedido.numeroPedido}"></td>
+            <td th:text="${pedido.status}"></td>
+            <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorComFrete, 1, 2)}"></td>
+            <td>
+                <form method="get" th:action="@{/pedido/detalhes/{id}(id=${pedido.id})}">
+                    <button type="submit" class="btn-voltar-checkout">Visualizar Detalhes</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

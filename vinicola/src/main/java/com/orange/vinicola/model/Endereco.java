@@ -30,7 +30,7 @@ public class Endereco {
     @Pattern(regexp = "\\d+", message = "O numero deve conter apenas números.")
     private String numero;
 
-    @Column(columnDefinition = "default ''")
+    @Column(nullable = false)
     private String complemento;
 
     @Column(nullable = false)

@@ -99,6 +99,7 @@ public class ClienteController {
     public String showPerfil(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Cliente cliente = clienteService.findByEmail(authentication.getName());
+        model.addAttribute("carrinho", cliente.getCarrinho());
         model.addAttribute("cliente", cliente);
         return "editar-cliente";
     }
@@ -107,6 +108,7 @@ public class ClienteController {
     public String showEditarDados(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Cliente cliente = clienteService.findByEmail(authentication.getName());
+        model.addAttribute("carrinho", cliente.getCarrinho());
         model.addAttribute("cliente", cliente);
         return "editar-dados-cliente";
     }

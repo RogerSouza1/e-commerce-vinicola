@@ -41,7 +41,7 @@ public class EnderecoController {
             return "lista-enderecos";
         }
 
-        List<Endereco> enderecos = enderecoService.findByClienteId(cliente.getId());
+        List<Endereco> enderecos = enderecoService.findAllByClienteId(cliente.getId());
         Endereco enderecoFaturamento = enderecoService.findEnderecoFaturamento(cliente.getId());
 
         if (enderecoFaturamento != null) {
@@ -51,6 +51,7 @@ public class EnderecoController {
         model.addAttribute("cliente", cliente);
         model.addAttribute("enderecoFaturamento", enderecoFaturamento);
         model.addAttribute("enderecos", enderecos);
+        model.addAttribute("carrinho", cliente.getCarrinho());
 
         return "lista-enderecos";
     }
@@ -82,7 +83,8 @@ public class EnderecoController {
 
     @PostMapping("/cadastrar")
     public ModelAndView cadastrarEndereco(@Valid @ModelAttribute("endereco") Endereco endereco,
-                                          BindingResult result, Model model,
+                                          @RequestParam(value = "redirect", required = false) String redirect,
+                                          BindingResult result,
                                           RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return new ModelAndView("registrar-endereco", "endereco", endereco);
@@ -94,9 +96,33 @@ public class EnderecoController {
         endereco.setCliente(cliente);
         enderecoRepository.save(endereco);
 
-        redirectAttributes.addFlashAttribute("mensagem", "Endereço cadastrado com sucesso!");
+        if (redirect != null && !redirect.isEmpty()) {
+            return new ModelAndView("redirect:" + redirect);
+        }
 
+        redirectAttributes.addFlashAttribute("mensagem", "Endereço cadastrado com sucesso!");
         return new ModelAndView("redirect:/endereco/lista-enderecos");
 
     }
+
+    @GetMapping("/selecionar-endereco")
+    public String selecionarEndereco(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Cliente cliente = clienteService.findByEmail(authentication.getName());
+
+        if (cliente == null) {
+            model.addAttribute("mensagem", "Cliente não encontrado.");
+            return "checkout";
+        }
+
+        List<Endereco> enderecos = enderecoService.findAllByClienteId(cliente.getId());
+        Endereco enderecoPadrao = enderecoService.findEnderecoPadrao(cliente.getId());
+
+        model.addAttribute("carrinho", cliente.getCarrinho());
+        model.addAttribute("enderecos", enderecos);
+        model.addAttribute("enderecoPadrao", enderecoPadrao);
+
+        return "checkout";
+    }
+
 }

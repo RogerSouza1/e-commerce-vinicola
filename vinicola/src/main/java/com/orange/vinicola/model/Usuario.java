@@ -1,6 +1,7 @@
 package com.orange.vinicola.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.Collections;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "Usuario")
 public class Usuario implements UserDetails {
 

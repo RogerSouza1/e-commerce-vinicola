@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Pedidos</title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
+    <script>
+        $(document).ready(function () {
+            $('#adicionar-novo-pedido').on('click', function () {
+                window.location.href = '/pedido/adicionar';
+            });
+        });
+    </script>
+</head>
+<body>
+
+<header>
+    <div th:replace="fragments/header :: header"></div>
+    <button class="btn-voltar" onclick="window.location.href='/'" type="button">
+        <img th:src="@{/images/seta.png}">
+    </button>
+</header>
+
+<main class="main-lista-pedidos">
+    <section class="lista-pedidos">
+        <div id="mensagem" th:text="${mensagem}"></div>
+        <div th:replace="~{fragments/tabela-pedidos :: tabela-pedidos(pedidos=${pedidos})}"></div>
+    </section>
+</main>
+
+<footer>
+    <div th:replace="fragments/footer :: footer"></div>
+</footer>
+
+</body>
+</html>

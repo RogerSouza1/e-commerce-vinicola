@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -22,37 +22,8 @@
 </head>
 <body>
 <header>
-    <section id="header">
-        <a href="/"><img alt="logo_winery" class="logo" th:src="@{/images/logo_winery.png}"></a>
-
-        <div>
-            <ul id="navbar">
-                <li><a class="active" href="/">Início</a></li>
-                <li><a class="link-navbar" href="/">Produtos</a></li>
-                <li>
-                    <a href="/carrinho">
-                        <img alt="carrinho" th:src="@{/images/sacola.png}">
-                        <span class="quantidade-itens" th:text="${carrinho != null ? carrinho.itens.size() : 0}"></span>
-                    </a>
-                </li>
-
-                <li sec:authorize="isAuthenticated()">
-                    <div class="dropdown">
-                        <a class="icone-navbar"><img alt="user" th:src="@{/images/user.png}"></a>
-                        <div class="dropdown-content">
-                            <a href="/cliente/perfil">Editar Perfil</a>
-                            <a href="/cliente/logout" onclick="confirmarLogout()">Sair</a>
-                        </div>
-                    </div>
-                </li>
-
-                <li sec:authorize="!isAuthenticated()">
-                    <a class="icone-navbar" href="/"><img alt="login" th:src="@{/images/user.png}"></a>
-                </li>
-            </ul>
-        </div>
-    </section>
-    <button class="btn-voltar" onclick="window.location.href='/'" type="button"><img
+    <div th:replace="fragments/header :: header"></div>
+    <button class="btn-voltar" onclick="window.location.href='/cliente/perfil'" type="button"><img
             th:src="@{/images/seta.png}"></button>
 </header>
 
@@ -109,5 +80,8 @@
         </form>
     </section>
 </main>
+<footer>
+    <div th:replace="fragments/footer :: footer"></div>
+</footer>
 </body>
 </html>
