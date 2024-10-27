@@ -15,7 +15,6 @@
     <table border="1" id="tabela-enderecos-entrega">
         <thead>
         <tr>
-            <th>ID</th>
             <th>CEP</th>
             <th>Logradouro</th>
             <th>Número</th>
@@ -28,7 +27,6 @@
         </thead>
         <tbody>
         <tr th:each="endereco : ${enderecos}">
-            <td th:text="${endereco.id}"></td>
             <td th:text="${endereco.cep}"></td>
             <td th:text="${endereco.logradouro}"></td>
             <td th:text="${endereco.numero}"></td>

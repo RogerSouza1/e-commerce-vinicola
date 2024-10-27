@@ -363,11 +363,13 @@
                                 <span id="formaPagamento-text"></span>
                             </div>
                             <div id="finalizar-pedido">
+                                <button class="btn-voltar-checkout"
+                                        onclick="mostrarEtapa('etapa-resumo', 'etapa-pagamento')">Voltar
+                                </button>
                                 <form id="finalizar-pedido-form" method="post">
                                     <input id="hidden-endereco" name="endereco" type="hidden">
                                     <input id="hidden-forma-pagamento" name="forma-pagamento" type="hidden">
                                     <div class="btn-checkout-container">
-                                        <button class="btn-voltar-checkout" onclick="mostrarEtapa('etapa-revisao', 'etapa-pagamento')">Voltar</button>
                                         <button type="button" class="btn-proxima-etapa" onclick="finalizarPedido()">Finalizar Compra</button>
                                     </div>
                                 </form>
