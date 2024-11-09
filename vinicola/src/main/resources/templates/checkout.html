@@ -353,6 +353,14 @@
                         </div>
                     </div>
                         <div class="coluna-direita">
+                            <div id="enderecoEntrega-resumo" class="coluna-direita-conteudo">
+                                <p><strong>Endereco de entrega:</strong></p>
+                                <span id="enderecoEntrega-text"></span>
+                            </div>
+                            <div id="formaPagamento-resumo" class="coluna-direita-conteudo">
+                                <p><strong>Forma de Pagamento:</strong></p>
+                                <span id="formaPagamento-text"></span>
+                            </div>
                             <div id="valor-subtotal-resumo" class="coluna-direita-conteudo">
                                 <p><strong>Subtotal:</strong></p>
                                 <span id="valor-subtotal-text" th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorTotal, 1, 2)}"></span>
@@ -364,14 +372,6 @@
                             <div id="valor-total-resumo" class="coluna-direita-conteudo">
                                 <p><strong>Valor Total:</strong></p>
                                 <span id="valor-total-text" th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
-                            </div>
-                            <div id="formaPagamento-resumo" class="coluna-direita-conteudo">
-                                <p><strong>Forma de Pagamento:</strong></p>
-                                <span id="formaPagamento-text"></span>
-                            </div>
-                            <div id="enderecoEntrega-resumo" class="coluna-direita-conteudo">
-                                <p><strong>Endereco de entrega:</strong></p>
-                                <span id="enderecoEntrega-text"></span>
                             </div>
                             <div id="finalizar-pedido">
                                 <button class="btn-voltar-checkout"
