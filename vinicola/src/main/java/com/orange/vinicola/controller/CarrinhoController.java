@@ -153,6 +153,9 @@ public class CarrinhoController {
         if (cliente != null) {
             carrinho = carrinhoRepository.findCarrinhoByClienteId(cliente.getId());
         }
+        if(carrinho.getItens().isEmpty()){
+           return mv;
+        }
         carrinho = carrinhoService.atualizarFrete(carrinho, frete, cliente);
         request.getSession().setAttribute("carrinho", carrinho);
         return mv;
@@ -163,7 +166,6 @@ public class CarrinhoController {
         if (request.getSession().getAttribute("cliente") == null) {
             return new ModelAndView("redirect:/login");
         }
-
         return new ModelAndView("redirect:/carrinho/checkout");
 
     }
@@ -180,6 +182,11 @@ public class CarrinhoController {
         ArrayList<Endereco> enderecosEntrega = enderecoService.findALlEnderecoEntregaByClienteId(cliente.getId());
         Endereco enderecoEntregaPadrao = null;
         Carrinho carrinho = carrinhoService.buscarCarrinhoPorClienteId(cliente.getId());
+
+        if(carrinho.getFrete() == 0){
+            double frete = 9 + (int)(Math.random() * ((32 - 9) + 1));
+            carrinho = carrinhoService.atualizarFrete(carrinho, frete, cliente);
+        }
         Endereco enderecoModal = new Endereco();
 
         for (Endereco endereco : enderecosEntrega) {

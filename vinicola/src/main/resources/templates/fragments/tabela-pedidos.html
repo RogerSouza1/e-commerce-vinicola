@@ -13,23 +13,21 @@
         <thead>
         <tr>
             <th>Número do Pedido</th>
-            <th>Status</th>
+            <th>Data</th>
             <th>Valor Total</th>
-            <th>Endereco de Entrega</th>
-            <th>Data do Pedido</th>
+            <th>Status</th>
             <th>Ações</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="pedido : ${pedidos}">
             <td th:text="*{pedido.numeroPedido}"></td>
-            <td th:text="${pedido.status}"></td>
-            <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorComFrete, 1, 2)}"></td>
-            <td th:text="${pedido.endereco.logradouro + ', ' + pedido.endereco.numero + ' - ' + pedido.endereco.bairro}"></td>
             <td th:text="${#dates.format(pedido.dataPedido, 'dd/MM/yyyy')}"></td>
+            <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorComFrete, 1, 2)}"></td>
+            <td th:text="${pedido.status}"></td>
             <td>
                 <form method="get" th:action="@{/pedido/detalhes/{id}(id=${pedido.id})}">
-                    <button type="submit" class="btn-voltar-checkout">Visualizar Detalhes</button>
+                    <button type="submit" class="btn-voltar-checkout">Mais detalhes</button>
                 </form>
             </td>
         </tr>

@@ -8,65 +8,65 @@
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/frontoffice.css}">
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const calcularBtn = document.querySelector('.calcular-btn');
-        const cepInput = document.querySelector('.cep-input');
-        const optionsSelect = document.querySelector('.options-select');
-        const valorFrete = document.querySelector('.valor-frete');
-        const valorCalculo = document.querySelector('.valor-calculo');
-        const calcularContainer = document.querySelector('.calcular');
+        document.addEventListener('DOMContentLoaded', function () {
+            const calcularBtn = document.querySelector('.calcular-btn');
+            const cepInput = document.querySelector('.cep-input');
+            const optionsSelect = document.querySelector('.options-select');
+            const valorFrete = document.querySelector('.valor-frete');
+            const valorCalculo = document.querySelector('.valor-calculo');
+            const calcularContainer = document.querySelector('.calcular');
 
-        calcularBtn.addEventListener('click', function () {
-            const cep = cepInput.value;
+            calcularBtn.addEventListener('click', function () {
+                const cep = cepInput.value;
 
-            if (!/^\d{5}-?\d{3}$/.test(cep)) {
-                alert('Por favor, insira um CEP válido.');
-                return;
-            }
+                if (!/^\d{5}-?\d{3}$/.test(cep)) {
+                    alert('Por favor, insira um CEP válido.');
+                    return;
+                }
 
-            calcularContainer.style.display = 'none';
-            valorCalculo.style.display = 'block';
+                calcularContainer.style.display = 'none';
+                valorCalculo.style.display = 'block';
 
-            const min = 9;
-            const max = 32;
-            const options = optionsSelect.options;
-            options[0].text = "Selecione uma opção";
-            options[0].value = "";
-            for (let i = 1; i < options.length; i++) {
-                const randomValue = (Math.random() * (max - min) + min).toFixed(2);
-                options[i].text = `Opção ${i} - R$ ${randomValue}`;
-                options[i].value = randomValue;
-            }
+                const min = 9;
+                const max = 32;
+                const options = optionsSelect.options;
+                options[0].text = "Selecione uma opção";
+                options[0].value = "";
+                for (let i = 1; i < options.length; i++) {
+                    const randomValue = (Math.random() * (max - min) + min).toFixed(2);
+                    options[i].text = `Opção ${i} - R$ ${randomValue}`;
+                    options[i].value = randomValue;
+                }
+            });
+
+            optionsSelect.addEventListener('change', function () {
+                const selectedValue = this.options[this.selectedIndex].value;
+                if (selectedValue) {
+                    console.log(`Selected value: ${selectedValue}`);
+                    valorFrete.innerText = `R$ ${selectedValue}`;
+                    window.location.href = `/carrinho/selecionarFrete?freteValue=${selectedValue}`;
+                } else {
+                    valorFrete.innerText = "R$0,00";
+                }
+            });
         });
 
-        optionsSelect.addEventListener('change', function () {
-            const selectedValue = this.options[this.selectedIndex].value;
-            if (selectedValue) {
-                console.log(`Selected value: ${selectedValue}`);
-                valorFrete.innerText = `R$ ${selectedValue}`;
-                window.location.href = `/carrinho/selecionarFrete?freteValue=${selectedValue}`;
-            } else {
-                valorFrete.innerText = "R$0,00";
+        function confirmChange() {
+            return confirm("Tem certeza que deseja tirar esse produto do seu carrinho?");
+        }
+
+        function confirmarLogout() {
+            if (!confirm("Você deseja fazer logout da loja?")) {
+                event.preventDefault();
             }
-        });
-    });
-
-    function confirmChange() {
-        return confirm("Tem certeza que deseja tirar esse produto do seu carrinho?");
-    }
-
-    function confirmarLogout() {
-        if (!confirm("Você deseja fazer logout da loja?")) {
-            event.preventDefault();
         }
-    }
 
-    function confirmarFinalizarCompra() {
-        if (!confirm("Deseja finalizar a compra?")) {
-            event.preventDefault();
+        function confirmarFinalizarCompra() {
+            if (!confirm("Deseja finalizar a compra?")) {
+                event.preventDefault();
+            }
         }
-    }
-</script>
+    </script>
 </head>
 
 <body>
@@ -81,15 +81,11 @@
     <div class="conteudo">
         <div th:if="${#lists.isEmpty(carrinho.itens)}">
             <h3 class="carrinho-vazio">Seu carrinho de compras está vazio.</h3>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    document.querySelector('.calcular-btn').disabled = true;
-                    document.querySelector('.cep-input').disabled = true;
-                    document.querySelector('.calcular-btn').style.opacity = '0.5';
-                    document.querySelector('.btn-finalizar').disabled = true;
-                    document.querySelector('.btn-finalizar').style.opacity = '0.5';
-                });
-            </script>
+            <style>
+                .calcular-btn, .btn-finalizar {
+                    opacity: 0.5;
+                }
+            </style>
         </div>
         <div class="card-row">
             <div th:each="item : ${carrinho.itens}">
@@ -140,10 +136,13 @@
                 <p class="desc-entrega">Confira as opções de entrega para seus itens.</p>
                 <label for="cep" aria-hidden="true"><strong>CEP:</strong></label>
                 <div class="cep-calc">
-                    <input type="text" class="cep-input" id="cep" name="cep" placeholder="XXXXX-XXX" required
+                    <input type="text" class="cep-input"
+                           th:disabled="${#lists.isEmpty(carrinho.itens)}"
+                           id="cep" name="cep" placeholder="XXXXX-XXX" required
                            aria-describedby="cepHelp"
                            style="border: 1px solid #ddd; border-radius: 4px; width: 18em; height: 3em; padding: 10px">
                     <button class="calcular-btn"
+                            th:disabled="${#lists.isEmpty(carrinho.itens)}"
                             style="cursor: pointer; border: 1px solid #ddd; border-radius: 8px; background-color: black; color: white; margin-left: 2em; width: 12em; height: 3em;">
                         Calcular
                     </button>

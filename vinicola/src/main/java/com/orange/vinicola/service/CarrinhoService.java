@@ -276,11 +276,4 @@ public class CarrinhoService {
         carrinhoRepository.save(carrinho);
     }
 
-    public void limparCarrinho(Carrinho carrinho) {
-        carrinho.getItens().clear();
-        carrinho.setValorTotal(0);
-        carrinho.setFrete(0);
-        carrinho.setValorComFrete(0);
-        carrinhoRepository.save(carrinho);
-    }
 }
