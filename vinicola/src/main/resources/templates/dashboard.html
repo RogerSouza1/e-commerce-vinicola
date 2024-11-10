@@ -28,6 +28,9 @@
 
 <main>
     <div class="button-container">
+        <div sec:authorize="hasRole('ROLE_ESTOQUISTA')">
+            <button class="btn btn-register" onclick="window.location.href='/pedido/listar'" type="button">Listar Pedido</button>
+        </div>
         <button class="btn btn-register" onclick="window.location.href='/lista-produtos'" type="button">Listar Produtos</button>
 
         <div sec:authorize="hasRole('ROLE_ADMINISTRADOR')">

@@ -27,8 +27,16 @@ public class PedidoService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    public void save(Pedido pedido) {
+        pedidoRepository.save(pedido);
+    }
+
     public List<Pedido> buscarPedidosPorClienteId(Long clienteId) {
         return pedidoRepository.findPedidosByClienteId(clienteId);
+    }
+
+    public List<Pedido> findAll(){
+        return pedidoRepository.findAll();
     }
 
     public Optional<Pedido> findById(Long produtoId) {

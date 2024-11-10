@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Pedido</title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo-container">
+            <img th:src="@{images/logo_winery.png}" alt="logo_winery" class="logo">
+            <div class="dropdown">
+                <button class="dropdown-btn" sec:authorize="isAuthenticated()">
+                    [[${#authentication.name}]] &#9662;
+                </button>
+                <div class="dropdown-content">
+                    <form method="post" th:action="@{/logout}">
+                        <button class="btn-logout" type="submit">Sair</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <button class="btn-voltar" onclick="window.location.href='/pedido/listar'" type="button"><img
+            th:src="@{/images/seta.png}"></button>
+</header>
+
+<main class="main-editar-pedido">
+    <section class="form-container">
+        <h2 class="form-title">Editar Pedido</h2>
+
+        <div th:if="${mensagem}" th:text="${mensagem}" style="color:dimgray;"></div>
+
+        <form th:action="@{/pedido/editar}" th:object="${pedido}" method="post" onsubmit="return validateForm()">
+            <input type="hidden" name="id" th:value="${pedido.getId()}"/>
+
+            <div class="input-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status" class="select-field" required th:field="*{status}">
+                    <option value="Aguardando pagamento" class="option-select">Aguardando pagamento</option>
+                    <option value="Pagamento rejeitado" class="option-select">Pagamento rejeitado</option>
+                    <option value="Pagamento com sucesso" class="option-select">Pagamento com sucesso</option>
+                    <option value="Aguardado retirada" class="option-select">Aguardado retirada</option>
+                    <option value="Em trânsito" class="option-select">Em trânsito</option>
+                    <option value="Entregue" class="option-select">Entregue</option>
+                </select><br>
+            </div>
+            <button class="btn-padrao" type="submit">
+                Salvar
+            </button>
+        </form>
+    </section>
+</main>
+
+</body>
+</html>
