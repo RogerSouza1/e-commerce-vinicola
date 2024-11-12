@@ -940,6 +940,18 @@ th, td {
     text-align: center;
 }
 
+.btn-mais-detalhes{
+    background-color: #242424;
+    color: #ffffff;
+    border: none;
+    padding: 1vw 0;
+    font-size: 1.2vw;
+    border-radius: 1vw;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
 .btn-proxima-etapa {
     background-color: #6b1d1d;
     margin-left: 1vw;
@@ -990,7 +1002,7 @@ th, td {
     margin-bottom: 1vw;
 }
 
-#formaPagamento-resumo {
+#valor-total-resumo {
     margin-bottom: 2.2vw;
 }
 
@@ -1005,6 +1017,7 @@ th, td {
 .resumo-checkout, .lista-pedidos, .detalhes-pedido-container {
     padding: 0 5vh;
 }
+
 
 .detalhes-pedido {
     width: 40%;

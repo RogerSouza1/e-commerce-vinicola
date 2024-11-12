@@ -27,7 +27,7 @@
             <td th:text="${pedido.status}"></td>
             <td>
                 <form method="get" th:action="@{/pedido/detalhes/{id}(id=${pedido.id})}">
-                    <button type="submit" class="btn-voltar-checkout">Mais detalhes</button>
+                    <button type="submit" class="btn-mais-detalhes">Mais detalhes</button>
                 </form>
             </td>
         </tr>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>Gerenciar Pedidos</title>
@@ -24,7 +24,7 @@
             <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorComFrete, 1, 2)}"></td>
             <td th:text="${pedido.status}"></td>
             <td>
-                <a class="btn-edit" th:href="@{/pedido/editar(id=${pedido.id})}">Editar</a>
+                <a class="btn-edit-estoquista" th:href="@{/pedido/editar(id=${pedido.id})}">Editar</a>
             </td>
         </tr>
         </tbody>
