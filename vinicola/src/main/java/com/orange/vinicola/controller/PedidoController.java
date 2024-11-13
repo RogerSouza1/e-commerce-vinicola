@@ -70,7 +70,6 @@ public class PedidoController {
         return "lista-pedidos";
     }
 
-    @PreAuthorize("hasRole('ROLE_ESTOQUISTA')")
     @GetMapping("/listar")
     public String listarPedidosEstoquista(Model model) {
         List<Pedido> pedidos = pedidoService.findAll();
@@ -90,7 +89,6 @@ public class PedidoController {
         return null;
     }
 
-    @PreAuthorize("hasRole('ROLE_ESTOQUISTA')")
     @GetMapping("/editar")
     public String showEditarPedido(@RequestParam("id") Long id, Model model){
         Optional<Pedido> pedido = pedidoService.findById(id);
