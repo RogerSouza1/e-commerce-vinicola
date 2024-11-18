@@ -8,14 +8,14 @@ import com.orange.vinicola.service.CarrinhoService;
 import com.orange.vinicola.service.ClienteService;
 import com.orange.vinicola.service.PedidoService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +70,14 @@ public class PedidoController {
         return "lista-pedidos";
     }
 
+    @GetMapping("/listar")
+    public String listarPedidosEstoquista(Model model) {
+        List<Pedido> pedidos = pedidoService.findAll();
+        pedidos.sort((p1, p2) -> p2.getId().compareTo(p1.getId()));
+        model.addAttribute("pedidos", pedidos);
+        return "lista-pedidos-estoquista";
+    }
+
     @GetMapping("/detalhes/{id}")
     public String detalhesPedido(@PathVariable Long id, Model model) {
         Optional<Pedido> pedido = pedidoService.findById(id);
@@ -78,7 +86,29 @@ public class PedidoController {
             model.addAttribute("pedido", pedido.get());
             return "detalhe-pedido";
         }
-
         return null;
+    }
+
+    @GetMapping("/editar")
+    public String showEditarPedido(@RequestParam("id") Long id, Model model){
+        Optional<Pedido> pedido = pedidoService.findById(id);
+        if(pedido.isPresent()){
+            model.addAttribute("pedido", pedido.get());
+            return "editar-pedido";
+        }
+        return "redirect:/pedido/listar";
+    }
+
+    @PostMapping("/editar")
+    public String editarPedido(@ModelAttribute("pedido")@Valid Pedido pedido, Model model){
+        Optional<Pedido> pedidoExiste = pedidoService.findById(pedido.getId());
+        if(pedidoExiste.isPresent()){
+            pedidoExiste.get().setStatus(pedido.getStatus());
+            pedidoService.save(pedidoExiste.get());
+            return "redirect:/pedido/listar";
+        }else{
+            model.addAttribute("mensagem", "Produto não encontrado");
+            return "editar-pedido";
+        }
     }
 }

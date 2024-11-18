@@ -10,6 +10,7 @@ import com.orange.vinicola.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,8 +27,16 @@ public class PedidoService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    public void save(Pedido pedido) {
+        pedidoRepository.save(pedido);
+    }
+
     public List<Pedido> buscarPedidosPorClienteId(Long clienteId) {
         return pedidoRepository.findPedidosByClienteId(clienteId);
+    }
+
+    public List<Pedido> findAll(){
+        return pedidoRepository.findAll();
     }
 
     public Optional<Pedido> findById(Long produtoId) {
@@ -47,6 +56,7 @@ public class PedidoService {
         pedido.setFormaPagamento(formaPagamento);
         pedido.setCliente(carrinho.getCliente());
         pedido.setItens(copiarItensDoCarrinho(carrinho, pedido));
+        pedido.setDataPedido(new Date());
 
         pedidoRepository.save(pedido);
 

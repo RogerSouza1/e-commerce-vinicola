@@ -19,32 +19,32 @@
 <main>
     <section class="detalhes-pedido-container">
         <h2>Detalhes do Pedido</h2>
-
         <div class="detalhes-pedido">
             <div>
                 <p><strong>Número do Pedido:</strong> <span th:text="${pedido.numeroPedido}"></span></p>
                 <p><strong>Status:</strong> <span th:text="${pedido.status}"></span></p>
-                <p><strong>Valor Total:</strong> <span th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal,1,2)}"></span></p>
+                <p><strong>Valor Produtos:</strong> <span
+                        th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorTotal,1,2)}"></span></p>
             </div>
             <div>
-                <p><strong>Frete:</strong> <span th:text="${'R$ ' + #numbers.formatDecimal(pedido.frete,1,2)}"></span></p>
-                <p><strong>Forma de Pagamento:</strong> <span th:text="${pedido.formaPagamento}"></span></p>
+                <p><strong>Frete:</strong> <span th:text="${'R$ ' + #numbers.formatDecimal(pedido.frete,1,2)}"></span>
+                </p>
+                <p><strong>Valor Total:</strong> <span
+                        th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorComFrete,1,2)}"></span></p>
+            </div>
                 <p><strong>Endereço de Entrega:</strong>
                     <span th:text="${pedido.endereco.logradouro} + ', ' + ${pedido.endereco.numero} +
                         (${pedido.endereco.complemento} != null ? ' - ' + ${pedido.endereco.complemento} : '') +
                         ', ' + ${pedido.endereco.bairro} + ', ' + ${pedido.endereco.cidade} + ' - ' + ${pedido.endereco.estado}">
                     </span>
                 </p>
+            <p><strong>Forma de Pagamento:</strong> <span th:text="${pedido.formaPagamento}"></span></p>
             </div>
         </div>
-
-        <section class="itens-pedido-container">
-            <h3>Itens do Pedido</h3>
-            <div th:insert="fragments/tabela-itens-pedido :: tabela-itens-pedido"></div>
-        </section>
+        <h3>Itens do Pedido</h3>
+        <div th:insert="fragments/tabela-itens-pedido :: tabela-itens-pedido"></div>
     </section>
 </main>
-
 <footer>
     <div th:replace="fragments/footer :: footer"></div>
 </footer>

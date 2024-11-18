@@ -82,7 +82,7 @@ body {
 /* CONTAINER DE LOGIN */
 .main-login, .main-index, .main-cadastro-usuario, .main-editar-usuario, .main-editar-produto,
 .main-cadastro-produto, .main-cadastro-cliente, .main-perfil-cliente, .main-editar-dados-cliente,
-.main-adicionar-novo-endereco, .endereco-container, .pagamento-container {
+.main-adicionar-novo-endereco, .endereco-container, .pagamento-container, .main-editar-pedido {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -291,6 +291,12 @@ input:focus {
     height: 100vh;
 }
 
+.main-lista-pedidos-estoquista{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 .content-wrapper {
     flex-grow: 1;
     display: flex;
@@ -377,6 +383,24 @@ td a {
     background-size: 1.3vw;
     background-position: 10px center;
     padding-left: 3vw;
+}
+
+.btn-edit-estoquista {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #D29000;
+    color: #ffffff;
+    padding: 0.5vw 3vw;
+    border-radius: 10px;
+    font-size: 1vw;
+    border: none;
+    cursor: pointer;
+    background-image: url('https://img.icons8.com/ios-glyphs/30/ffffff/edit.png');
+    background-repeat: no-repeat;
+    background-size: 1.3vw;
+    background-position: 10px center;
+    padding-left: 4vw;
 }
 
 .btn-edit:hover {

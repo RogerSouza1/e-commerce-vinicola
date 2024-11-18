@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" >
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -30,43 +30,41 @@
                 const min = 9;
                 const max = 32;
                 const options = optionsSelect.options;
-                for (let i = 0; i < options.length; i++) {
+                options[0].text = "Selecione uma opção";
+                options[0].value = "";
+                for (let i = 1; i < options.length; i++) {
                     const randomValue = (Math.random() * (max - min) + min).toFixed(2);
-                    options[i].text = `Opção ${i + 1} - R$ ${randomValue}`;
+                    options[i].text = `Opção ${i} - R$ ${randomValue}`;
                     options[i].value = randomValue;
                 }
             });
 
             optionsSelect.addEventListener('change', function () {
                 const selectedValue = this.options[this.selectedIndex].value;
-                valorFrete.innerText = `R$ ${selectedValue}`;
-
-                window.location.href = `/carrinho/selecionarFrete?freteValue=${selectedValue}`;
+                if (selectedValue) {
+                    console.log(`Selected value: ${selectedValue}`);
+                    valorFrete.innerText = `R$ ${selectedValue}`;
+                    window.location.href = `/carrinho/selecionarFrete?freteValue=${selectedValue}`;
+                } else {
+                    valorFrete.innerText = "R$0,00";
+                }
             });
         });
 
         function confirmChange() {
-            if (confirm("Tem certeza que deseja tirar esse produto do seu carrinho?")) {
-                return true;
-            } else {
-                return false;
-            }
+            return confirm("Tem certeza que deseja tirar esse produto do seu carrinho?");
         }
 
         function confirmarLogout() {
-            var confirmacao = confirm("Você deseja fazer logout da loja?");
-            if (!confirmacao) {
+            if (!confirm("Você deseja fazer logout da loja?")) {
                 event.preventDefault();
             }
-            return confirmacao;
         }
 
         function confirmarFinalizarCompra() {
-            var confirmacao = confirm("Deseja finalizar a compra?");
-            if (!confirmacao) {
+            if (!confirm("Deseja finalizar a compra?")) {
                 event.preventDefault();
             }
-            return confirmacao;
         }
     </script>
 </head>
@@ -83,6 +81,11 @@
     <div class="conteudo">
         <div th:if="${#lists.isEmpty(carrinho.itens)}">
             <h3 class="carrinho-vazio">Seu carrinho de compras está vazio.</h3>
+            <style>
+                .calcular-btn, .btn-finalizar {
+                    opacity: 0.5;
+                }
+            </style>
         </div>
         <div class="card-row">
             <div th:each="item : ${carrinho.itens}">
@@ -117,9 +120,11 @@
                         <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
                     </div>
 
-                    <form th:action="@{/carrinho/removerProduto}" method="post" onsubmit="return confirmChange()" class="botao-remover-carrinho-container">
+                    <form th:action="@{/carrinho/removerProduto}" method="post" onsubmit="return confirmChange()"
+                          class="botao-remover-carrinho-container">
                         <input type="hidden" name="produtoId" th:value="${item.produto.id}">
-                        <button type="submit" class="botao-remover-carrinho" aria-label="Remover produto do carrinho"><img th:src="@{../images/lixeira.png}" alt="Remover produto"></button>
+                        <button type="submit" class="botao-remover-carrinho" aria-label="Remover produto do carrinho">
+                            <img th:src="@{../images/lixeira.png}" alt="Remover produto"></button>
                     </form>
                 </div>
             </div>
@@ -131,8 +136,14 @@
                 <p class="desc-entrega">Confira as opções de entrega para seus itens.</p>
                 <label for="cep" aria-hidden="true"><strong>CEP:</strong></label>
                 <div class="cep-calc">
-                    <input type="text" class="cep-input" id="cep" name="cep" placeholder="XXXXX-XXX" required aria-describedby="cepHelp" style="border: 1px solid #ddd; border-radius: 4px; width: 18em; height: 3em; padding: 10px">
-                    <button class="calcular-btn" style="cursor: pointer; border: 1px solid #ddd; border-radius: 8px; background-color: black; color: white; margin-left: 2em; width: 12em; height: 3em;">
+                    <input type="text" class="cep-input"
+                           th:disabled="${#lists.isEmpty(carrinho.itens)}"
+                           id="cep" name="cep" placeholder="XXXXX-XXX" required
+                           aria-describedby="cepHelp"
+                           style="border: 1px solid #ddd; border-radius: 4px; width: 18em; height: 3em; padding: 10px">
+                    <button class="calcular-btn"
+                            th:disabled="${#lists.isEmpty(carrinho.itens)}"
+                            style="cursor: pointer; border: 1px solid #ddd; border-radius: 8px; background-color: black; color: white; margin-left: 2em; width: 12em; height: 3em;">
                         Calcular
                     </button>
                 </div>
@@ -140,8 +151,10 @@
 
             <div class="valor-calculo" style="margin-top: 2em; display: none;">
                 <strong class="titulo-entrega">Opções de Entrega</strong>
-                <select class="options-select" name="options" aria-label="Selecionar opção de entrega" style="border: 1px solid #ddd; border-radius: 4px; width: 27em; height: 3em;">
-                    <option value="option1" disabled selected>Selecione uma opção</option>
+                <select class="options-select" name="options" aria-label="Selecionar opção de entrega"
+                        style="border: 1px solid #ddd; border-radius: 4px; width: 27em; height: 3em;">
+                    <option value="optionVazia"></option>
+                    <option value="option1"></option>
                     <option value="option2"></option>
                     <option value="option3"></option>
                 </select>
@@ -162,7 +175,8 @@
                     <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
                 </div>
                 <form action="/carrinho/finalizar" method="post" onsubmit="">
-                    <button class="btn-finalizar" onclick="confirmarFinalizarCompra()" th:disabled="${#lists.isEmpty(carrinho.itens)}"
+                    <button class="btn-finalizar" onclick="confirmarFinalizarCompra()"
+                            th:disabled="${#lists.isEmpty(carrinho.itens)}"
                             type="submit">Finalizar Compra
                     </button>
                 </form>

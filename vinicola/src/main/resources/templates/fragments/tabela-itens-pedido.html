@@ -6,22 +6,26 @@
 </head>
 <body>
 <div th:fragment="tabela-itens-pedido">
-    <table border="1" id="tabela-itens-pedido">
-        <thead>
-        <tr>
-            <th>Produto</th>
-            <th>Quantidade</th>
-            <th>Valor Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item : ${pedido.itens}">
-            <td th:text="${item.produto.nome}"></td>
-            <td th:text="${item.quantidade}"></td>
-            <td th:text="${'R$ ' + #numbers.formatDecimal(item.valorItem, 1, 2)}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="card-row" th:each="item : ${pedido.itens}">
+        <div class="desc-produto-row">
+            <div th:each="imagem : ${item.produto.imagens}">
+                <img alt="Imagem do Produto - ${item.produto.nome}" class="imagem-produto-carrinho"
+                     th:src="@{/imagem/{id}(id=${imagem.id})}"/>
+            </div>
+            <div class="produto-carrinho-checkout">
+                <p class="info-produto-checkout"><strong>Produto:</strong></p>
+                <span th:text="${item.produto.nome}"></span>
+            </div>
+            <div class="quantidade-carrinho-checkout">
+                <p class="info-produto-checkout"><strong>Quantidade:</strong></p>
+                <span th:text="${item.quantidade}"></span>
+            </div>
+            <div class="preco-carrinho-checkout">
+                <p class="info-produto-checkout"><strong>Preço:</strong></p>
+                <span th:text="'R$ ' + ${#numbers.formatDecimal(item.valorItem, 1, 2)}"></span>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

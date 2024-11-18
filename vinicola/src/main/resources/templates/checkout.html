@@ -52,6 +52,12 @@
             document.getElementById(mostrar).style.display = "block";
 
             if (ocultar === 'etapa-endereco') {
+                var enderecoEntregaSelecionada = document.getElementById('endereco-entrega').selectedOptions[0];
+                var logradouro = enderecoEntregaSelecionada.getAttribute('data-logradouro');
+                var numero = enderecoEntregaSelecionada.getAttribute('data-numero');
+                var bairro = enderecoEntregaSelecionada.getAttribute('data-bairro');
+                var enderecoTexto = logradouro + ', ' + numero + ' - ' + bairro;
+                document.getElementById('enderecoEntrega-text').innerText = enderecoTexto;
                 document.getElementById('hidden-endereco').value = document.getElementById('endereco-entrega').value;
             }
 
@@ -191,7 +197,8 @@
                             <option th:each="enderecos : ${enderecoEntrega}"
                                     th:selected="${enderecos.id == enderecoPadrao.id}"
                                     th:text="${enderecos.logradouro + ', ' + enderecos.numero + ' - ' + enderecos.bairro}"
-                                    th:value="${enderecos.id}">
+                                    th:value="${enderecos.id}"
+                                    th:attr="data-logradouro=${enderecos.logradouro}, data-numero=${enderecos.numero}, data-bairro=${enderecos.bairro}">
                             </option>
                         </select>
                     </div>
@@ -346,6 +353,14 @@
                         </div>
                     </div>
                         <div class="coluna-direita">
+                            <div id="enderecoEntrega-resumo" class="coluna-direita-conteudo">
+                                <p><strong>Endereco de entrega:</strong></p>
+                                <span id="enderecoEntrega-text"></span>
+                            </div>
+                            <div id="formaPagamento-resumo" class="coluna-direita-conteudo">
+                                <p><strong>Forma de Pagamento:</strong></p>
+                                <span id="formaPagamento-text"></span>
+                            </div>
                             <div id="valor-subtotal-resumo" class="coluna-direita-conteudo">
                                 <p><strong>Subtotal:</strong></p>
                                 <span id="valor-subtotal-text" th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorTotal, 1, 2)}"></span>
@@ -357,10 +372,6 @@
                             <div id="valor-total-resumo" class="coluna-direita-conteudo">
                                 <p><strong>Valor Total:</strong></p>
                                 <span id="valor-total-text" th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
-                            </div>
-                            <div id="formaPagamento-resumo" class="coluna-direita-conteudo">
-                                <p><strong>Forma de Pagamento:</strong></p>
-                                <span id="formaPagamento-text"></span>
                             </div>
                             <div id="finalizar-pedido">
                                 <button class="btn-voltar-checkout"

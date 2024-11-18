@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +23,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/**","/detalhes-produto-cliente", "/index", "/h2-console/**", "/css/**", "/images/**", "/js/**", "imagem/**", "/carrinho/**", "/cliente/**").permitAll()
+                        .requestMatchers("/detalhes-produto-cliente", "/index", "/h2-console/**", "/css/**", "/images/**", "/js/**", "/imagem/**", "/carrinho/**", "/cliente/**").permitAll()
+                        .requestMatchers("/cliente/perfil", "/cliente/editar-dados", "/carrinho/finalizar", "/carrinho/checkout").hasRole("CLIENTE")
+                        .requestMatchers("/dashboard").hasAnyRole("ADMINISTRADOR","ESTOQUISTA")
+                        .requestMatchers("/lista-usuarios", "/buscar-usuario", "editar-usuario").hasRole("ADMINISTRADOR")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -40,10 +44,9 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**", "/**")
+                        .ignoringRequestMatchers("/h2-console/**")
                 )
                 .headers(headers -> headers
-                        .xssProtection(xss -> xss.disable())
                         .frameOptions(frame -> frame.sameOrigin())
                 );
 
@@ -54,5 +57,4 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

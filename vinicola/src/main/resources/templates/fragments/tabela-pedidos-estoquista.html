@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>Gerenciar Pedidos</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<div th:fragment="tabela-pedidos(pedidos)">
-    <h2>Lista de Pedidos</h2>
-    <br>
-    <table border="1" id="tabela-pedidos">
+<div th:fragment="tabela-pedidos-estoquista">
+    <table border="1" id="tabela-pedidos-estoquista">
         <thead>
         <tr>
             <th>Número do Pedido</th>
@@ -26,9 +24,7 @@
             <td th:text="${'R$ ' + #numbers.formatDecimal(pedido.valorComFrete, 1, 2)}"></td>
             <td th:text="${pedido.status}"></td>
             <td>
-                <form method="get" th:action="@{/pedido/detalhes/{id}(id=${pedido.id})}">
-                    <button type="submit" class="btn-mais-detalhes">Mais detalhes</button>
-                </form>
+                <a class="btn-edit-estoquista" th:href="@{/pedido/editar(id=${pedido.id})}">Editar</a>
             </td>
         </tr>
         </tbody>
