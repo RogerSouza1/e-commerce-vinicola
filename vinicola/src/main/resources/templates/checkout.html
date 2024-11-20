@@ -378,6 +378,7 @@
                                         onclick="mostrarEtapa('etapa-resumo', 'etapa-pagamento')">Voltar
                                 </button>
                                 <form id="finalizar-pedido-form" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                     <input id="hidden-endereco" name="endereco" type="hidden">
                                     <input id="hidden-forma-pagamento" name="forma-pagamento" type="hidden">
                                     <div>

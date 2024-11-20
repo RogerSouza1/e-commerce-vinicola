@@ -175,6 +175,7 @@
                     <span th:text="'R$ ' + ${#numbers.formatDecimal(carrinho.valorComFrete, 1, 2)}"></span>
                 </div>
                 <form action="/carrinho/finalizar" method="post" onsubmit="">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button class="btn-finalizar" onclick="confirmarFinalizarCompra()"
                             th:disabled="${#lists.isEmpty(carrinho.itens)}"
                             type="submit">Finalizar Compra
