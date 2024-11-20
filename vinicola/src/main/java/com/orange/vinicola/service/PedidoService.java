@@ -46,7 +46,7 @@ public class PedidoService {
     public Pedido finalizarCarrinho(Carrinho carrinho, Endereco endereco, String formaPagamento) {
         Pedido pedido = new Pedido();
         pedido.setNumeroPedido(gerarNumeroPedido());
-        String status = formaPagamento.equals("BOLETO") ? "Aguardando Pagamento" : "Pedido a Caminho";
+        String status = "Aguardando Pagamento";
         pedido.setStatus(status);
         pedido.setFrete(carrinho.getFrete());
         pedido.setValorTotal(carrinho.getValorTotal());

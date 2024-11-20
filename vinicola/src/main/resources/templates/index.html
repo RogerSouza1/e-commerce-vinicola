@@ -37,9 +37,19 @@
     </section>
 
     <section class="section-p1" id="produtos1">
+
+        <form method="post" th:action="@{/pesquisa}" class="form-pesquisa">
+            <label for="nome-pesquisa">Pesquisar produtos:</label>
+            <input type="text" id= "nome-pesquisa" name="nome" placeholder="Pesquisar produtos...">
+            <button type="submit">Buscar</button>
+        </form>
+
         <h2>Mais Vendidos</h2>
         <p>Vinhos de Qualidade</p>
         <div class="pro-container">
+            <div th:if="${#lists.isEmpty(produtos)}">
+                <p>Nenhum produto encontrado com o nome pesquisado.</p>
+            </div>
             <div class="pro" th:each="produto : ${produtos}">
                 <div class="image-container">
                     <img alt="Imagem do Produto" class="img-produto"

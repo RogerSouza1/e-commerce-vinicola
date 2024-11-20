@@ -333,9 +333,9 @@
                     <div class="coluna-esquerda">
                         <div class="card-row" th:each="item : ${carrinho.itens}">
                             <div class="desc-produto-row">
-                                <div th:each="imagem : ${item.produto.imagens}">
+                                <div class="imagem-pro">
                                     <img alt="Imagem do Produto - ${item.produto.nome}" class="imagem-produto-carrinho"
-                                         th:src="@{/imagem/{id}(id=${imagem.id})}" />
+                                         th:src="@{/imagem/{id}(id=${item.produto.imagemPrincipal.id})}"/>
                                 </div>
                                 <div class="produto-carrinho-checkout">
                                     <p class="info-produto-checkout"><strong>Produto:</strong></p>

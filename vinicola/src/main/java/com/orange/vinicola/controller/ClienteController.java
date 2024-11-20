@@ -1,5 +1,6 @@
 package com.orange.vinicola.controller;
 
+import com.orange.vinicola.model.Carrinho;
 import com.orange.vinicola.model.Cliente;
 import com.orange.vinicola.model.Endereco;
 import com.orange.vinicola.service.ClienteService;
@@ -83,6 +84,16 @@ public class ClienteController {
                    endereco.setCliente(cliente);
                }
             }
+
+            Carrinho carrinho = new Carrinho();
+
+            carrinho.setItens(new ArrayList<>());
+            carrinho.setValorTotal(0);
+            carrinho.setFrete(0);
+            carrinho.setValorComFrete(0);
+            carrinho.setCliente(cliente);
+
+            cliente.setCarrinho(carrinho);
 
             clienteService.save(cliente);
 

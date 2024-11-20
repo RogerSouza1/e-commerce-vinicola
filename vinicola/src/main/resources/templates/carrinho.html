@@ -16,26 +16,54 @@
             const valorCalculo = document.querySelector('.valor-calculo');
             const calcularContainer = document.querySelector('.calcular');
 
-            calcularBtn.addEventListener('click', function () {
+            cepInput.addEventListener('input', function () {
+                let cep = this.value.replace(/\D/g, '');
+                if (cep.length > 8) {
+                    cep = cep.substring(0, 8);
+                }
+                if (cep.length > 5) {
+                    cep = cep.substring(0, 5) + '-' + cep.substring(5, 8);
+                }
+                this.value = cep;
+            });
+
+            calcularBtn.addEventListener('click', async function () {
                 const cep = cepInput.value;
 
-                if (!/^\d{5}-?\d{3}$/.test(cep)) {
-                    alert('Por favor, insira um CEP válido.');
+                // Verifica se o CEP está no formato correto
+                if (!/^\d{5}-\d{3}$/.test(cep)) {
+                    alert('Por favor, insira um CEP válido no formato xxxxx-xxx.');
                     return;
                 }
 
-                calcularContainer.style.display = 'none';
-                valorCalculo.style.display = 'block';
+                // Remove o traço para enviar o CEP à API
+                const cepSemMascara = cep.replace('-', '');
 
-                const min = 9;
-                const max = 32;
-                const options = optionsSelect.options;
-                options[0].text = "Selecione uma opção";
-                options[0].value = "";
-                for (let i = 1; i < options.length; i++) {
-                    const randomValue = (Math.random() * (max - min) + min).toFixed(2);
-                    options[i].text = `Opção ${i} - R$ ${randomValue}`;
-                    options[i].value = randomValue;
+                try {
+                    const response = await fetch(`https://viacep.com.br/ws/${cepSemMascara}/json/`);
+                    const data = await response.json();
+
+                    if ('erro' in data) {
+                        alert('O CEP informado não existe. Por favor, verifique e tente novamente.');
+                        return;
+                    }
+
+                    // Mostrar a div de opções de entrega sem esconder o CEP
+                    valorCalculo.style.display = 'block';  // Exibe as opções de entrega
+
+                    const min = 9;
+                    const max = 32;
+                    const options = optionsSelect.options;
+                    options[0].text = "Selecione uma opção";
+                    options[0].value = "";
+                    for (let i = 1; i < options.length; i++) {
+                        const randomValue = (Math.random() * (max - min) + min).toFixed(2);
+                        options[i].text = `Opção ${i} - R$ ${randomValue}`;
+                        options[i].value = randomValue;
+                    }
+                } catch (error) {
+                    alert('Houve um problema ao validar o CEP. Por favor, tente novamente mais tarde.');
+                    console.error('Erro ao validar o CEP:', error);
                 }
             });
 
@@ -50,6 +78,7 @@
                 }
             });
         });
+
 
         function confirmChange() {
             return confirm("Tem certeza que deseja tirar esse produto do seu carrinho?");
@@ -90,9 +119,10 @@
         <div class="card-row">
             <div th:each="item : ${carrinho.itens}">
                 <div class="desc-produto-row">
-                    <div th:each="imagem : ${item.produto.imagens}">
+
+                    <div class="imagem-pro">
                         <img alt="Imagem do Produto - ${item.produto.nome}" class="imagem-produto-carrinho"
-                             th:src="@{/imagem/{id}(id=${imagem.id})}"/>
+                             th:src="@{/imagem/{id}(id=${item.produto.imagemPrincipal.id})}"/>
                     </div>
 
                     <div class="produto-carrinho">
@@ -138,6 +168,7 @@
                 <div class="cep-calc">
                     <input type="text" class="cep-input"
                            th:disabled="${#lists.isEmpty(carrinho.itens)}"
+                           th:size="9"
                            id="cep" name="cep" placeholder="XXXXX-XXX" required
                            aria-describedby="cepHelp"
                            style="border: 1px solid #ddd; border-radius: 4px; width: 18em; height: 3em; padding: 10px">
@@ -160,6 +191,7 @@
                 </select>
                 <p class="valor-frete">R$0,00</p>
             </div>
+
 
             <div class="finalizar" style="margin-top: 2em;">
                 <div class="finalizar-row">
