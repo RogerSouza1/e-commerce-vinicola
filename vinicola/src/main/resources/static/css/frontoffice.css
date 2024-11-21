@@ -1034,3 +1034,42 @@ th, td {
 .itens-pedido-container h3{
     margin-bottom: 1vw;
 }
+
+.pesquisar-produtos label {
+    font-size: 25px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #333;
+    display: block;
+}
+
+.barra-pesquisa {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    margin-bottom: 4vw;
+}
+
+.barra-pesquisa input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.barra-pesquisa button {
+    padding: 12px 40px;
+    background-color: var(--cinza-escuro);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.barra-pesquisa button:hover {
+    background-color: #616161;
+}
