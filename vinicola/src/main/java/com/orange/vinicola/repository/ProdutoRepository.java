@@ -23,4 +23,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     @Query("SELECT p.qtdEstoque FROM Produto p WHERE p.id = :id")
     int quantidadeEstoquePorProduto(@Param("id") Long id);
+
+    List<Produto> findByNomeContainingIgnoreCase(String nome);
 }

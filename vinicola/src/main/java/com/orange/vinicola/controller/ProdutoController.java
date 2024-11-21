@@ -243,5 +243,21 @@ public class ProdutoController {
             return "redirect:/index";
         }
     }
+
+        @PostMapping("/pesquisa")
+        public String pesquisarProdutos(@RequestParam(value = "nome", required = false, defaultValue = "") String nome, Model model) {
+
+            List<Produto> produtos = null;
+
+            if (nome.isEmpty()){
+                produtos = produtoService.findAllAtivado();
+            } else {
+                produtos = produtoService.pesquisarPorNome(nome);
+            }
+
+            model.addAttribute("produtos", produtos);
+            return "index";
+        }
+
 }
 

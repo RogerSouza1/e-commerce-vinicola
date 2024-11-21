@@ -47,4 +47,8 @@ public class ProdutoService {
         return produtoRepository.quantidadeEstoquePorProduto(id);
     }
 
+    public List<Produto> pesquisarPorNome(String nome) {
+        return produtoRepository.findByNomeContainingIgnoreCase(nome);
+    }
+
 }
