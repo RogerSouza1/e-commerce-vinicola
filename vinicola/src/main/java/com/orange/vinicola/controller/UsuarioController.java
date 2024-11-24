@@ -2,6 +2,7 @@ package com.orange.vinicola.controller;
 
 import com.orange.vinicola.model.Usuario;
 import com.orange.vinicola.service.UsuarioService;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,8 @@ public class UsuarioController {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("/cadastro-funcionario")
     public String showForm(Model model) {
@@ -97,7 +100,13 @@ public class UsuarioController {
             }
         }
 
-        usuario.setSenha(encoder.encode(usuario.getSenha()));
+        if(!usuario.getSenha().trim().isEmpty()) {
+            usuario.setSenha(encoder.encode(usuario.getSenha()));
+        }else{
+            Usuario usuarioSemSenha = UsuarioService.findById(usuario.getId()).get();
+            usuario.setSenha(usuarioSemSenha.getSenha());
+        }
+
         UsuarioService.save(usuario);
         model.addAttribute("mensagem", "Usuário atualizado com sucesso!");
         return "redirect:/lista-usuarios";
