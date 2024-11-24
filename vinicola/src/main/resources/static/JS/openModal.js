@@ -121,7 +121,7 @@ function setPrincipalImage(index, imgElement) {
     alert("Imagem principal definida.");
 }
 
-function saveAndCloseModal() {
+function saveAndCloseModalGerenciar() {
     const fileInput = document.getElementById("imageUpload");
     const hiddenFileInput = document.getElementById("hiddenImageUpload");
 
@@ -132,7 +132,7 @@ function saveAndCloseModal() {
 
     hiddenFileInput.files = dt.files;
 
-    closeModal();
+    closeModalGerenciar();
 }
 
     function openModalVisu(button) {
