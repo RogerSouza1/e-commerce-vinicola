@@ -24,9 +24,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/", "/detalhes-produto-cliente", "/index", "/h2-console/**", "/css/**", "/images/**", "/js/**", "/imagem/**", "/carrinho/**", "/cliente/**","/pesquisa").permitAll()
-                        .requestMatchers("/cliente/perfil", "/cliente/editar-dados", "/carrinho/finalizar", "/carrinho/checkout").hasRole("CLIENTE")
-                        .requestMatchers("/dashboard").hasAnyRole("ADMINISTRADOR","ESTOQUISTA")
-                        .requestMatchers("/lista-usuarios", "/buscar-usuario", "/editar-usuario").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/cliente/perfil", "/cliente/editar-dados", "/carrinho/finalizar", "/carrinho/checkout","/pedido","/pedido/finalizar").hasRole("CLIENTE")
+                        .requestMatchers("/dashboard", "/lista-produtos", "/buscar-produto", "/editar-produto").hasAnyRole("ADMINISTRADOR","ESTOQUISTA")
+                        .requestMatchers("/lista-usuarios", "/buscar-usuario", "/editar-usuario","/cadastro-produto", "/alterar-estado-produto", "/detalhes-produto").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/pedido/listar", "/pedido/editar").hasRole("ESTOQUISTA")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
