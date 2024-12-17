@@ -1,180 +1,71 @@
-# e-commerce-vinicola
-## Sobre a Winery
-> O projeto Winery é uma iniciativa desenvolvida para avaliar o conteúdo da disciplina de PI (Projeto Integrador) no curso de ADS do Centro Universitário Senac.
-> Winery é um e-commerce desenvolvido para facilitar a compra de vinhos de alta qualidade diretamente de sua vinícola preferida. Com uma interface amigável e um sistema seguro, o Winery oferece uma experiência de compra tranquila e agradável para todos os amantes de vinho.
-> O sistema será completo, incluindo módulos essenciais como compras, carrinho, criptografia de senha, entre outros. Apresentará uma interface front-end intuitiva para facilitar a interação do usuário, desde o cadastro. Todos os dados serão armazenados com segurança em nosso banco de dados, garantindo a privacidade dos usuários.
-
-## 🔧Lista de Funcionalidades
-### Como Administrador
-
-#### Requisitos Funcionais
-- [ ] O sistema deve listar todos os usuários cadastrados na entrada da tela, mostrando Nome, email, status e grupo.
-- [ ] O sistema deve permitir cadastrar um novo usuário ao clicar no sinal de "+".
-- [ ] O sistema deve permitir alterar um usuário existente ao clicar em "alterar usuário".
-- [ ] O sistema deve permitir inativar ou reativar um usuário ao clicar no botão correspondente.
-- [ ] O sistema deve permitir filtrar a lista de usuários por nome.
-- [ ] O sistema deve permitir cadastrar nome, CPF, email, senha e grupo (admin/estoquista) no banco de dados.
-- [ ] O sistema deve pedir a senha duas vezes no cadastro de usuário e só permitir o cadastro se as duas senhas forem iguais.
-- [ ] A senha deve ser encriptada antes de ser enviada para o banco de dados.
-- [ ] O sistema deve cadastrar o usuário como ativo por padrão.
-- [ ] O sistema deve impedir o cadastro de dois usuários com o mesmo email.
-- [ ] O sistema deve validar o CPF antes de gravar no banco de dados.
-- [ ] O sistema deve permitir alterar o grupo de um usuário, exceto se for o usuário logado no momento.
-- [ ] O sistema deve permitir alterar o nome, CPF e senha do usuário, sempre validando a senha duas vezes e armazenando-a de forma encriptada no banco de dados.
-- [ ] O sistema não deve permitir a alteração do email do usuário.
-- [ ] Todas as alterações realizadas no sistema devem refletir diretamente no banco de dados.
-- [ ] O sistema deve permitir alterar o status dos usuários (ativo/inativo) na mesma tela de listagem de usuário, confirmando a alteração por uma mensagem de alerta.
-
-- [ ] Após o login do administrador, a tela principal do backoffice terá o botão de Listar Produtos.
-- [ ] Ao clicar no botão, haverá a abertura da tela de produtos, que por default deve listar os últimos (decrescente) produtos inseridos na base.
-- [ ] A tela de produtos deve ter um campo de busca de produto com busca parcial (Ex. smart - traz tudo que contém smart no nome do produto).
-- [ ] A lista deve apresentar o código do produto, o nome do produto, a quantidade em estoque, o valor e o status (ativo ou desativado).
-- [ ] Terá um botão para chamar a tela de cadastro de produto (representado por um sinal de +).
-- [ ] A lista deve mostrar no máximo 10 produtos por página e criar uma barra de paginação.
-- [ ] Para cada produto, deve haver um ícone/link com as ações permitidas (alterar, inativar, reativar, visualizar).
-- [ ] O sistema deve permitir incluir dados de nome de produto (máx 200 caracteres), avaliação (de 1 a 5 variando de 0,5 em 0,5), descrição detalhada (2000 caracteres), preço do produto (valor monetário) com 2 casas decimais, e quantidade em estoque (valor inteiro).
-- [ ] O sistema deve permitir incluir e associar múltiplas imagens ao mesmo produto (não limitado).
-- [ ] O sistema deve permitir definir uma imagem como padrão.
-- [ ] A imagem deve ser carregada antes no diretório do projeto (pelo botão procurar).
-- [ ] Ao carregar a imagem, o sistema deve trocar o nome e armazenar o caminho com o novo nome no banco de dados.
-- [ ] Deve ser possível criar um marcador na imagem que será considerada principal e mostrada na página de landing page.
-- [ ] O botão salvar deve salvar o produto e as referências das imagens no banco de dados e voltar para a tela de lista de produtos.
-- [ ] O botão cancelar deve voltar para a tela de lista de produtos.
-- [ ] As alterações nas informações e imagens de um produto devem ser refletidas no banco de dados.
-- [ ] Não é necessário entrar em tela de edição para inativar/reativar um produto; ao clicar no botão, deve alternar o status do produto.
-- [ ] Antes de mudar o status, deve aparecer um pop-up perguntando se confirma ou não a alteração.
-- [ ] A tela deve mostrar como a página de detalhe do produto será exibida para o usuário final.
-- [ ] O botão de comprar na tela de detalhes do produto deve ficar desabilitado.
-- [ ] O carrossel com as imagens deve ser funcional, mostrando o produto e a avaliação.
-
-#### Requisitos Não Funcionais
-- [ ] A senha deve ser encriptada antes de ser validada com o dado no banco de dados, que também deve estar encriptado.
-- [ ] Toda alteração realizada no sistema deve refletir diretamente no banco de dados.
-- [ ] O sistema deve garantir a performance adequada durante a validação e encriptação de senhas.
-- [ ] O sistema deve ser seguro e proteger as informações dos usuários, especialmente as senhas.
-
-- [ ] O sistema deve refletir todas as alterações no banco de dados.
-- [ ] A imagem deve ser carregada antes no diretório do projeto (pelo botão procurar).
-
-#### Regras de Negócio
-- [ ] Não é permitido cadastrar dois usuários com o mesmo login (email).
-- [ ] O CPF deve ser validado antes de ser gravado no banco de dados.
-- [ ] O cadastro de usuário deve sempre registrar o usuário como ativo.
-- [ ] O administrador não pode alterar seu próprio grupo.
-- [ ] As alterações de status (ativo/inativo) devem ser confirmadas por uma mensagem de alerta antes de serem aplicadas.
-
-- [ ] O sistema deve listar os produtos por default em ordem decrescente de inserção.
-- [ ] O sistema deve permitir incluir dados de nome de produto, avaliação, descrição detalhada, preço e quantidade em estoque.
-- [ ] Deve ser possível definir uma imagem como padrão.
-- [ ] As alterações de status (ativo/inativo) devem ser confirmadas por um pop-up antes de serem aplicadas.
-- [ ] A tela de produtos deve permitir a busca parcial de produtos pelo nome.
-- [ ] A lista de produtos deve apresentar código, nome, quantidade em estoque, valor e status.
-- [ ] Deve haver uma barra de paginação para a lista de produtos, mostrando no máximo 10 produtos por página.
-- [ ] A tela de detalhe do produto deve mostrar o produto e sua avaliação de forma funcional.
-
-### Como Estoquista
-
-#### Requisitos Funcionais
-- [ ] Após o login do Estoquista, a tela principal do backoffice terá o botão de Produtos.
-- [ ] Ao clicar no botão, haverá a abertura da tela de produtos, que por default deve listar os últimos (decrescente) produtos inseridos na base.
-- [ ] A tela de produtos deve ter um campo de busca de produto com busca parcial (Ex. smart - traz tudo que contém smart no nome do produto).
-- [ ] A lista deve apresentar o código do produto, o nome do produto, a quantidade em estoque, o valor e o status (ativo ou desativado).
-- [ ] A lista deve mostrar no máximo 10 produtos por página e criar uma barra de paginação.
-- [ ] Para cada produto, deve haver um ícone/link com a ação permitida (apenas alterar).
-- [ ] O sistema deve permitir alterar apenas a quantidade de produto, todos os outros campos devem estar desabilitados.
-- [ ] As alterações na quantidade de produto devem ser refletidas no banco de dados H15.
-
-#### Requisitos Não Funcionais
-- [ ] O sistema deve refletir todas as alterações no banco de dados H15.
-
-#### Regras de Negócio
-- [ ] O sistema deve listar os produtos por default em ordem decrescente de inserção.
-- [ ] A tela de produtos deve permitir a busca parcial de produtos pelo nome.
-- [ ] A lista de produtos deve apresentar código, nome, quantidade em estoque, valor e status.
-- [ ] Deve haver uma barra de paginação para a lista de produtos, mostrando no máximo 10 produtos por página.
-- [ ] O sistema deve permitir alterar apenas a quantidade de produto pelo estoquista, todos os outros campos devem estar desabilitados.
-
-### Como Cliente logado e não logado
-
-#### Requisitos Funcionais
-- [ ] A página deve exibir o logo da loja.
-- [ ] A página deve ter ícones de carrinho no lado direito.
-- [ ] Deve haver um link para identificação do cliente (faça login/crie seu login) que não precisa funcionar.
-- [ ] A lista de produtos deve ser no formato de cards e apresentar a imagem configurada como principal no cadastro.
-- [ ] Cada card deve conter pelo menos a imagem principal cadastrada, o nome do produto, preço e um botão para detalhes.
-- [ ] Ao clicar no botão de detalhes, a página de detalhes do produto deve ser aberta.
-- [ ] O carrossel de imagens na página de detalhes deve ser funcional.
-- [ ] A página de detalhes deve apresentar o nome do produto, descrição detalhada, valor e a avaliação.
-- [ ] Ao clicar em comprar, o produto deve ser adicionado ao carrinho.
-- [ ] O carrinho deve acumular os produtos selecionados.
-- [ ] É possível comprar o mesmo produto mais de uma vez, adicionando à quantidade no carrinho.
-- [ ] Ao clicar em comprar, seja na página de detalhes ou na principal, o usuário deve ser redirecionado para o carrinho ou para a página inicial (continuar comprando) com o indicador do carrinho atualizado.
-- [ ] O item adicionado ao carrinho deve ser gravado (em sessão, banco de dados ou outro meio escolhido).
-- [ ] É possível aumentar a quantidade de um produto no carrinho, recalculando o subtotal.
-- [ ] O subtotal deve levar em consideração o frete calculado.
-- [ ] É possível diminuir a quantidade de um produto no carrinho, recalculando o subtotal.
-- [ ] É possível remover um item do carrinho, recalculando o subtotal.
-- [ ] O subtotal deve levar em consideração o frete calculado.
-
-#### Requisitos Não Funcionais
-- [ ] O sistema deve refletir todas as alterações do carrinho (em sessão, banco de dados ou outro meio escolhido).
-
-#### Regras de Negócio
-- [ ] O frete para clientes não logados é de livre escolha, podendo escolher entre 3 valores de frete.
-
-### Como Cliente não logado
-
-#### Requisitos Funcionais
-- [ ] O sistema deve validar os dados de login no banco de dados.
-- [ ] O login deve ser realizado utilizando o email do usuário.
-- [ ] A senha deve ser encriptada antes de ser validada com o dado no banco de dados.
-- [ ] O sistema deve negar a entrada do usuário no backoffice se o login não for localizado.
-- [ ] Se as credenciais estiverem corretas e o usuário estiver habilitado, o sistema deve redirecionar para a página principal do backoffice.
-- [ ] O sistema deve criar a sessão com o usuário e seu grupo (administrador ou estoquista) ao logar.
-- [ ] O sistema deve rejeitar clientes que tentarem logar com email e senha na tela de login do backoffice.
-      
-- [ ] O e-mail do cliente não pode existir na base de dados.
-- [ ] O CPF deve ser único e validado.
-- [ ] O endereço de faturamento é obrigatório, devendo incluir:
-  - [ ] CEP
-  - [ ] Logradouro
-  - [ ] Número
-  - [ ] Complemento
-  - [ ] Bairro
-  - [ ] Cidade
-  - [ ] UF
-- [ ] Os dados de nome completo, data de nascimento e gênero também devem ser coletados.
-- [ ] O CEP deve ser validado por uma API, por exemplo: `https://viacep.com.br/ws/09760280/json/`.
-- [ ] O endereço de entrega é obrigatório e pode ser copiado do endereço de faturamento.
-- [ ] O cliente pode ter mais de um endereço de entrega.
-- [ ] O nome do cliente deve conter no mínimo 2 palavras, com pelo menos 3 letras em cada palavra.
-- [ ] A senha deve ser armazenada de forma encriptada no banco de dados.
-- [ ] Ao final do cadastro, o cliente deve ser armazenado na base de dados.
-- [ ] O cliente deve ser direcionado para a tela de login após o cadastro.
-- [ ] Validar usuário e senha (usuário = e-mail) no banco de dados.
-- [ ] Se o usuário existir, deve-se criar uma sessão com o cliente logado.
-- [ ] Caso não exista, deve ser gerado um erro informando que não foi localizado o usuário e/ou senha.
-
-#### Requisitos Não Funcionais
-- [ ] A senha deve ser encriptada antes de ser validada com o dado no banco de dados, que também deve estar encriptado.
-- [ ] Toda alteração realizada no sistema deve refletir diretamente no banco de dados.
-- [ ] O sistema deve garantir a performance adequada durante a validação e encriptação de senhas.
-- [ ] O sistema deve ser seguro e proteger as informações dos usuários, especialmente as senhas.
-
-#### Regras de Negócio
-- [ ] O sistema deve negar o acesso ao usuário se o login não for localizado no banco de dados.
-- [ ] Não é permitido cadastrar dois usuários com o mesmo login (email).
-
-### Como Cliente logado
-
-#### Requisitos Funcionais
-- [ ] O cliente logado pode trocar seu nome, data de nascimento e gênero.
-- [ ] Deve ser permitido também a alteração da senha.
-- [ ] O cliente pode incluir mais endereços de entrega.
-- [ ] Deve permitir a alteração do cadastro para incluir um novo endereço de entrega.
-- [ ] A partir do segundo endereço, é possível escolher qual endereço será o endereço padrão (que será pré-carregado) no checkout.
-- [ ] A validação e funcionalidade (consulta à API) do endereço devem ser as mesmas do cadastramento.
-- [ ] Permitir a mudança de qual endereço de entrega é padrão ou não.
-- [ ] Não é permitido alterar os dados de um endereço de entrega existente; deve-se adicionar um novo.
-- [ ] Deve alertar que está saindo da sessão.
-- [ ] Limpar a sessão do login do cliente.
+# 🍷Winery
+## Sobre
+>Winery é um e-commerce desenvolvido para facilitar a compra de vinhos de alta qualidade diretamente por meio de uma plataforma web. Com sua interface amigável e um sistema seguro, o Winery oferece uma experiência de compra ideal para todos os amantes de vinho.
+> 
+>O sistema será completo, incluindo módulos essenciais para operações de CRUD, validações de permissionamento, criptografia de senhas, entre outros. Apresentará o front office para interação com os usuários e um back office para a gestão de funcionários, produtos e controle de pedidos. Todos os dados serão armazenados com segurança em nosso banco de dados, garantindo a integridade das informações.
+>
+>
+## 📋Funcionalidades
+### Requisitos Funcionais
+>
+>
+#### Como Administrador
+- [x] O administrador poderá listar todos os usuários cadastrados na entrada da tela, visualizando informações como nome, e-mail, grupo (administrador ou estoquista) e status (ativo ou inativo).
+- [x] O administrador poderá cadastrar um novo usuário com nome, CPF, email, senha (encriptada) e grupo (admin/estoquista) no banco de dados.
+- [x] O administrador poderá alterar um usuário existente, como os campos de nome, cpf, e-mail e grupo. O usuário não pode editar o próprio grupo.
+- [x] O administrador poderá inativar ou reativar um usuário ao clicar no botão correspondente.
+- [x] O administrador poderá filtrar a lista de usuários por nome.
+- [x] O administrador poderá acessar a lista de produtos, que será exibida de forma decrescente. Os campos que serão exibidos são o código do produto, o nome, a quantidade em estoque, o valor e o status (ativo ou desativado), e será possível buscar um produto específico pelo seu nome.
+- [x] O administrador poderá cadastrar um novo produto, com os campos, nome de produto (máx 200 caracteres), avaliação (de 1 a 5 variando de 0,5 em 0,5), descrição detalhada (2000 caracteres), preço do produto (valor monetário) com 2 casas decimais, quantidade em estoque (valor inteiro) e multiplas Imagens. Uma imagem deve ser definida como principal.
+- [x] O administrador poderá alterar todas as informações de um produto, incluindo as imagens.
+- [x] O administrador poderá ativar ou desativar produtos na lista.
+- [x] O administrador poderá visualizar como o produto será mostrado no front-office para o cliente.
+- [x] O administrador, poderá sair do sistema, com isso seus dados armazenados na sessão serão limpos.
+>
+#### Como Estoquista
+- [x] O estoquista, poderá mudar a quantidade de produto no estoque.
+- [x] O estoquista, poderá visualizar a lista de todos os pedidos realizados dentro do sistema.
+- [x] O estoquista, poderá mudar o status do pedido.
+- [x] O estoquista, poderá sair do sistema, com isso seus dados armazenados na sessão serão limpos.
+>
+#### Como Cliente logado e não logado
+- [x] O cliente, logado ou não, poderá visualizar os produtos da loja na página principal.
+- [x] O cliente, logado ou não, poderá visualizar os detalhes do produto, como Nome, Descrição Detalhada, Valor, Avaliação e Carrossel de Imagens.
+- [x] O cliente, logado ou não, a partir da tela de visualizar os detalhes do produto, poderá adicionar o item ao carrinho. Caso o item já esteja presente no carrinho, ele será incrementado.
+- [x] O cliente, logado ou não, poderá no carrinho incrementar ou decrementar a quantidade de produtos adicionados, e com isso o subtotal e total deverão ser recalculados.
+- [x] O cliente, logado ou não, poderá no carrinho remover um produto, e com isso o subtotal e o total deverão ser recalculados.
+- [x] O cliente, logado ou não, poderá no carrinho calculando frete escolher de livre escolha três opções pré-definidas.
+>
+#### Como Cliente não logado
+- [x] O cliente, não logado, deve conseguir realizar login com o e-mail e senha (que será encriptada antes da validação), e os mesmos deve ser validado no banco de dados. Caso corretos ele será direcionado a página inicial e seu carrinho (caso exista) será carregado.
+- [x] O cliente, não logado, deve conseguir se cadastrar no sistema, e para isso ele deve fornecer, Nome (Com no mínimo 2 palavras e 3 letras em cada), Email (Sendo único e válido), CPF (Sendo único e válido), Endereço de Faturamento, Endereço de Entrega e Senha. Caso os dados forem válidos o sistema direcionará o cliente para a tela de login, caso não, o erro será mostrado ao cliente.
+>
+#### Como Cliente logado
+- [x] O cliente, logado, será permitido a alteração de nome, data de nascimento, gênero e senha.
+- [x] O cliente, logado, será permitido a adição de novos endereços de entrega
+- [x] O cliente, logado, possuindo mais de um endereço de entregas adicionados, poderá escolher qual deles será o padrão.
+- [x] O cliente, logado, poderá sair do sistema, com isso seus dados armazenados na sessão serão limpos.
+- [x] O cliente, logado, ao clicar em finalizar compra no carrinho, deve ser enviado para a tela de checkout. Caso o cliente não esteja logado, ele deverá ser enviado para a tela de login.
+- [x] O cliente, logado, poderá escolher entre seus endereços de entrega adicionados, e se necessário, adicionar um novo
+- [x] O cliente, logado, poderá escolher entre, pelo menos, duas formas de pagamento, sendo elas boleto e cartão. Ao escolher cartão deverá preencher todos os campos.
+- [x] O cliente, logado, poderá visualizar o resumo do seu pedido, com todos os produtos, os valores unitários, quantidades, valores totais, frete, total geral, endereço de entrega, forma de pagamento e apresentar o botão de concluir compra e voltar.
+- [x] Ao finalizar a compra, o mesmo deve ser criado no banco de dados com o status de “aguardando pagamento”. Junto a isso, deverá ser gerado o número do pedido, e exibido para o cliente.
+- [x] O cliente, logado, deve ter um item de menu para poder visualizar os pedidos criados. Esse menu deve listar todos os pedidos informando o número, data, valor total, status e botão de mais detalhes.
+- [x] O cliente poderá visualizar os detalhes dos itens pedido, o endereço e forma pagamento do pedido.
+>
+### Requisitos Não-Funcionais
+- [x] Desempenho
+    - Filtragem por nome: A listagem de usuários deve suportar filtragem eficiente por nome para evitar sobrecarga ao sistema quando houver muitos usuários cadastrados.
+    - Paginação e Busca Eficiente: Paginação e Busca eficiente no banco de dados para evitar possíveis sobrecargas de vários resultados
+    - Usuários Simultâneos: O sistema deve permitir o acesso de no mínimo 10 usuários de forma simultânea.
+- [x] Usabilidade
+    - Interface amigável: O sistema deve evitar direcionamentos desnecessários, sempre optando por validações e alterações de estados via pop-up.
+    - Acessibilidade: O sistema deve ser acessível para pessoas com deficiência ou dificuldade visual.
+- [x] Segurança
+    - Autenticação: O sistema deve implementar autenticação segura, garantindo que senhas sejam armazenadas de forma criptografada e que a autenticação utilize práticas recomendadas, como o uso de tokens.
+- [x] Portabilidade
+    - Suporte a navegadores: O sistema deve ser acessível e funcional em navegadores modernos, incluindo Chrome, Firefox, Safari e Edge.
+    - Suporte a plataformas: O sistema deve ser desenvolvido para funcionar Suporte aem diferentes sistemas operacionais, como plataformas Windows, macOS e Linux, sem necessidade de ajustes significativos.
+- [x] Manutenção
+    - Facilidade de Atualizações: O sistema deve ser estruturado de forma a permitir atualizações e manutenções regulares com impacto mínimo na disponibilidade do serviço.
+    - Documentação: A documentação do sistema deve ser completa e atualizada, facilitando a manutenção e a capacitação de novos desenvolvedores.
