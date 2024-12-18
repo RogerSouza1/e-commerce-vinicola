@@ -69,3 +69,50 @@
 - [x] Manutenção
     - Facilidade de Atualizações: O sistema deve ser estruturado de forma a permitir atualizações e manutenções regulares com impacto mínimo na disponibilidade do serviço.
     - Documentação: A documentação do sistema deve ser completa e atualizada, facilitando a manutenção e a capacitação de novos desenvolvedores.
+## ✅ Testes 
+### Requisitos de Sistema
+
+#### Exemplos:
+##### Requisitos Funcionais
+- Login do Usuário: Usuário faz login com e-mail e senha. Acesso liberado se dados forem corretos.
+- Cadastrar produtos: Administrador cadastra produtos com nome, descrição, preço, estoque e imagens.
+##### Requisitos Não Funcionais
+- Desempenho: Filtragem, paginação eficiente e suporte para 10 usuários simultâneos.
+- Usabilidade: Interface amigável com pop-ups e acessibilidade para deficientes visuais.
+
+### Estratégia de teste
+#### Níveis de teste
+
+**Nome do Teste**       | **Técnicas**    | **Descrição**                                                                                 |
+-------------------------|-----------------|---------------------------------------------------------------------------------------------|
+Teste Unitário          | Caixa Branca    | Utilização do JUnit para testar individualmente as funções e métodos do sistema, garantindo que cada unidade de código funcione conforme esperado. |
+Teste de Integração     | Caixa Preta     | Uso do GitHub para gerenciar Branch de integração, testando a interação entre diferentes componentes do sistema. Realizando revisões de código para garantir a qualidade e segurança de cada nova integração ao sistema. |
+Teste de Sistema        | Caixa Preta     | Testando Funcionalidades.                                                         |
+Teste de Aceitação      | Caixa Preta     | Feedback do professor.                                                                      |
+
+#### Tipos de teste
+
+| **Tipo do Teste**   | **Técnicas** | 
+|---------------------|--------------| 
+| Desempenho          | JMeter       |
+| Usabilidade         | LightHouse   |
+| Portabilidade       | Teste manual |
+
+### Ambiente de teste
+
+| **Recurso**                 | **Descrição**                                                                 |
+|-----------------------------|------------------------------------------------------------------------------|
+| **Computador cliente**      | Desktop ou laptop                                                            |
+| **Mobile**                  | Não Aplicável                                                                |
+| **Servidor de aplicação**   | Servidor embutido do Spring Boot (Tomcat)                                    |
+| **Servidor de banco de dados** | H2 DATABASE                                                               |
+| **Criação de relatórios**   | Ferramenta de geração de relatórios de testes (ex: JUnit, TestNG)            |
+| **Browser cliente**         | Google Chrome                                                                |
+| **SO cliente**              | Sistema Operacional Windows                                                  |
+| **JDK**                     | Java Development Kit Oracle 21                                               |
+
+## 🧑‍💻 Integrantes
+
+| <a href="https://github.com/RogerSouza1"><img src="https://github.com/user-attachments/assets/c548756f-271a-4042-a7ef-f23e4cab25b5" height="120"></a> | <a href="https://github.com/carladfb"><img src="https://github.com/user-attachments/assets/a0e6e602-f915-4aae-a96d-254efb45ddfe" height="120"></a> | <a href="https://github.com/Pelifefe"><img src="https://github.com/user-attachments/assets/13b37fca-018d-4762-a147-14a713f90449" height="120"></a> | <a href="https://github.com/GeorgiaLSousa"><img src="https://github.com/user-attachments/assets/4483a206-e2be-4af2-a073-1c3691e7f5d5" height="120"></a> | <a href="https://github.com/heloysasa"><img src="https://github.com/user-attachments/assets/391317fe-98fc-4e75-aeb0-8d671fc38188" height="120"></a> |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|
+| **[RogerSouza1](https://github.com/RogerSouza1)**                                                                                               | **[carladfb](https://github.com/carladfb)**                                                                                                    | **[Pelifefe](https://github.com/Pelifefe)**                                                                                           | **[GeorgiaLSouza](https://github.com/GeorgiaLSousa)**                                                                                         | **[heloysasa](https://github.com/heloysasa)**                                                                                         |
