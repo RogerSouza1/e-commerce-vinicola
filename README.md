@@ -111,6 +111,40 @@ Teste de Aceitação      | Caixa Preta     | Feedback do professor.            
 | **SO cliente**              | Sistema Operacional Windows                                                  |
 | **JDK**                     | Java Development Kit Oracle 21                                               |
 
+### Caso de Teste
+#### Teste de Unidade - JUnit
+![teste-unidade](https://github.com/user-attachments/assets/5622b628-dfd4-41f0-8993-99e9f76d1fd4)
+> Novo Usuário
+##### Resultado
+![teste-unidade-resultado](https://github.com/user-attachments/assets/bb7d35c1-320c-451b-9067-e272e954815b)
+
+#### Teste de Integração
+![teste-integracao](https://github.com/user-attachments/assets/5884e43c-c969-4ad4-9145-9342f7fad3a5)
+> Sair da conta
+##### Resultado
+![teste-integracao-resultado](https://github.com/user-attachments/assets/bdc77b96-1d82-4b05-9ed2-36f0d7a3b79e)
+
+#### Teste de Sistema
+![teste-sistema](https://github.com/user-attachments/assets/f09f36f2-2568-4592-af5e-af3babae6b38)
+> Produto cadastrado
+##### Resultado
+![teste-sistema-resultado](https://github.com/user-attachments/assets/8c874cf5-47a6-414d-838d-80681b4bba44)
+
+#### Teste de Aceitação
+![teste-aceitacao-resultaod](https://github.com/user-attachments/assets/b25dc4d7-d0c1-4002-b17d-8444ebddbde9)
+
+#### Teste de Usabilidade
+![teste-usabilidade-resultado](https://github.com/user-attachments/assets/98c34bba-b23e-4714-9d28-39058d955e71)
+> Lista de produto/escolher produto na paǵina principal
+#### Teste de Desempenho
+![image](https://github.com/user-attachments/assets/f0d75b9d-ecff-4159-8f2e-4e3d9684de2b)
+> Login do Usuário
+##### Resultado
+![teste-desempenho-resultado](https://github.com/user-attachments/assets/7027d197-6c33-4db7-9648-46fcfa93d901)
+
+#### Teste de Portabilidade
+![image](https://github.com/user-attachments/assets/9c724ff8-f96d-4559-a952-8fc0bc089a09)
+
 ## 🧑‍💻 Integrantes
 
 | <a href="https://github.com/RogerSouza1"><img src="https://github.com/user-attachments/assets/c548756f-271a-4042-a7ef-f23e4cab25b5" height="120"></a> | <a href="https://github.com/carladfb"><img src="https://github.com/user-attachments/assets/a0e6e602-f915-4aae-a96d-254efb45ddfe" height="120"></a> | <a href="https://github.com/Pelifefe"><img src="https://github.com/user-attachments/assets/13b37fca-018d-4762-a147-14a713f90449" height="120"></a> | <a href="https://github.com/GeorgiaLSousa"><img src="https://github.com/user-attachments/assets/4483a206-e2be-4af2-a073-1c3691e7f5d5" height="120"></a> | <a href="https://github.com/heloysasa"><img src="https://github.com/user-attachments/assets/391317fe-98fc-4e75-aeb0-8d671fc38188" height="120"></a> |
